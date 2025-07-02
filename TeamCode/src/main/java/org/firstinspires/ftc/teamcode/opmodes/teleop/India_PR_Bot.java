@@ -25,9 +25,11 @@ public class India_PR_Bot extends LinearOpMode {
 
     public static double MAX_ARM_POWER = 0.7;
     public static int ARM_INITIAL_ANGLE = 90; //deg
-    public static int ARM_INTAKE_POSITION = 880;
-    public static int ARM_UP_POSITION = 160;
+    public static int ARM_INTAKE_POSITION = 2250;
+    public static int ARM_UP_POSITION = 0;
     public static double INTAKE_POWER = 0.75;
+
+    public static int OUTTAKE_POS = 500;
     public static double DRIVETRAIN_POWER = 0.2;
     private PIDFMotorController armController;
     private DcMotor rightMotor, leftMotor;
@@ -77,10 +79,10 @@ public class India_PR_Bot extends LinearOpMode {
 
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
-        double armTicksInDegrees = 537.7 / 360.0;
+        final double armTicksInDegrees = 537.7 / 360.0;
 
         // Initialize PIDF controllers for the arm and slide
-        armController = new PIDFMotorController(intakeArmMotor, 0.01, 0.23, 0.0005, 0.4, armTicksInDegrees, MAX_ARM_POWER, ARM_INITIAL_ANGLE);
+        armController = new PIDFMotorController(intakeArmMotor, 0.01, 0.25, 0.001, 0.4, armTicksInDegrees, MAX_ARM_POWER, ARM_INITIAL_ANGLE);
 
         // Set directions for drivetrain motors
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -88,6 +90,7 @@ public class India_PR_Bot extends LinearOpMode {
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Initialize the IMU
         imu = hardwareMap.get(IMU.class, "imu");
@@ -99,8 +102,8 @@ public class India_PR_Bot extends LinearOpMode {
     private void handleDriving() {
 
         // Set motor powers
-        double y = -gamepad1.left_stick_y; // Remember, Y stick is reversed!
-        double rx = gamepad1.right_stick_x;
+        double y = (gamepad1.left_stick_y) / 2; // Remember, Y stick is reversed!
+        double rx = (gamepad1.left_stick_x) / 2;
 
         leftMotor.setPower(y + rx);
         rightMotor.setPower(y - rx);
@@ -116,9 +119,11 @@ public class India_PR_Bot extends LinearOpMode {
         } else if (gamepad1.b){
             intakeServo.setPower(0);
         } else if (gamepad1.right_bumper){
-            intakeServo.setPower(INTAKE_POWER);
-        } else if (gamepad1.left_bumper){
             intakeServo.setPower(-INTAKE_POWER);
+        } else if (gamepad1.left_bumper){
+            intakeServo.setPower(INTAKE_POWER);
+        } else if (gamepad1.x){
+            armController.setTargetPosition(OUTTAKE_POS);
         }
     }
 
@@ -129,7 +134,7 @@ public class India_PR_Bot extends LinearOpMode {
     private void resetArmPID(){
         if (gamepad1.back) {
             armController.resetMotorEncoder();
-            gamepad2.rumble(100);
+            gamepad1.rumble(100);
         }
     }
     private void runPIDIterations() {
