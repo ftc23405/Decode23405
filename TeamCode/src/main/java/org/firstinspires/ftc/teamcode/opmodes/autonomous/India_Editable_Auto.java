@@ -46,38 +46,44 @@ public class India_Editable_Auto extends LinearOpMode {
         intakeArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-
-
         waitForStart();
 
         armController.setTargetPosition(ARM_UP_POSITION);
-        forward(DRIVETRAIN_POWER);
-        turnLeft(DRIVETRAIN_POWER);
+        forward(DRIVETRAIN_POWER,1);
+        turnLeft(DRIVETRAIN_POWER,1);
         stopDriving();
         outtakePreload();
     }
 
 
     //functions for driving, can be edited
-    public void forward(double power) {
+    public void forward(double power,long seconds) {
         leftMotor.setPower(power);
         rightMotor.setPower(power);
+        sleep((seconds * 1000));
+        stopDriving();
 
     }
 
-    public void backward(double power) {
+    public void backward(double power, long seconds) {
         leftMotor.setPower(-power);
         rightMotor.setPower(-power);
+        sleep((seconds * 1000));
+        stopDriving();
     }
 
-    public void turnLeft(double power) {
+    public void turnLeft(double power, long seconds) {
         leftMotor.setPower(power);
         rightMotor.setPower(-power);
+        sleep((seconds * 1000));
+        stopDriving();
     }
 
-    public void turnRight(double power) {
+    public void turnRight(double power, long seconds) {
         leftMotor.setPower(-power);
         rightMotor.setPower(power);
+        sleep((seconds * 1000));
+        stopDriving();
     }
 
     public void stopDriving() {
