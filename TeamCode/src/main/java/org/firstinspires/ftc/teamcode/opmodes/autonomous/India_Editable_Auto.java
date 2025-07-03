@@ -29,6 +29,9 @@ public class India_Editable_Auto extends LinearOpMode {
     private DcMotor rightMotor, leftMotor;
     private com.qualcomm.robotcore.hardware.CRServo intakeServo;
 
+    private Thread pidThread;
+    private volatile boolean pidThreadRunning = true;
+
     private void runPIDIterations() {
         PIDFMotorController.MotorData armMotorData = armController.runIteration();
         telemetry.addData("Arm Position", armMotorData.CurrentPosition);
@@ -48,7 +51,7 @@ public class India_Editable_Auto extends LinearOpMode {
         final double armTicksInDegrees = 537.7 / 360.0;
 
         // Initialize PIDF controllers for the arm
-        armController = new PIDFMotorController(intakeArmMotor, 0.01, 0.25, 0.001, 0.4, armTicksInDegrees, MAX_ARM_POWER, ARM_INITIAL_ANGLE);
+        armController = new PIDFMotorController(intakeArmMotor, 0.01, 0.2, 0.0005, 0.4, armTicksInDegrees, MAX_ARM_POWER, ARM_INITIAL_ANGLE);
 
         // Set directions for drivetrain motors
         leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -59,6 +62,19 @@ public class India_Editable_Auto extends LinearOpMode {
         intakeArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
+        pidThread = new Thread(() -> {
+            while (pidThreadRunning && !isStopRequested()) {
+                runPIDIterations();
+                telemetry.update();
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+
+        pidThread.start();
         waitForStart();
 
         armController.setTargetPosition(ARM_UP_POSITION);
@@ -67,11 +83,8 @@ public class India_Editable_Auto extends LinearOpMode {
         stopDriving();
         outtakePreload();
 
-        if (isStopRequested()) return;
-        while (opModeIsActive()) {
-            runPIDIterations();
-            telemetry.update();
-        }
+        pidThreadRunning = false;
+        pidThread.join();
     }
 
 
