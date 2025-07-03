@@ -109,6 +109,10 @@ public class India_PR_Bot extends LinearOpMode {
 
 
     private void intakeControl(){
+
+        double arm_add = gamepad1.left_trigger;
+        double arm_subtract = gamepad1.right_trigger;
+
         if (gamepad1.a){
             armController.setTargetPosition(ARM_INTAKE_POSITION);
         } else if (gamepad1.y){
@@ -121,6 +125,10 @@ public class India_PR_Bot extends LinearOpMode {
             intakeServo.setPower(OUTTAKE_POWER);
         } else if (gamepad1.x){
             armController.setTargetPosition(OUTTAKE_POS);
+        } else if (gamepad1.left_trigger > 0.1) {
+            armController.setTargetPosition(armController.getCurrentPosition() + (int) (arm_add * 100));
+        } else if (gamepad1.right_trigger > 0.1){
+            armController.setTargetPosition(armController.getCurrentPosition() - (int) (arm_subtract * 100));
         }
     }
 
