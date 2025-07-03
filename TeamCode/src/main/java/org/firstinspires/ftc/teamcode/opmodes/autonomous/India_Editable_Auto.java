@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.tuning.PIDFMotorController;
+import org.firstinspires.ftc.teamcode.tuning.PIDFMotorControllerSlides;
+
+@Autonomous
+@Config
 
 public class India_Editable_Auto extends LinearOpMode {
 
@@ -22,6 +28,13 @@ public class India_Editable_Auto extends LinearOpMode {
     private PIDFMotorController armController;
     private DcMotor rightMotor, leftMotor;
     private com.qualcomm.robotcore.hardware.CRServo intakeServo;
+
+    private void runPIDIterations() {
+        PIDFMotorController.MotorData armMotorData = armController.runIteration();
+        telemetry.addData("Arm Position", armMotorData.CurrentPosition);
+        telemetry.addData("Arm Target", armMotorData.TargetPosition);
+        telemetry.addData("Arm Power", armMotorData.SetPower);
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -53,11 +66,17 @@ public class India_Editable_Auto extends LinearOpMode {
         turnLeft(DRIVETRAIN_POWER,1);
         stopDriving();
         outtakePreload();
+
+        if (isStopRequested()) return;
+        while (opModeIsActive()) {
+            runPIDIterations();
+            telemetry.update();
+        }
     }
 
 
     //functions for driving, can be edited
-    public void forward(double power,long seconds) {
+    public void backward(double power,long seconds) {
         leftMotor.setPower(power);
         rightMotor.setPower(power);
         sleep((seconds * 1000));
@@ -65,21 +84,21 @@ public class India_Editable_Auto extends LinearOpMode {
 
     }
 
-    public void backward(double power, long seconds) {
+    public void forward(double power, long seconds) {
         leftMotor.setPower(-power);
         rightMotor.setPower(-power);
         sleep((seconds * 1000));
         stopDriving();
     }
 
-    public void turnLeft(double power, long seconds) {
+    public void turnRight(double power, long seconds) {
         leftMotor.setPower(power);
         rightMotor.setPower(-power);
         sleep((seconds * 1000));
         stopDriving();
     }
 
-    public void turnRight(double power, long seconds) {
+    public void turnLeft(double power, long seconds) {
         leftMotor.setPower(-power);
         rightMotor.setPower(power);
         sleep((seconds * 1000));
@@ -93,7 +112,7 @@ public class India_Editable_Auto extends LinearOpMode {
 
     public void outtakePreload(){
         armController.setTargetPosition(OUTTAKE_POS);
-        sleep(500);
+        sleep(1000);
         intakeServo.setPower(OUTTAKE_POWER);
         sleep(2000);
         intakeServo.setPower(0);
