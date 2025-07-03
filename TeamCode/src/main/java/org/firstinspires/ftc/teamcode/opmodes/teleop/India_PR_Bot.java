@@ -61,7 +61,6 @@ public class India_PR_Bot extends LinearOpMode {
 
         while (opModeIsActive()) {
             handleDriving();
-            resetArmPID();
             intakeControl();
             runPIDIterations();
             telemetry.update();
@@ -97,9 +96,6 @@ public class India_PR_Bot extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
     }
 
-    /**
-     * Manages the drivetrain controls using mecanum drive with field-oriented control.
-     */
     private void handleDriving() {
 
         // Set motor powers
@@ -132,12 +128,6 @@ public class India_PR_Bot extends LinearOpMode {
      * Controls the bucket position based on gamepad2 inputs.
      */
 
-    private void resetArmPID(){
-        if (gamepad1.back) {
-            armController.resetMotorEncoder();
-            gamepad1.rumble(100);
-        }
-    }
     private void runPIDIterations() {
         PIDFMotorController.MotorData armMotorData = armController.runIteration();
         telemetry.addData("Arm Position", armMotorData.CurrentPosition);
