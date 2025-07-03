@@ -27,7 +27,8 @@ public class India_PR_Bot extends LinearOpMode {
     public static int ARM_INITIAL_ANGLE = 90; //deg
     public static int ARM_INTAKE_POSITION = 2250;
     public static int ARM_UP_POSITION = 0;
-    public static double INTAKE_POWER = 0.75;
+    public static double INTAKE_POWER = -0.75;
+    public static double OUTTAKE_POWER = 1;
 
     public static int OUTTAKE_POS = 500;
     public static double DRIVETRAIN_POWER = 0.2;
@@ -119,9 +120,9 @@ public class India_PR_Bot extends LinearOpMode {
         } else if (gamepad1.b){
             intakeServo.setPower(0);
         } else if (gamepad1.right_bumper){
-            intakeServo.setPower(-INTAKE_POWER);
-        } else if (gamepad1.left_bumper){
             intakeServo.setPower(INTAKE_POWER);
+        } else if (gamepad1.left_bumper){
+            intakeServo.setPower(OUTTAKE_POWER);
         } else if (gamepad1.x){
             armController.setTargetPosition(OUTTAKE_POS);
         }
