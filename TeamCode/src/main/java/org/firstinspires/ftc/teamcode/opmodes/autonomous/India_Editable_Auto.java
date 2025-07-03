@@ -93,6 +93,9 @@ public class India_Editable_Auto extends LinearOpMode {
 
     public void outtakePreload(){
         armController.setTargetPosition(OUTTAKE_POS);
+        sleep(500);
         intakeServo.setPower(OUTTAKE_POWER);
+        sleep(2000);
+        intakeServo.setPower(0);
     }
 }
