@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.rowanmcalpin.nextftc.ftc.hardware.controllables.ResetEncoder;
 
 import org.firstinspires.ftc.teamcode.tuning.PIDFMotorController;
 
