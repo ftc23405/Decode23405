@@ -9,10 +9,12 @@ import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.PedroDriverControlled;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import dev.nextftc.hardware.driving.DriverControlledCommand;
 import dev.nextftc.hardware.driving.FieldCentric;
 import dev.nextftc.hardware.driving.HolonomicMode;
 import dev.nextftc.hardware.driving.MecanumDriverControlled;
@@ -33,7 +35,7 @@ public class V1_Teleop extends NextFTCOpMode {
         );
     }
 
-    //create motors and set directions
+    //not in use (using pedro teleop), create motors and set directions
     private final MotorEx frontLeftMotor = new MotorEx("frontLeftMotor").reversed();
     private final MotorEx frontRightMotor = new MotorEx("frontRightMotor");
     private final MotorEx backLeftMotor = new MotorEx("backLeftMotor").reversed();
@@ -42,15 +44,11 @@ public class V1_Teleop extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
-        Command driverControlled = new MecanumDriverControlled(
-                frontLeftMotor,
-                frontRightMotor,
-                backLeftMotor,
-                backRightMotor,
+        DriverControlledCommand driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
                 Gamepads.gamepad1().leftStickX(),
                 Gamepads.gamepad1().rightStickX(),
-                new FieldCentric(imu)
+                false
         );
         driverControlled.schedule();
 

@@ -18,23 +18,30 @@ public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(11.8)
-            .forwardZeroPowerAcceleration(-37.97242711)
-            .lateralZeroPowerAcceleration(-73.596685215)
+            .forwardZeroPowerAcceleration(0)
+            .lateralZeroPowerAcceleration(0)
             .useSecondaryTranslationalPIDF(true)
             .useSecondaryHeadingPIDF(true)
             .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.00049)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(2.5, 0, 0.1, 0))
+            .centripetalScaling(0.005)
+
+            .translationalPIDFCoefficients(
+                    new PIDFCoefficients(0.1, 0, 0.01, 0)
+            )
+            .headingPIDFCoefficients(
+                    new PIDFCoefficients(0.1, 0, 0.01, 0)
+            )
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.01, 0.0001, 0.0001, 0.6, 0)
+                    new FilteredPIDFCoefficients(0.1,0.0,0.01,0.6,0.0)
             )
             .secondaryTranslationalPIDFCoefficients(
                     new PIDFCoefficients(0.1, 0, 0.01, 0)
             )
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.1, 0))
+            .secondaryHeadingPIDFCoefficients(
+                    new PIDFCoefficients(0.1, 0, 0.01, 0)
+            )
             .secondaryDrivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.015, 0.01, 0.0001, 0.6, 0)
+                    new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01)
             );
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -46,8 +53,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(57.4983669)
-            .yVelocity(42.37080612)
+            .xVelocity(0)
+            .yVelocity(0)
             .useBrakeModeInTeleOp(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
@@ -59,7 +66,6 @@ public class Constants {
             .encoderResolution(
                     GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD
             )
-            .customEncoderResolution(13.26291192)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
