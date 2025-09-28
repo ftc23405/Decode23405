@@ -33,7 +33,8 @@ public class V1_Teleop extends NextFTCOpMode {
         addComponents( //add needed components
                 new SubsystemComponent(Intake.INSTANCE),
                 BulkReadComponent.INSTANCE,
-                BindingsComponent.INSTANCE
+                BindingsComponent.INSTANCE,
+                new PedroComponent(Constants::createFollower)
         );
     }
 

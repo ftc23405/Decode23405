@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
+@Configurable
 @TeleOp(name = "StarterBotTeleop", group = "StarterBot")
 public class StarterBotTeleop extends OpMode {
     final double FEED_TIME_SECONDS = 0.20;

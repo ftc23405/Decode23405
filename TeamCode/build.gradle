@@ -33,6 +33,9 @@ repositories {
     maven {
         url = 'https://repo.dairy.foundation/releases'
     }
+    maven {
+        url = "https://mymaven.bylazar.com/releases"
+    }
 }
 dependencies {
     implementation project(':FtcRobotController')
@@ -43,4 +46,5 @@ dependencies {
     implementation 'dev.nextftc:ftc:1.0.0'
     implementation 'dev.nextftc:hardware:1.0.0' // If you would like to use the hardware module
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
+    implementation 'com.bylazar:fullpanels:1.0.6'
 }
