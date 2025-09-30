@@ -52,19 +52,19 @@ public class DriveDirection extends OpMode {
 
         if (gamepad1.a){
             frontLeftMotor.setPower(1);
-            telemetryM.debug("frontLeftMotor ", frontLeftMotor.getPower());
+            telemetryM.debug("frontLeftMotor running: ", frontLeftMotor.getPower());
         }
         if (gamepad1.b){
             backLeftMotor.setPower(1);
-            telemetryM.debug("backLeftMotor ", backLeftMotor.getPower());
+            telemetryM.debug("backLeftMotor running: ", backLeftMotor.getPower());
         }
         if (gamepad1.x){
             frontRightMotor.setPower(1);
-            telemetryM.debug("frontRightMotor ", frontRightMotor.getPower());
+            telemetryM.debug("frontRightMotor running: ", frontRightMotor.getPower());
         }
         if (gamepad1.y){
             backRightMotor.setPower(1);
-            telemetryM.debug("backRightMotor ", backRightMotor.getPower());
+            telemetryM.debug("backRightMotor running: ", backRightMotor.getPower());
         }
         if (gamepad1.right_bumper){ //stops all motors
             frontLeftMotor.setPower(0);

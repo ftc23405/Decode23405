@@ -21,7 +21,7 @@ public class Intake implements Subsystem {
 
     private Intake() { }
 
-    private final MotorEx intakeMotor = new MotorEx("intakeMotor");
+    private final MotorEx intakeMotor = new MotorEx("intakeMotor").brakeMode();
 
     private final PIDCoefficients intakePIDComponents = new PIDCoefficients(intakeP, intakeI, intakeD);
 
