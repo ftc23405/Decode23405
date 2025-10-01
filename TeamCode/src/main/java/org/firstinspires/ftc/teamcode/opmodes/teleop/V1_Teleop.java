@@ -45,6 +45,13 @@ public class V1_Teleop extends NextFTCOpMode {
     private final MotorEx backRightMotor = new MotorEx("backRightMotor");
     private final IMUEx imu = new IMUEx("imu", Direction.UP, Direction.FORWARD).zeroed();
 
+
+    @Override
+    public void onInit() {
+
+    }
+
+
     @Override
     public void onStartButtonPressed() {
         DriverControlledCommand driverControlled = new PedroDriverControlled(
