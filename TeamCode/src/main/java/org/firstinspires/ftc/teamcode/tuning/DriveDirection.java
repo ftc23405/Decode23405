@@ -26,14 +26,15 @@ public class DriveDirection extends OpMode {
     @IgnoreConfigurable
     static TelemetryManager telemetryM;
 
-    private DcMotorEx frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
+    public DcMotorEx frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
 
     @Override
     public void init() {
-        DcMotorEx frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
-        DcMotorEx backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
-        DcMotorEx frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
-        DcMotorEx backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
+
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "frontLeftMotor");
+        backLeftMotor = hardwareMap.get(DcMotorEx.class, "backLeftMotor");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class, "frontRightMotor");
+        backRightMotor = hardwareMap.get(DcMotorEx.class, "backRightMotor");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
