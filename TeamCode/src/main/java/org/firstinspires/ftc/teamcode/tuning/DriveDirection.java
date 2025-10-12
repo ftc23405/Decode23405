@@ -1,23 +1,14 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.configurables.annotations.IgnoreConfigurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import java.text.DecimalFormat;
-import java.util.zip.Adler32;
 
 @Configurable
 @TeleOp
@@ -46,10 +37,17 @@ public class DriveDirection extends OpMode {
         frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+
     }
 
     @Override
     public void loop() {
+
+        telemetryM.debug("Select Motor");
+        telemetryM.debug("Run frontLeftMotor select A");
+        telemetryM.debug("Run backLeftMotor select B");
+        telemetryM.debug("Run frontRightMotor select X");
+        telemetryM.debug("Run backRightMotor select Y");
 
         if (gamepad1.a){
             frontLeftMotor.setPower(1);
@@ -73,7 +71,6 @@ public class DriveDirection extends OpMode {
             frontRightMotor.setPower(0);
             backRightMotor.setPower(0);
         }
-
 
         telemetryM.update(telemetry);
     }
