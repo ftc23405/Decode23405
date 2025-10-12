@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commandbase.subsystems;
 
+
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.core.commands.Command;
@@ -13,13 +15,6 @@ public class Shooter implements Subsystem {
     public final static Shooter INSTANCE = new Shooter();
 
     private Shooter() { }
-
-    public static double shooterP = 0.01;
-    public static double shooterI = 0.05; //use integrator (high kI) for high error response
-    public static double shooterD = 0;
-
-    public static double targetVelocity = 500;
-    public static double offVelocity = 0;
 
     MotorEx shooterMotorLeft = new MotorEx("shooterMotorLeft").brakeMode();
     MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").reversed().brakeMode();
