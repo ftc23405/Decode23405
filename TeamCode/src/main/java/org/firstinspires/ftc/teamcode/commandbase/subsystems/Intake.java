@@ -17,6 +17,9 @@ public class Intake implements Subsystem {
     public static double intakeI = 0;
     public static double intakeD = 0.005;
 
+    public static double intakeSpeed = 1000;
+    public static double offSpeed = 0;
+
     public final static Intake INSTANCE = new Intake();
 
     private Intake() { }
@@ -29,19 +32,20 @@ public class Intake implements Subsystem {
             .velPid(intakePIDComponents)
             .build();
 
-    public Command intakeOff = new RunToVelocity(intakeController, 0).requires(this);
+    public Command intakeOff = new RunToVelocity(intakeController, offSpeed).requires(this);
 
-    public Command intakeHalfSpeed = new RunToVelocity(intakeController, 500).requires(this);
+    public Command intakeHalfSpeed = new RunToVelocity(intakeController, intakeSpeed / 2).requires(this);
 
-    public Command intakeFullSpeed = new RunToVelocity(intakeController, 1000).requires(this);
+    public Command intakeFullSpeed = new RunToVelocity(intakeController, intakeSpeed).requires(this);
 
-    public Command intakeReverseHalfSpeed = new RunToVelocity(intakeController, -500).requires(this);
+    public Command intakeReverseHalfSpeed = new RunToVelocity(intakeController, -intakeSpeed / 2).requires(this);
 
-    public Command intakeReverseFullSpeed = new RunToVelocity(intakeController, -1000).requires(this);
+    public Command intakeReverseFullSpeed = new RunToVelocity(intakeController, -intakeSpeed).requires(this);
 
     @Override
     public void periodic() {
         intakeMotor.setPower(intakeController.calculate(intakeMotor.getState()));
-        ActiveOpMode.telemetry();
+        ActiveOpMode.telemetry().addData("Intake Velocity:", intakeMotor.getVelocity());
+        ActiveOpMode.telemetry().update();
     }
 }
