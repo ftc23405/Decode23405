@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
@@ -13,7 +12,6 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -24,19 +22,15 @@ import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.DriverControlledCommand;
-import dev.nextftc.hardware.driving.FieldCentric;
-import dev.nextftc.hardware.driving.HolonomicMode;
-import dev.nextftc.hardware.driving.MecanumDriverControlled;
 import dev.nextftc.hardware.impl.Direction;
 import dev.nextftc.hardware.impl.IMUEx;
 import dev.nextftc.hardware.impl.MotorEx;
-import static dev.nextftc.bindings.Bindings.*;
 
-@TeleOp
+@TeleOp(name = "V1 RED Side Teleop")
 @Configurable //panels
-public class V1_Teleop extends NextFTCOpMode {
+public class V1_Teleop_Red extends NextFTCOpMode {
 
-    public V1_Teleop() {
+    public V1_Teleop_Red() {
         addComponents( //add needed components
                 new SubsystemComponent(Intake.INSTANCE),
                 BulkReadComponent.INSTANCE,
@@ -54,21 +48,23 @@ public class V1_Teleop extends NextFTCOpMode {
 
     private final Pose parkingPose = new Pose(38.7,33.2, Math.toRadians(90));
 
-    private Path parkPath;
+    private PathChain parkPath;
 
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
     @Override
     public void onInit() {
+        PedroComponent.follower().updatePose();
 
     }
-
 
     @Override
     public void onStartButtonPressed() {
 
-        parkPath = new Path(new BezierLine(PedroComponent.follower().getPose(), parkingPose));
-        parkPath.setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), parkingPose.getHeading());
+        parkPath = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(PedroComponent.follower()::getPose, parkingPose))
+                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), parkingPose.getHeading())
+                .build();
 
         DriverControlledCommand driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
