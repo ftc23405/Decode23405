@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable
@@ -17,6 +16,6 @@ public class Globals {
     public static double shooterD = 0;
 
     public static double targetVelocity = 500;
-    public static double offVelocity = 0;
+    public static double shooterOffVelocity = 0;
 
 }

@@ -29,7 +29,7 @@ public class Shooter implements Subsystem {
 
     public Command shooterOn = new RunToVelocity(shooterController, targetVelocity).requires(this);
 
-    public Command shooterOff = new RunToVelocity(shooterController, offVelocity).requires(this);
+    public Command shooterOff = new RunToVelocity(shooterController, shooterOffVelocity).requires(this);
 
     @Override
     public void periodic() {
