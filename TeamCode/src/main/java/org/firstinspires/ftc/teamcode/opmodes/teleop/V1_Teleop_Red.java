@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -54,17 +56,18 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     @Override
     public void onInit() {
+
+        PedroComponent.follower().setStartingPose(PedroComponent.follower().getPose());
         PedroComponent.follower().updatePose();
 
+        parkPath = PedroComponent.follower().pathBuilder()
+                .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, parkingPose)))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(PedroComponent.follower()::getHeading, parkingPose.getHeading(), 0.8))
+                .build();
     }
 
     @Override
     public void onStartButtonPressed() {
-
-        parkPath = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(PedroComponent.follower()::getPose, parkingPose))
-                .setLinearHeadingInterpolation(PedroComponent.follower().getHeading(), parkingPose.getHeading())
-                .build();
 
         DriverControlledCommand driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
@@ -82,8 +85,8 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
         Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
-
-        parkButton.whenBecomesTrue(new FollowPath(parkPath));
+        parkButton
+                .whenBecomesTrue(new FollowPath(parkPath));
     }
 
     @Override
