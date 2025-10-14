@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.utility.InstantCommand;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -77,6 +79,8 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         );
         driverControlled.schedule();
 
+        Gamepads.gamepad1().start()
+                .whenBecomesTrue(new InstantCommand(imu::zero));
         Gamepads.gamepad1().a()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().y()
