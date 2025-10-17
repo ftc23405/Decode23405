@@ -73,7 +73,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
     public void onStartButtonPressed() {
 
         PedroDriverControlled driverControlled = new PedroDriverControlled(
-                Gamepads.gamepad1().leftStickY().negate(),
+                Gamepads.gamepad1().leftStickY(),
                 Gamepads.gamepad1().leftStickX(),
                 Gamepads.gamepad1().rightStickX(),
                 false
@@ -81,15 +81,26 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(0)));
-        Gamepads.gamepad1().a()
-                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
-        Gamepads.gamepad1().y()
-                .whenBecomesTrue(Intake.INSTANCE.intakeOff);
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180))))
+                .whenBecomesTrue(() -> gamepad1.rumble(500));
         Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
+                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().leftBumper()
+                .whenBecomesTrue(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad1().b()
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed);
+
+
+        Gamepads.gamepad2().rightBumper()
+                .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
+        Gamepads.gamepad2().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+        Gamepads.gamepad2().y()
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn);
+        Gamepads.gamepad2().a()
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse);
+        Gamepads.gamepad2().x()
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferOff);
         parkButton
                 .whenBecomesTrue(new FollowPath(parkPath));
     }

@@ -15,7 +15,7 @@ public class Globals {
     public static double shooterI = 0.05; //use integrator (high kI) for high error response
     public static double shooterD = 0;
 
-    public static double targetVelocity = 500;
+    public static double targetVelocity = 2000;
     public static double shooterOffVelocity = 0;
 
     public static double transferPower = 0.5;

@@ -18,7 +18,7 @@ public class Intake implements Subsystem {
 
     private Intake() { }
 
-    private final MotorEx intakeMotor = new MotorEx("intakeMotor").brakeMode();
+    private final MotorEx intakeMotor = new MotorEx("intakeMotor").brakeMode().reversed();
 
     private final PIDCoefficients intakePIDComponents = new PIDCoefficients(intakeP, intakeI, intakeD);
 
