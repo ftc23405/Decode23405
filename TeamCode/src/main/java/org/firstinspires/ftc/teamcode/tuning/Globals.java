@@ -18,4 +18,6 @@ public class Globals {
     public static double targetVelocity = 500;
     public static double shooterOffVelocity = 0;
 
+    public static double transferPower = 0.5;
+    public static double reverseTransferPower = -0.5;
 }

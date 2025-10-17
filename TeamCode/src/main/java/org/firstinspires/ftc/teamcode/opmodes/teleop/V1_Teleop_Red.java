@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
@@ -36,7 +37,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     public V1_Teleop_Red() {
         addComponents( //add needed components
-                new SubsystemComponent(Intake.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
@@ -56,11 +57,11 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
+
     @Override
     public void onInit() {
 
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180)));
-        PedroComponent.follower().update();
 
         parkPath = PedroComponent.follower().pathBuilder()
                 .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, parkingPose)))
@@ -80,7 +81,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose())));
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(0)));
         Gamepads.gamepad1().a()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().y()
@@ -95,9 +96,6 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
-        ActiveOpMode.telemetry();
-        BindingManager.update();
-        PedroComponent.follower().update();
     }
 
     @Override
