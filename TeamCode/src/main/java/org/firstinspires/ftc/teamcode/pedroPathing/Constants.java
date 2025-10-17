@@ -45,6 +45,7 @@ public class Constants {
             );
 
     public static MecanumConstants driveConstants = new MecanumConstants()
+            .maxPower(1)
             .leftFrontMotorName("frontLeftMotor")
             .leftRearMotorName("backLeftMotor")
             .rightFrontMotorName("frontRightMotor")
@@ -58,8 +59,8 @@ public class Constants {
             .useBrakeModeInTeleOp(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-6)
-            .strafePodX(-10)
+            .forwardPodY(-5)
+            .strafePodX(-8)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .yawScalar(1.0)

@@ -59,8 +59,8 @@ public class V1_Teleop_Red extends NextFTCOpMode {
     @Override
     public void onInit() {
 
-        PedroComponent.follower().setStartingPose(PedroComponent.follower().getPose());
-        PedroComponent.follower().updatePose();
+        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180)));
+        PedroComponent.follower().update();
 
         parkPath = PedroComponent.follower().pathBuilder()
                 .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, parkingPose)))
@@ -71,8 +71,8 @@ public class V1_Teleop_Red extends NextFTCOpMode {
     @Override
     public void onStartButtonPressed() {
 
-        DriverControlledCommand driverControlled = new PedroDriverControlled(
-                Gamepads.gamepad1().leftStickY(),
+        PedroDriverControlled driverControlled = new PedroDriverControlled(
+                Gamepads.gamepad1().leftStickY().negate(),
                 Gamepads.gamepad1().leftStickX(),
                 Gamepads.gamepad1().rightStickX(),
                 false
@@ -80,7 +80,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(new InstantCommand(imu::zero));
+                .whenBecomesTrue(new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose())));
         Gamepads.gamepad1().a()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().y()
@@ -97,6 +97,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
     public void onUpdate() {
         ActiveOpMode.telemetry();
         BindingManager.update();
+        PedroComponent.follower().update();
     }
 
     @Override
