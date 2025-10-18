@@ -7,6 +7,7 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
@@ -30,6 +31,7 @@ import dev.nextftc.hardware.driving.DriverControlledCommand;
 import dev.nextftc.hardware.impl.Direction;
 import dev.nextftc.hardware.impl.IMUEx;
 import dev.nextftc.hardware.impl.MotorEx;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp(name = "V1 RED Side Teleop")
 @Configurable //panels
@@ -37,7 +39,8 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     public V1_Teleop_Red() {
         addComponents( //add needed components
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, TransferPusher.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
@@ -75,14 +78,13 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         PedroDriverControlled driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
                 Gamepads.gamepad1().leftStickX(),
-                Gamepads.gamepad1().rightStickX(),
+                Gamepads.gamepad1().rightStickX().negate(),
                 false
         );
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180))))
-                .whenBecomesTrue(() -> gamepad1.rumble(500));
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180))));
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().leftBumper()
@@ -107,10 +109,14 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        BindingManager.update();
+        telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
+        telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
+        telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
+
     }
 
     @Override
     public void onStop() {
-        BindingManager.reset();
     }
 }
