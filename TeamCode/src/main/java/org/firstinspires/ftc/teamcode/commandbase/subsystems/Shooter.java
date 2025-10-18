@@ -29,7 +29,6 @@ public class Shooter implements Subsystem {
             .build();
 
     public Command shooterOn = new RunToVelocity(shooterController, targetVelocity).requires(this);
-
     public Command shooterOff = new RunToVelocity(shooterController, shooterOffVelocity).requires(this);
 
     @Override

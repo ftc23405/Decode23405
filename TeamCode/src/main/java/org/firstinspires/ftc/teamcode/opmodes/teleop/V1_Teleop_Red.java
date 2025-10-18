@@ -43,7 +43,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
-                new PedroComponent(Constants::createFollower)
+                new PedroComponent(Constants::createFollower) //follower for Pedro teleop drive
         );
     }
 
@@ -64,7 +64,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
     @Override
     public void onInit() {
 
-        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180)));
+        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
         parkPath = PedroComponent.follower().pathBuilder()
                 .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, parkingPose)))
@@ -78,13 +78,13 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         PedroDriverControlled driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
                 Gamepads.gamepad1().leftStickX(),
-                Gamepads.gamepad1().rightStickX().negate(),
+                Gamepads.gamepad1().rightStickX().negate(), //negate the right stick because it's inverted
                 false
         );
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180))));
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
         Gamepads.gamepad1().leftBumper()
@@ -94,7 +94,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
 
 
         Gamepads.gamepad2().b()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow)
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad2().rightBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
@@ -102,21 +102,21 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
         Gamepads.gamepad2().a()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
         parkButton
                 .whenBecomesTrue(new FollowPath(parkPath));
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate() { //runs every loop
         BindingManager.update();
         telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
-
+        telemetry.update(); //telemetry for driver station
     }
 
     @Override
