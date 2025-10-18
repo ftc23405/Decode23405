@@ -98,9 +98,11 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         Gamepads.gamepad2().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
         Gamepads.gamepad2().y()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn);
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
         Gamepads.gamepad2().a()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse);
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
         Gamepads.gamepad2().x()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOff);
         parkButton
