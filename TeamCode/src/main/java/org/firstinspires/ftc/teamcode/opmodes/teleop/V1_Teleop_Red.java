@@ -93,6 +93,9 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed);
 
 
+        Gamepads.gamepad2().b()
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad2().rightBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
         Gamepads.gamepad2().leftBumper()
@@ -103,8 +106,6 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         Gamepads.gamepad2().a()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
-        Gamepads.gamepad2().x()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferOff);
         parkButton
                 .whenBecomesTrue(new FollowPath(parkPath));
     }
