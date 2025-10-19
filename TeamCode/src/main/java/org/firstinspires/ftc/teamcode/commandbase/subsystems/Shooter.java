@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.commandbase.subsystems;
 
 
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
+
+import org.firstinspires.ftc.robotcore.internal.hardware.android.GpioPin;
+
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.core.commands.Command;
@@ -36,6 +39,6 @@ public class Shooter implements Subsystem {
         shooterMotorGroup.setPower(shooterController.calculate(shooterMotorGroup.getState()));
         ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", shooterMotorRight.getVelocity());
         ActiveOpMode.telemetry().addData("Left Shooter Motor Velocity:", shooterMotorLeft.getVelocity());
-        ActiveOpMode.telemetry().update();
+        ActiveOpMode.telemetry().addData("Motor Group Velocity", shooterMotorGroup.getVelocity());
     }
 }

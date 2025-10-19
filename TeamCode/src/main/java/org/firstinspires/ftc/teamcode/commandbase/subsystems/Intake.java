@@ -40,7 +40,6 @@ public class Intake implements Subsystem {
     @Override
     public void periodic() {
         intakeMotor.setPower(intakeController.calculate(intakeMotor.getState()));
-        ActiveOpMode.telemetry().addData("Intake Velocity:", intakeMotor.getVelocity());
-        ActiveOpMode.telemetry().update();
+        ActiveOpMode.telemetry().addData("Intake Velocity", intakeMotor.getVelocity());
     }
 }

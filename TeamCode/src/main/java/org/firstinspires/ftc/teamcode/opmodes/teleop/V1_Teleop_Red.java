@@ -117,6 +117,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         telemetry.update(); //telemetry for driver station
+        ActiveOpMode.telemetry().update();
     }
 
     @Override
