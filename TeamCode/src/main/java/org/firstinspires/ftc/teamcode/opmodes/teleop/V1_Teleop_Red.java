@@ -23,6 +23,7 @@ import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
+import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -92,7 +93,6 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         Gamepads.gamepad1().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed);
 
-
         Gamepads.gamepad2().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -118,6 +118,10 @@ public class V1_Teleop_Red extends NextFTCOpMode {
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         telemetry.update(); //telemetry for driver station
         ActiveOpMode.telemetry().update();
+
+        if (PedroComponent.follower().getPose().getHeading() == Math.toRadians(180)) { //if follower has heading of 180 degrees, reset the IMU
+            new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
+        }
     }
 
     @Override
