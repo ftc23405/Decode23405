@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.commandbase.subsystems;
 
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
-import org.firstinspires.ftc.robotcore.internal.hardware.android.GpioPin;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.feedback.PIDCoefficients;
+import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
@@ -25,14 +28,22 @@ public class Shooter implements Subsystem {
 
     MotorGroup shooterMotorGroup = new MotorGroup(shooterMotorLeft, shooterMotorRight); //create motor group
 
+
     private final PIDCoefficients shooterPIDComponents = new PIDCoefficients(shooterP, shooterI, shooterD);
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(shooterPIDComponents)
+            .basicFF(shooterFF)
             .build();
 
     public Command shooterOn = new RunToVelocity(shooterController, targetVelocity).requires(this);
     public Command shooterOff = new RunToVelocity(shooterController, shooterOffVelocity).requires(this);
+
+    public Command waitUntilAtTargetVelocity(double tolerance) {
+        return new WaitUntil(() ->
+                Math.abs(shooterMotorGroup.getVelocity() - targetVelocity) < tolerance
+        );
+    }
 
     @Override
     public void periodic() {
