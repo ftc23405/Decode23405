@@ -39,10 +39,10 @@ public class Shooter implements Subsystem {
     public Command shooterOn = new RunToVelocity(shooterController, targetVelocity).requires(this);
     public Command shooterOff = new RunToVelocity(shooterController, shooterOffVelocity).requires(this);
 
-    public Command waitUntilAtTargetVelocity(double tolerance) {
+    public Command waitUntilAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
                 Math.abs(shooterMotorGroup.getVelocity() - targetVelocity) < tolerance
-        );
+        ).then(command);
     }
 
     @Override
