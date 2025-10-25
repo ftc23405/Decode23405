@@ -16,10 +16,14 @@ public class Globals {
     public static double shooterD = 0;
     public static double shooterFF = 0;
 
-    public static double targetVelocity = 500;
+    public static double targetVelocity = calculateTicksPerSecond(2000, 28);
     public static double shooterOffVelocity = 0;
 
     public static double transferPower = -0.5;
     public static double reverseTransferPower = 0.5;
+
+    public static double calculateTicksPerSecond(double targetRPM, double ticksPerRev) {
+        return (targetRPM / 60) * ticksPerRev;
+    }
 
 }
