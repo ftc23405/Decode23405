@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commandbase.vision;
 
 import android.util.Size;
 
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -19,13 +18,9 @@ import java.util.List;
 public class AprilTagWebcam {
 
     private AprilTagProcessor aprilTagProcessor;
-
     private VisionPortal visionPortal;
-
     private List<AprilTagDetection> detectedTags = new ArrayList<>();
-
     private TelemetryManager telemetryM;
-
 
     public void initalize(HardwareMap hwMap, TelemetryManager telemetryM) {
         this.telemetryM = telemetryM;
@@ -69,18 +64,60 @@ public class AprilTagWebcam {
             telemetryM.debug(String.format("Center %6.0f %6.0f   (pixels)", detectedId.center.x, detectedId.center.y));
         }
     }
-        public AprilTagDetection getTagBySpecificID(int id){
-            for (AprilTagDetection detection : detectedTags) {
-                if (detection.id == id) {
-                    return detection;
-                }
-            }
-            return null;
-        }
 
-        public void stop() {
-            if (visionPortal != null) {
-                visionPortal.close();
+    public AprilTagDetection getTagBySpecificID(int id){
+        for (AprilTagDetection detection : detectedTags) {
+            if (detection.id == id) {
+                return detection;
             }
+        }
+        return null;
+    }
+
+    public AprilTagDetection getFirstDetectedTag() {
+        if (detectedTags != null && !detectedTags.isEmpty()) {
+            return detectedTags.get(0); // return the first detected tag
+        }
+        return null; // no tags detected
+    }
+
+    public double getFirstTagBearing() {
+        AprilTagDetection tag = getFirstDetectedTag();
+        if (tag == null) {
+            return 0.0; //if no tag detected
+        }
+        // ftcPose.bearing = how many degrees the robot must turn to face the tag
+        return normalizeAngleDegrees(tag.ftcPose.bearing);
+    }
+
+    public double getTagDistance(AprilTagDetection detection) {
+        return detection.ftcPose.y;
+    }
+
+    public void stop() {
+        if (visionPortal != null) {
+            visionPortal.close();
         }
     }
+
+    public void start() {
+        if (visionPortal != null && visionPortal.getCameraState() == VisionPortal.CameraState.STOPPING_STREAM) {
+            visionPortal.resumeStreaming();
+        }
+    }
+
+    public void pause() {
+        if (visionPortal != null && visionPortal.getCameraState() == VisionPortal.CameraState.STREAMING) {
+            visionPortal.stopStreaming();
+        }
+    }
+
+    // Normalize an angle to [-180, 180)
+    private double normalizeAngleDegrees(double ang) {
+        // normalize error to [-180, 180]
+        double a = ang % 360.0;
+        if (a >= 180.0) a -= 360.0;
+        if (a < -180.0) a += 360.0;
+        return a;
+    }
+}
