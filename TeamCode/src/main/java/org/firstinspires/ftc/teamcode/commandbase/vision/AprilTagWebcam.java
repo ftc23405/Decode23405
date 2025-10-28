@@ -26,10 +26,9 @@ public class AprilTagWebcam {
 
     private TelemetryManager telemetryM;
 
-    public void init(HardwareMap hwMap, TelemetryManager telemetryM) {
-        this.telemetryM = telemetryM;
 
-        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+    public void initalize(HardwareMap hwMap, TelemetryManager telemetryM) {
+        this.telemetryM = telemetryM;
 
         aprilTagProcessor = new AprilTagProcessor.Builder()
                 .setDrawTagID(true)
@@ -79,7 +78,7 @@ public class AprilTagWebcam {
             return null;
         }
 
-        public void stop () {
+        public void stop() {
             if (visionPortal != null) {
                 visionPortal.close();
             }

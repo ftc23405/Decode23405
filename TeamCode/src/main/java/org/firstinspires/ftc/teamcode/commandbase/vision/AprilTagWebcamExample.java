@@ -16,7 +16,7 @@ public class AprilTagWebcamExample extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-        aprilTagWebcam.init(hardwareMap, telemetryM);
+        aprilTagWebcam.initalize(hardwareMap, telemetryM);
     }
 
     @Override
@@ -24,6 +24,13 @@ public class AprilTagWebcamExample extends NextFTCOpMode {
         //update vision portal
         aprilTagWebcam.update();
         AprilTagDetection id20 = aprilTagWebcam.getTagBySpecificID(20);
+        AprilTagDetection id24 = aprilTagWebcam.getTagBySpecificID(24);
         aprilTagWebcam.displayDetectionTelemetry(id20);
+        aprilTagWebcam.displayDetectionTelemetry(id24);
+    }
+
+    @Override
+    public void onStop() {
+        aprilTagWebcam.stop();
     }
 }
