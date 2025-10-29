@@ -8,7 +8,7 @@ public class Globals {
     public static double intakeI = 0;
     public static double intakeD = 0.005;
 
-    public static double intakeTargetSpeed = 200;
+    public static double intakeTargetSpeed = calculateTicksPerSecond(200, 384.5);
     public static double intakeOffSpeed = 0;
 
     public static double shooterP = 0.1;

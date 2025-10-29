@@ -116,7 +116,6 @@ public class V2_Teleop extends NextFTCOpMode {
         telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
-        telemetry.update(); //telemetry for driver station
         ActiveOpMode.telemetry().update();
 
         if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
