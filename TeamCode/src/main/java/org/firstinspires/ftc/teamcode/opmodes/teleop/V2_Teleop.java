@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
-import static java.lang.Math.abs;
-
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.BezierLine;
@@ -10,7 +8,6 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
@@ -33,9 +30,6 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
-import dev.nextftc.hardware.impl.Direction;
-import dev.nextftc.hardware.impl.IMUEx;
-import dev.nextftc.hardware.impl.MotorEx;
 
 @TeleOp(name = "V1 RED Side Teleop")
 @Configurable //panels
@@ -125,7 +119,7 @@ public class V2_Teleop extends NextFTCOpMode {
         telemetry.update(); //telemetry for driver station
         ActiveOpMode.telemetry().update();
 
-        if (abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= 2){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
+        if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 radians of tolerance), reset the IMU
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
         }
     }
