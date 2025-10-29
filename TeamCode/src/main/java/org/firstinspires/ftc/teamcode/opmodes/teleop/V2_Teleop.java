@@ -119,7 +119,7 @@ public class V2_Teleop extends NextFTCOpMode {
         telemetry.update(); //telemetry for driver station
         ActiveOpMode.telemetry().update();
 
-        if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 radians of tolerance), reset the IMU
+        if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
         }
     }
