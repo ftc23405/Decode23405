@@ -16,8 +16,22 @@ public class TransferPusher implements Subsystem {
     public final static TransferPusher INSTANCE = new TransferPusher();
 
     private final CRServoEx transferPusher = new CRServoEx("transferPusher");
-    public Command transferOn = new SetPower(transferPusher,transferPower).requires(this);
+
+    public Command transferOn = new SetPower(transferPusher, transferPower).requires(this);
+
     public Command transferReverse = new SetPower(transferPusher, reverseTransferPower).requires(this);
+
     public Command transferOff = new SetPower(transferPusher, 0).requires(this);
 
+    @Override
+    public void initialize() {
+        transferPusher.setPower(0.001);
+        transferPusher.setPower(0);
+    }
+
+    @Override
+    public void periodic() {
+
+        Shooter.INSTANCE.waitUntilAtTargetVelocity(20, transferOn);
+    }
 }

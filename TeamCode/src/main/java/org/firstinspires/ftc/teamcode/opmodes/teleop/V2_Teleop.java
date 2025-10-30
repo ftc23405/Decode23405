@@ -31,7 +31,7 @@ import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@TeleOp(name = "V1 RED Side Teleop")
+@TeleOp
 @Configurable //panels
 public class V2_Teleop extends NextFTCOpMode {
 
