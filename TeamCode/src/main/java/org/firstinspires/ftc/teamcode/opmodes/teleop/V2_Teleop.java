@@ -81,11 +81,11 @@ public class V2_Teleop extends NextFTCOpMode {
         Gamepads.gamepad1().start()
                 .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
         Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed);
+                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().leftBumper()
-                .whenBecomesTrue(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().b()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed);
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(() -> webcam.start())
                 .whenTrue(new SequentialGroup(
