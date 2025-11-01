@@ -93,6 +93,10 @@ public class V2_Teleop extends NextFTCOpMode {
                         new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
                 )
                 .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+        Gamepads.gamepad1().rightTrigger().inRange(0.05, 1)
+                .whenTrue((Intake.INSTANCE.variableIntake(() -> gamepad1.right_trigger)));
+        Gamepads.gamepad1().rightTrigger().atMost(0)
+                .whenTrue(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad2().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
