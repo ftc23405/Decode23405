@@ -30,6 +30,7 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import dev.nextftc.hardware.driving.MecanumDriverControlled;
 
 @TeleOp
 @Configurable //panels
@@ -52,13 +53,6 @@ public class OutreachTeleop extends NextFTCOpMode {
     @Override
     public void onStartButtonPressed() {
 
-        PedroDriverControlled driverControlled = new PedroDriverControlled(
-                Gamepads.gamepad1().leftStickY(),
-                Gamepads.gamepad1().leftStickX(),
-                Gamepads.gamepad1().rightStickX().negate(), //negate the right stick because it's inverted
-                true
-        );
-        driverControlled.schedule();
     }
 
     @Override
