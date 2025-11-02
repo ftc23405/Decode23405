@@ -39,7 +39,7 @@ public class Intake implements Subsystem {
 
     public Command intakeReverseHalfSpeed = new RunToVelocity(intakeController, -intakeTargetSpeed / 2).requires(this);
 
-    public Command intakeReverseSlow = new RunToVelocity(intakeController, -0.1 * intakeTargetSpeed);
+    public Command intakeReverseSlow = new RunToVelocity(intakeController, -0.2 * intakeTargetSpeed);
     public Command intakeReverseFullSpeed = new RunToVelocity(intakeController, -intakeTargetSpeed).requires(this);
 
 

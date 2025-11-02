@@ -98,6 +98,14 @@ public class AprilTagWebcam {
         return normalizeAngleDegrees(tag.ftcPose.bearing);
     }
 
+    public double getFirstTagDistance() {
+        AprilTagDetection tag = getFirstDetectedTag();
+        if (tag == null) {
+            return 0.0;
+        }
+        return tag.ftcPose.y;
+    }
+
     public double getTagDistance(AprilTagDetection detection) {
         return detection.ftcPose.y;
     }

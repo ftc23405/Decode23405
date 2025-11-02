@@ -80,12 +80,6 @@ public class V2_Teleop extends NextFTCOpMode {
 
         Gamepads.gamepad1().start()
                 .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
-        Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().leftBumper()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseHalfSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(() -> webcam.start())
                 .whenTrue(new SequentialGroup(
@@ -93,17 +87,19 @@ public class V2_Teleop extends NextFTCOpMode {
                         new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
                 )
                 .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
-        Gamepads.gamepad1().rightTrigger().inRange(0.05, 1)
-                .whenTrue((Intake.INSTANCE.variableIntake(() -> gamepad1.right_trigger)));
-        Gamepads.gamepad1().rightTrigger().atMost(0)
-                .whenTrue(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad2().b()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad2().rightBumper()
+        Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
-        Gamepads.gamepad2().leftBumper()
+        Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+
+        Gamepads.gamepad2().rightBumper()
+                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad2().leftBumper()
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad2().rightTrigger().inRange(0.05, 1)
+                .whenTrue((Intake.INSTANCE.variableIntake(() -> gamepad1.right_trigger)));
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
