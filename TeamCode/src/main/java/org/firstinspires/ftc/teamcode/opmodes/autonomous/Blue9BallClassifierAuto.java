@@ -4,6 +4,7 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -64,9 +65,9 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
     private final Pose intakeShortControlPose2 = new Pose(69.992, 83.990).mirror();
 
     private final Pose intakePose2 = new Pose(128.298, 59.523, Math.toRadians(0)).mirror();
-    private final Pose intakeLongControlPose1 = new Pose(73.765, 89.102).mirror();
-    private final Pose intakeLongControlPose2 = new Pose(81.555, 58.306).mirror();
-    private final Pose intakeLongControlPose3 = new Pose(89.467, 59.645).mirror();
+    private final Pose intakeLongControlPose1 = new Pose(64.879, 51.733).mirror();
+    private final Pose intakeLongControlPose2 = new Pose(93.241, 59.158).mirror();
+
 
     private final Pose goBackLongControlPose1 = new Pose(80.825, 70.965).mirror();
 
@@ -75,16 +76,16 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
 
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
-        shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
+        shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading(), 0.8);
 
         intake1 = new Path(new BezierCurve(scoringPose, intakeShortControlPose1,intakeShortControlPose2, intakePose1));
-        intake1.setTangentHeadingInterpolation();
+        intake1.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose1.getHeading(), 0.5);
 
         goBack1 = new Path(new BezierLine(intakePose1, scoringPose));
         goBack1.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPose.getHeading());
 
-        intake2 = new Path(new BezierCurve(scoringPose, intakeLongControlPose1, intakeLongControlPose2, intakeLongControlPose3, intakePose2));
-        intake2.setTangentHeadingInterpolation();
+        intake2 = new Path(new BezierCurve(scoringPose, intakeLongControlPose1, intakeLongControlPose2, intakePose2));
+        intake2.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose2.getHeading(), 0.6);
 
         goBack2 = new Path(new BezierCurve(intakePose2, goBackLongControlPose1, scoringPose));
         goBack2.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPose.getHeading());
