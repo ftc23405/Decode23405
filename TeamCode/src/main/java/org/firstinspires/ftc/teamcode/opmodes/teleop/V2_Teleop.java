@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
@@ -58,13 +60,8 @@ public class V2_Teleop extends NextFTCOpMode {
     @Override
     public void onInit() {
 
-        webcam.initalize(hardwareMap, telemetryM);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
-        parkPath = PedroComponent.follower().pathBuilder()
-                .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, parkingPose)))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(PedroComponent.follower()::getHeading, parkingPose.getHeading(), 0.8))
-                .build();
     }
 
     @Override
@@ -79,35 +76,39 @@ public class V2_Teleop extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
-        Gamepads.gamepad1().y()
-                .whenBecomesTrue(() -> webcam.start())
-                .whenTrue(new SequentialGroup(
-                        new InstantCommand(() -> webcam.update()),
-                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
-                )
-                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(0)))); //reset pinpoint IMU
+
         Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
+                .whenBecomesTrue(new SequentialGroup(
+                        Shooter.INSTANCE.shooterOn,
+                        new Delay(0.75),
+                        Intake.INSTANCE.intakeFullSpeed,
+                        TransferPusher.INSTANCE.transferOn
+                ))
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
         Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
-
-        Gamepads.gamepad2().rightBumper()
+        Gamepads.gamepad1().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow)
+        Gamepads.gamepad1().x()
+                .whenBecomesTrue(Intake.INSTANCE.intakeHalfSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad2().rightTrigger().inRange(0.05, 1)
-                .whenTrue((Intake.INSTANCE.variableIntake(() -> gamepad1.right_trigger)));
+        Gamepads.gamepad1().a()
+                .whenBecomesTrue(Intake.INSTANCE.intakeQuarterSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad1().b()
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+
+
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
         Gamepads.gamepad2().a()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
-        parkButton
-                .whenBecomesTrue(new FollowPath(parkPath));
     }
 
     @Override
@@ -118,13 +119,11 @@ public class V2_Teleop extends NextFTCOpMode {
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
 
-        if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
-            new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
-        }
+
     }
 
     @Override
     public void onStop() {
-        webcam.stop();
+        BindingManager.reset();
     }
 }

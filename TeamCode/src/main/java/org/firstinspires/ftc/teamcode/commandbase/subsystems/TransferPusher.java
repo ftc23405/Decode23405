@@ -25,13 +25,10 @@ public class TransferPusher implements Subsystem {
 
     @Override
     public void initialize() {
-        transferPusher.setPower(0.001);
-        transferPusher.setPower(0);
     }
 
     @Override
     public void periodic() {
 
-        Shooter.INSTANCE.waitUntilAtTargetVelocity(20, transferOn);
     }
 }

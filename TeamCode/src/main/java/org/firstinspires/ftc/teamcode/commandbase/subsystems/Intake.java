@@ -15,6 +15,7 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.GamepadEx;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
+import dev.nextftc.hardware.powerable.SetPower;
 
 @Configurable
 public class Intake implements Subsystem {
@@ -23,42 +24,36 @@ public class Intake implements Subsystem {
 
     private Intake() { }
 
-    private final MotorEx intakeMotor = new MotorEx("intakeMotor").brakeMode().reversed();
+    private final MotorEx intakeMotor = new MotorEx("intakeMotor").reversed().brakeMode();
 
-    private final PIDCoefficients intakePIDComponents = new PIDCoefficients(intakeP, intakeI, intakeD);
+    public Command intakeOff = new SetPower(intakeMotor, intakeOffSpeed);
 
-    private final ControlSystem intakeController = ControlSystem.builder()
-            .velPid(intakePIDComponents)
-            .build();
+    public Command intakeQuarterSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 4);
 
-    public Command intakeOff = new RunToVelocity(intakeController, intakeOffSpeed).requires(this);
+    public Command intakeHalfSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 2);
 
-    public Command intakeHalfSpeed = new RunToVelocity(intakeController, intakeTargetSpeed / 2).requires(this);
+    public Command intakeFullSpeed = new SetPower(intakeMotor, intakeTargetSpeed);
 
-    public Command intakeFullSpeed = new RunToVelocity(intakeController, intakeTargetSpeed).requires(this);
-
-    public Command intakeReverseHalfSpeed = new RunToVelocity(intakeController, -intakeTargetSpeed / 2).requires(this);
-
-    public Command intakeReverseSlow = new RunToVelocity(intakeController, -0.2 * intakeTargetSpeed);
-    public Command intakeReverseFullSpeed = new RunToVelocity(intakeController, -intakeTargetSpeed).requires(this);
+    public Command intakeReverseHalfSpeed = new SetPower(intakeMotor, -intakeTargetSpeed / 2);
+    public Command intakeReverseSlow = new SetPower(intakeMotor, -0.2 * intakeTargetSpeed);
+    public Command intakeReverseFullSpeed = new SetPower(intakeMotor, -intakeTargetSpeed);
 
 
-    public Command variableIntake(DoubleSupplier triggerSupplier) {
-        DoubleSupplier velocitySupplier = () -> {
-            double raw = triggerSupplier.getAsDouble(); // assume 0..1
-            // deadzone:
-            double deadzone = 0.05;
-            if (Math.abs(raw) < deadzone) return 0.0;
-            // optional squared scaling
-            double scaled = Math.signum(raw) * (raw * raw);
-            return scaled * intakeTargetSpeed;
-        };
-        return new RunToVelocity(intakeController, velocitySupplier.getAsDouble()).requires(this);
-    }
+//    public Command variableIntake(DoubleSupplier triggerSupplier) {
+//        DoubleSupplier velocitySupplier = () -> {
+//            double raw = triggerSupplier.getAsDouble(); // assume 0..1
+//            // deadzone:
+//            double deadzone = 0.05;
+//            if (Math.abs(raw) < deadzone) return 0.0;
+//            // optional squared scaling
+//            double scaled = Math.signum(raw) * (raw * raw);
+//            return scaled * intakeTargetSpeed;
+//        };
+//        return new RunToVelocity(intakeController, velocitySupplier.getAsDouble()).requires(this);
+//    }
 
     @Override
     public void periodic() {
-        intakeMotor.setPower(intakeController.calculate(intakeMotor.getState()));
         ActiveOpMode.telemetry().addData("Intake Velocity", intakeMotor.getVelocity());
     }
 }
