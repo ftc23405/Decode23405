@@ -8,9 +8,13 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -28,13 +32,40 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
                 new PedroComponent(Constants::createFollower)
         );
     }
+
+    public Command shootWithTransfer() {
+        return new SequentialGroup(
+                Shooter.INSTANCE.shooterOn,
+                new Delay(0.75),
+                Intake.INSTANCE.intakeFullSpeed,
+                TransferPusher.INSTANCE.transferOn
+        );
+    }
+
     public Command autoRoutine() {
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
+                shootWithTransfer(),
+                new Delay(3),
+                Shooter.INSTANCE.shooterOff,
+                TransferPusher.INSTANCE.transferOff,
                 new FollowPath(intake1,true),
+                new Delay(1),
+                Intake.INSTANCE.intakeOff,
                 new FollowPath(goBack1,true),
+                shootWithTransfer(),
+                new Delay(3),
+                Shooter.INSTANCE.shooterOff,
+                TransferPusher.INSTANCE.transferOff,
                 new FollowPath(intake2,true),
+                new Delay(1),
+                Intake.INSTANCE.intakeOff,
                 new FollowPath(goBack2,true),
+                shootWithTransfer(),
+                new Delay(3),
+                Shooter.INSTANCE.shooterOff,
+                TransferPusher.INSTANCE.transferOff,
+                Intake.INSTANCE.intakeOff,
                 new FollowPath(park,true)
 
         );

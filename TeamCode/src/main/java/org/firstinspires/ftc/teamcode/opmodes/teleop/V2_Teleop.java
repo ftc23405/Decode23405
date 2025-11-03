@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -59,7 +60,7 @@ public class V2_Teleop extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-
+        webcam.initalize(hardwareMap, telemetryM);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
@@ -78,6 +79,13 @@ public class V2_Teleop extends NextFTCOpMode {
         Gamepads.gamepad1().start()
                 .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(0)))); //reset pinpoint IMU
 
+        Gamepads.gamepad1().y()
+                .whenBecomesTrue(() -> webcam.start())
+                .whenTrue(new SequentialGroup(
+                        new InstantCommand(() -> webcam.update()),
+                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
+                )
+                        .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(new SequentialGroup(
                         Shooter.INSTANCE.shooterOn,
@@ -119,11 +127,15 @@ public class V2_Teleop extends NextFTCOpMode {
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
 
+        if (Math.abs(PedroComponent.follower().getPose().getHeading() - Math.toRadians(180)) <= Math.toRadians(2)){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
+            new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
+        }
 
     }
 
     @Override
     public void onStop() {
         BindingManager.reset();
+        webcam.stop();
     }
 }
