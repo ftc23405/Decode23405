@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,15 +14,12 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.core.units.Angle;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
 import dev.nextftc.extensions.pedro.TurnBy;
@@ -86,17 +80,7 @@ public class V2_Teleop extends NextFTCOpMode {
                         new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
                 )
                         .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
-        Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(new SequentialGroup(
-                        Shooter.INSTANCE.shooterOn,
-                        new Delay(0.75),
-                        Intake.INSTANCE.intakeFullSpeed,
-                        TransferPusher.INSTANCE.transferOn
-                ))
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
-        Gamepads.gamepad1().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -110,7 +94,27 @@ public class V2_Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
+        Gamepads.gamepad2().dpadLeft()
+                .whenBecomesTrue(new SequentialGroup(
+                        Shooter.INSTANCE.shooterCloseShoot,
+                        new Delay(0.75),
+                        Intake.INSTANCE.intakeFullSpeed,
+                        TransferPusher.INSTANCE.transferOn
+                ))
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
 
+        Gamepads.gamepad2().dpadUp()
+                .whenBecomesTrue(new SequentialGroup(
+                        Shooter.INSTANCE.shooterFarShoot,
+                        new Delay(0.75),
+                        Intake.INSTANCE.intakeFullSpeed,
+                        TransferPusher.INSTANCE.transferOn
+                ))
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
+        Gamepads.gamepad2().dpadDown()
+                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs

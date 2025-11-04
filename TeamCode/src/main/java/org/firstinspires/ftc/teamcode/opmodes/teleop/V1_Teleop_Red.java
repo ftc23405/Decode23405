@@ -7,7 +7,6 @@ import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
@@ -17,22 +16,18 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
 import dev.nextftc.core.commands.utility.InstantCommand;
-import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
-import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
-import dev.nextftc.hardware.driving.DriverControlledCommand;
 import dev.nextftc.hardware.impl.Direction;
 import dev.nextftc.hardware.impl.IMUEx;
 import dev.nextftc.hardware.impl.MotorEx;
-import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp(name = "V1 RED Side Teleop")
 @Configurable //panels
@@ -97,7 +92,7 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOn);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
         Gamepads.gamepad2().leftBumper()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
         Gamepads.gamepad2().y()

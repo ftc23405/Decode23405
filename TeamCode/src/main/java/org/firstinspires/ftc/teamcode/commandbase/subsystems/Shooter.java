@@ -3,18 +3,11 @@ package org.firstinspires.ftc.teamcode.commandbase.subsystems;
 
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
-
-import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.feedback.PIDCoefficients;
-import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
-import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
@@ -30,7 +23,10 @@ public class Shooter implements Subsystem {
     MotorGroup shooterMotorGroup = new MotorGroup(shooterMotorLeft, shooterMotorRight); //create motor group
 
 
-    public Command shooterOn = new SetPower(shooterMotorGroup, 1);
+    public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1);
+
+    public Command shooterCloseShoot = new SetPower(shooterMotorGroup, 0.6);
+
     public Command shooterOff = new SetPower(shooterMotorGroup, 0);
     public Command waitUntilAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
