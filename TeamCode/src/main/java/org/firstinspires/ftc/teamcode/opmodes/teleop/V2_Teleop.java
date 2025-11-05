@@ -54,7 +54,7 @@ public class V2_Teleop extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-        webcam.initalize(hardwareMap, telemetryM);
+//        webcam.initalize(hardwareMap, telemetryM);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
@@ -71,15 +71,15 @@ public class V2_Teleop extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().start()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(0)))); //reset pinpoint IMU
+                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
 
-        Gamepads.gamepad1().y()
-                .whenBecomesTrue(() -> webcam.start())
-                .whenTrue(new SequentialGroup(
-                        new InstantCommand(() -> webcam.update()),
-                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
-                )
-                        .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+//        Gamepads.gamepad1().y()
+//                .whenBecomesTrue(() -> webcam.start())
+//                .whenTrue(new SequentialGroup(
+//                        new InstantCommand(() -> webcam.update()),
+//                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
+//                )
+//                        .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
@@ -140,6 +140,6 @@ public class V2_Teleop extends NextFTCOpMode {
     @Override
     public void onStop() {
         BindingManager.reset();
-        webcam.stop();
+//        webcam.stop();
     }
 }

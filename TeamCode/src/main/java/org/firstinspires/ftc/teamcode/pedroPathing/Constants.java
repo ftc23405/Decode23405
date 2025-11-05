@@ -17,28 +17,28 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(4.4)
-            .forwardZeroPowerAcceleration(-57.00381)
-            .lateralZeroPowerAcceleration(-62.872233)
+            .mass(10.205)
+            .forwardZeroPowerAcceleration(-34.870755)
+            .lateralZeroPowerAcceleration(-66.460284)
             .useSecondaryTranslationalPIDF(true)
-            .useSecondaryHeadingPIDF(true)
+            .useSecondaryHeadingPIDF(false)
             .useSecondaryDrivePIDF(true)
-            .centripetalScaling(0.005)
+            .centripetalScaling(0.0005)
 
             .translationalPIDFCoefficients(
-                    new PIDFCoefficients(0.15, 0, 0.1, 0)
+                    new PIDFCoefficients(0.15, 0, 0.01, 0)
             )
             .headingPIDFCoefficients(
-                    new PIDFCoefficients(1.5, 0, 0.03, 0.05)
+                    new PIDFCoefficients(1, 0, 0.02, 0.03)
             )
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.1,0.0,0.01,0.6,0.0)
+                    new FilteredPIDFCoefficients(0.003,0.0,0.0001,0.6,0.0)
             )
             .secondaryTranslationalPIDFCoefficients(
                     new PIDFCoefficients(0.2, 0, 0.01, 0)
             )
             .secondaryHeadingPIDFCoefficients(
-                    new PIDFCoefficients(0.1, 0, 0.005, 0)
+                    new PIDFCoefficients(0.002, 0, 0.0001, 0)
             )
             .secondaryDrivePIDFCoefficients(
                     new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01)
@@ -53,9 +53,9 @@ public class Constants {
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(82.62078)
-            .yVelocity(67.23966)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .xVelocity(75.86479)
+            .yVelocity(59.58992)
             .useBrakeModeInTeleOp(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
