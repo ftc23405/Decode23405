@@ -16,6 +16,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -27,6 +28,8 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
         public Red9BallClassifierAuto() {
             addComponents(
+                    new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                    new SubsystemComponent(TransferPusher.INSTANCE),
                     BulkReadComponent.INSTANCE,
                     new PedroComponent(Constants::createFollower)
             );
@@ -77,6 +80,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
         @Override
         public void onInit() {
+            PedroComponent.follower().setStartingPose(startPose);
             buildPaths();
         }
 
