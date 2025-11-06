@@ -99,6 +99,14 @@ public class V2_Teleop extends NextFTCOpMode {
                         Shooter.INSTANCE.shooterCloseShoot,
                         new Delay(0.75),
                         Intake.INSTANCE.intakeFullSpeed,
+                        TransferPusher.INSTANCE.transferOn,
+                        new Delay(0.15),
+                        TransferPusher.INSTANCE.transferOff,
+                        new Delay(0.25),
+                        TransferPusher.INSTANCE.transferOn,
+                        new Delay(0.15),
+                        TransferPusher.INSTANCE.transferOff,
+                        new Delay(0.25),
                         TransferPusher.INSTANCE.transferOn
                 ))
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff)
