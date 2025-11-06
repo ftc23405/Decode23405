@@ -25,6 +25,8 @@ public class Shooter implements Subsystem {
 
     public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1);
 
+    public Command shooterClassifierShoot = new SetPower(shooterMotorGroup, 0.8);
+
     public Command shooterCloseShoot = new SetPower(shooterMotorGroup, 0.7);
 
     public Command shooterOff = new SetPower(shooterMotorGroup, 0);

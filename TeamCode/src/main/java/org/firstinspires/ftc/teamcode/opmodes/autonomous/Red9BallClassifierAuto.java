@@ -37,7 +37,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                Shooter.INSTANCE.shooterCloseShoot,
+                Shooter.INSTANCE.shooterClassifierShoot,
                 new Delay(0.75),
                 Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
