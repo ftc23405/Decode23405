@@ -71,7 +71,10 @@ public class V2_Teleop extends NextFTCOpMode {
         driverControlled.schedule();
 
         Gamepads.gamepad1().leftBumper()
-                .whenBecomesTrue(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU
+                .whenBecomesTrue(new SequentialGroup(
+                        new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))),
+                        new InstantCommand(() -> gamepad1.rumble(500))
+                )); //reset pinpoint IMU
 
 //        Gamepads.gamepad1().y()
 //                .whenBecomesTrue(() -> webcam.start())
@@ -130,35 +133,35 @@ public class V2_Teleop extends NextFTCOpMode {
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
         Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot)
-                .whenBecomesFalse(new SequentialGroup(
-                        new Delay(0.75),
-                        Intake.INSTANCE.intakeFullSpeed,
-                        TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.15),
-                        TransferPusher.INSTANCE.transferOff,
-                        new Delay(0.25),
-                        TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.15),
-                        TransferPusher.INSTANCE.transferOff,
-                        new Delay(0.25),
-                        TransferPusher.INSTANCE.transferOn
-                ));
+                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
+//                .whenBecomesFalse(new SequentialGroup(
+//                        new Delay(0.75),
+//                        Intake.INSTANCE.intakeFullSpeed,
+//                        TransferPusher.INSTANCE.transferOn,
+//                        new Delay(0.15),
+//                        TransferPusher.INSTANCE.transferOff,
+//                        new Delay(0.25),
+//                        TransferPusher.INSTANCE.transferOn,
+//                        new Delay(0.15),
+//                        TransferPusher.INSTANCE.transferOff,
+//                        new Delay(0.25),
+//                        TransferPusher.INSTANCE.transferOn
+//                ));
         Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot)
-                .whenBecomesFalse(new SequentialGroup(
-                        new Delay(0.75),
-                        Intake.INSTANCE.intakeFullSpeed,
-                        TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.15),
-                        TransferPusher.INSTANCE.transferOff,
-                        new Delay(0.25),
-                        TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.15),
-                        TransferPusher.INSTANCE.transferOff,
-                        new Delay(0.25),
-                        TransferPusher.INSTANCE.transferOn
-                ));
+                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot);
+//                .whenBecomesFalse(new SequentialGroup(
+//                        new Delay(0.75),
+//                        Intake.INSTANCE.intakeFullSpeed,
+//                        TransferPusher.INSTANCE.transferOn,
+//                        new Delay(0.15),
+//                        TransferPusher.INSTANCE.transferOff,
+//                        new Delay(0.25),
+//                        TransferPusher.INSTANCE.transferOn,
+//                        new Delay(0.15),
+//                        TransferPusher.INSTANCE.transferOff,
+//                        new Delay(0.25),
+//                        TransferPusher.INSTANCE.transferOn
+//                ));
         Gamepads.gamepad2().dpadDown()
                 .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
         Gamepads.gamepad2().y()
