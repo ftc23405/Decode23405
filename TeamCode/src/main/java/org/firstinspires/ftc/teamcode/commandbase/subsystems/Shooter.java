@@ -25,7 +25,7 @@ public class Shooter implements Subsystem {
 
     public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1);
 
-    public Command shooterCloseShoot = new SetPower(shooterMotorGroup, 0.6);
+    public Command shooterCloseShoot = new SetPower(shooterMotorGroup, 0.7);
 
     public Command shooterOff = new SetPower(shooterMotorGroup, 0);
     public Command waitUntilAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument

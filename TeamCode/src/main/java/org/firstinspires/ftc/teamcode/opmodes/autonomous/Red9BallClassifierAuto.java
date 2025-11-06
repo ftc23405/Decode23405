@@ -40,6 +40,14 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                 Shooter.INSTANCE.shooterCloseShoot,
                 new Delay(0.75),
                 Intake.INSTANCE.intakeFullSpeed,
+                TransferPusher.INSTANCE.transferOn,
+                new Delay(0.15),
+                TransferPusher.INSTANCE.transferOff,
+                new Delay(0.25),
+                TransferPusher.INSTANCE.transferOn,
+                new Delay(0.15),
+                TransferPusher.INSTANCE.transferOff,
+                new Delay(0.25),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -91,18 +99,18 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
         private Path shoot1, intake1, goBack1, intake2, goBack2, park;
 
-        private final Pose startPose = new Pose(118.000, 130.500, Math.toRadians(216));
-        private final Pose scoringPose = new Pose(92.632, 107.117, Math.toRadians(225));
+        private final Pose startPose = new Pose(116.7182, 129.528, Math.toRadians(216));
+        private final Pose scoringPose = new Pose(84, 100, Math.toRadians(216));
 
-        private final Pose intakePose1 = new Pose(129.150, 83.990, Math.toRadians(0));
-        private final Pose intakeShortControlPose1 = new Pose(74.982, 89.224);
-        private final Pose intakeShortControlPose2 = new Pose(69.992, 83.990);
+        private final Pose intakePose1 = new Pose(130.150, 84.990, Math.toRadians(0));
+        private final Pose intakeShortControlPose1 = new Pose(75.982, 90.224);
+        private final Pose intakeShortControlPose2 = new Pose(70.992, 84.990);
 
-        private final Pose intakePose2 = new Pose(128.298, 59.523, Math.toRadians(0));
-        private final Pose intakeLongControlPose1 = new Pose(64.879, 51.733);
-        private final Pose intakeLongControlPose2 = new Pose(93.241, 59.158);
+        private final Pose intakePose2 = new Pose(129.298, 60.523, Math.toRadians(0));
+        private final Pose intakeLongControlPose1 = new Pose(65.879, 52.733);
+        private final Pose intakeLongControlPose2 = new Pose(94.241, 60.158);
 
-        private final Pose goBackLongControlPose1 = new Pose(80.825, 70.965);
+        private final Pose goBackLongControlPose1 = new Pose(81.825, 71.965);
 
         private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
 
