@@ -82,7 +82,7 @@ public class Red3BallFarAuto extends NextFTCOpMode {
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(84.233, 18.989, Math.toRadians(-116));
+    private final Pose scoringPose = new Pose(84.233, 18.989, Math.toRadians(-121));
 
     private final Pose turnPose = new Pose(97.461, 34.435, Math.toRadians(0));
 
