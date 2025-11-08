@@ -23,10 +23,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "6 Ball Red Far Auto")
-public class Red6BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "3 Ball Red Far Auto")
+public class Red3BallFarAuto extends NextFTCOpMode {
 
-    public Red6BallFarAuto() {
+    public Red3BallFarAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -41,11 +41,11 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 new Delay(2),
                 Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.25),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
                 new Delay(1),
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.25),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
                 new Delay(1),
                 TransferPusher.INSTANCE.transferOn
@@ -59,16 +59,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 new Delay(3),
                 Shooter.INSTANCE.shooterOff,
                 TransferPusher.INSTANCE.transferOff,
-                new FollowPath(turn1,true),
-                new FollowPath(intake1,true),
-                new Delay(1),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(shoot2,true),
-                shootWithTransfer(),
-                new Delay(3),
-                Shooter.INSTANCE.shooterOff,
-                TransferPusher.INSTANCE.transferOff,
-                new FollowPath(park,true)
+                new FollowPath(park, true)
         );
     }
 
@@ -97,7 +88,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     private final Pose intakePose1 = new Pose(131.687, 34.852, Math.toRadians(0));
 
-    private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
+    private final Pose endPose = new Pose(118, 9, Math.toRadians(180));
 
 
     public void buildPaths() {
