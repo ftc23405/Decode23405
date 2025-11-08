@@ -20,7 +20,7 @@ public class Constants {
             .mass(10.205)
             .forwardZeroPowerAcceleration(-34.870755)
             .lateralZeroPowerAcceleration(-66.460284)
-            .useSecondaryTranslationalPIDF(true)
+            .useSecondaryTranslationalPIDF(false)
             .useSecondaryHeadingPIDF(false)
             .useSecondaryDrivePIDF(false)
             .centripetalScaling(0.0005)
