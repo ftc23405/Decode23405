@@ -29,7 +29,7 @@ public class Shooter implements Subsystem {
         shooterMotorLeft.getMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shooterMotorRight.getMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1);
+    public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1.1);
 
     public Command shooterClassifierShoot = new SetPower(shooterMotorGroup, 0.8);
 
