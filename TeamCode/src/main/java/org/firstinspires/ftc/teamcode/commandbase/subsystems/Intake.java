@@ -32,6 +32,8 @@ public class Intake implements Subsystem {
 
     public Command intakeHalfSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 2);
 
+    public Command intakeAutoSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 1.5);
+
     public Command intakeFullSpeed = new SetPower(intakeMotor, intakeTargetSpeed);
 
     public Command intakeReverseHalfSpeed = new SetPower(intakeMotor, -intakeTargetSpeed / 2);

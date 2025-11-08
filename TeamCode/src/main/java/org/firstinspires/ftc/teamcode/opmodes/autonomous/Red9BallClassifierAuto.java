@@ -59,7 +59,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(3),
                     Shooter.INSTANCE.shooterOff,
                     TransferPusher.INSTANCE.transferOff,
-                    Intake.INSTANCE.intakeHalfSpeed,
+                    Intake.INSTANCE.intakeAutoSpeed,
                     new FollowPath(intake1,true),
                     new Delay(1),
                     Intake.INSTANCE.intakeOff,
@@ -68,16 +68,17 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(3),
                     Shooter.INSTANCE.shooterOff,
                     TransferPusher.INSTANCE.transferOff,
-                    new FollowPath(intake2,true)
-//                    new Delay(1),
-//                    Intake.INSTANCE.intakeOff,
-//                    new FollowPath(goBack2,true),
-//                    shootWithTransfer(),
-//                    new Delay(3),
-//                    Shooter.INSTANCE.shooterOff,
-//                    TransferPusher.INSTANCE.transferOff,
-//                    Intake.INSTANCE.intakeOff,
-//                    new FollowPath(park,true)
+                    Intake.INSTANCE.intakeAutoSpeed,
+                    new FollowPath(intake2,true),
+                    new Delay(1),
+                    Intake.INSTANCE.intakeOff,
+                    new FollowPath(goBack2,true),
+                    shootWithTransfer(),
+                    new Delay(3),
+                    Shooter.INSTANCE.shooterOff,
+                    TransferPusher.INSTANCE.transferOff,
+                    Intake.INSTANCE.intakeOff,
+                    new FollowPath(park,true)
 
             );
         }

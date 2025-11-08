@@ -23,10 +23,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "9 Ball Blue Side Classifier Auto")
-public class Blue9BallClassifierAuto extends NextFTCOpMode {
+@Autonomous(name = "6 Ball Blue Side Classifier Auto")
+public class Blue6BallClassifierAuto extends NextFTCOpMode {
 
-    public Blue9BallClassifierAuto() {
+    public Blue6BallClassifierAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -68,17 +68,16 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
                 new Delay(3),
                 Shooter.INSTANCE.shooterOff,
                 TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeAutoSpeed,
-                new FollowPath(intake2,true),
-                new Delay(1),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(goBack2,true),
-                shootWithTransfer(),
-                new Delay(3),
-                Shooter.INSTANCE.shooterOff,
-                TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(park,true)
+                new FollowPath(intake2,true)
+//                new Delay(1),
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(goBack2,true),
+//                shootWithTransfer(),
+//                new Delay(3),
+//                Shooter.INSTANCE.shooterOff,
+//                TransferPusher.INSTANCE.transferOff,
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(park,true)
 
         );
     }

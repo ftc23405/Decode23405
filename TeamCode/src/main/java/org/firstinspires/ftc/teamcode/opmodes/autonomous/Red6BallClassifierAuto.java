@@ -23,10 +23,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "9 Ball Blue Side Classifier Auto")
-public class Blue9BallClassifierAuto extends NextFTCOpMode {
+@Autonomous(name = "6 Ball Red Side Classifier Auto")
+public class Red6BallClassifierAuto extends NextFTCOpMode{
 
-    public Blue9BallClassifierAuto() {
+    public Red6BallClassifierAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -68,17 +68,16 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
                 new Delay(3),
                 Shooter.INSTANCE.shooterOff,
                 TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeAutoSpeed,
-                new FollowPath(intake2,true),
-                new Delay(1),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(goBack2,true),
-                shootWithTransfer(),
-                new Delay(3),
-                Shooter.INSTANCE.shooterOff,
-                TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(park,true)
+                new FollowPath(intake2,true)
+//                    new Delay(1),
+//                    Intake.INSTANCE.intakeOff,
+//                    new FollowPath(goBack2,true),
+//                    shootWithTransfer(),
+//                    new Delay(3),
+//                    Shooter.INSTANCE.shooterOff,
+//                    TransferPusher.INSTANCE.transferOff,
+//                    Intake.INSTANCE.intakeOff,
+//                    new FollowPath(park,true)
 
         );
     }
@@ -101,20 +100,20 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
 
     private Path shoot1, intake1, goBack1, intake2, goBack2, park;
 
-    private final Pose startPose = new Pose(120, 132, Math.toRadians(216)).mirror();
-    private final Pose scoringPose = new Pose(84, 100, Math.toRadians(216)).mirror();
+    private final Pose startPose = new Pose(120, 132, Math.toRadians(216));
+    private final Pose scoringPose = new Pose(84, 100, Math.toRadians(216));
 
-    private final Pose intakePose1 = new Pose(130.150, 84.990, Math.toRadians(0)).mirror();
-    private final Pose intakeShortControlPose1 = new Pose(75.982, 90.224).mirror();
-    private final Pose intakeShortControlPose2 = new Pose(70.992, 84.990).mirror();
+    private final Pose intakePose1 = new Pose(130.150, 84.990, Math.toRadians(0));
+    private final Pose intakeShortControlPose1 = new Pose(75.982, 90.224);
+    private final Pose intakeShortControlPose2 = new Pose(70.992, 84.990);
 
-    private final Pose intakePose2 = new Pose(129.298, 60.523, Math.toRadians(0)).mirror();
-    private final Pose intakeLongControlPose1 = new Pose(65.879, 52.733).mirror();
-    private final Pose intakeLongControlPose2 = new Pose(94.241, 60.158).mirror();
+    private final Pose intakePose2 = new Pose(129.298, 60.523, Math.toRadians(0));
+    private final Pose intakeLongControlPose1 = new Pose(65.879, 52.733);
+    private final Pose intakeLongControlPose2 = new Pose(94.241, 60.158);
 
-    private final Pose goBackLongControlPose1 = new Pose(81.825, 71.965).mirror();
+    private final Pose goBackLongControlPose1 = new Pose(81.825, 71.965);
 
-    private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180)).mirror();
+    private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
 
 
     public void buildPaths() {
