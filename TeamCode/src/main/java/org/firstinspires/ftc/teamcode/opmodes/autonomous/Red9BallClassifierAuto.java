@@ -38,16 +38,16 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 Shooter.INSTANCE.shooterClassifierShoot,
-                new Delay(0.75),
-                Intake.INSTANCE.intakeHalfSpeed,
+                new Delay(1),
+                Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.3),
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.3),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -59,6 +59,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(3),
                     Shooter.INSTANCE.shooterOff,
                     TransferPusher.INSTANCE.transferOff,
+                    Intake.INSTANCE.intakeHalfSpeed,
                     new FollowPath(intake1,true),
                     new Delay(1),
                     Intake.INSTANCE.intakeOff,
@@ -67,16 +68,16 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(3),
                     Shooter.INSTANCE.shooterOff,
                     TransferPusher.INSTANCE.transferOff,
-                    new FollowPath(intake2,true),
-                    new Delay(1),
-                    Intake.INSTANCE.intakeOff,
-                    new FollowPath(goBack2,true),
-                    shootWithTransfer(),
-                    new Delay(3),
-                    Shooter.INSTANCE.shooterOff,
-                    TransferPusher.INSTANCE.transferOff,
-                    Intake.INSTANCE.intakeOff,
-                    new FollowPath(park,true)
+                    new FollowPath(intake2,true)
+//                    new Delay(1),
+//                    Intake.INSTANCE.intakeOff,
+//                    new FollowPath(goBack2,true),
+//                    shootWithTransfer(),
+//                    new Delay(3),
+//                    Shooter.INSTANCE.shooterOff,
+//                    TransferPusher.INSTANCE.transferOff,
+//                    Intake.INSTANCE.intakeOff,
+//                    new FollowPath(park,true)
 
             );
         }

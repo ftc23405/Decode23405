@@ -38,16 +38,16 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 Shooter.INSTANCE.shooterClassifierShoot,
-                new Delay(0.75),
-                Intake.INSTANCE.intakeHalfSpeed,
+                new Delay(1),
+                Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.3),
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.2),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.3),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -59,6 +59,7 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
                 new Delay(3),
                 Shooter.INSTANCE.shooterOff,
                 TransferPusher.INSTANCE.transferOff,
+                Intake.INSTANCE.intakeHalfSpeed,
                 new FollowPath(intake1,true),
                 new Delay(1),
                 Intake.INSTANCE.intakeOff,
@@ -67,16 +68,16 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
                 new Delay(3),
                 Shooter.INSTANCE.shooterOff,
                 TransferPusher.INSTANCE.transferOff,
-                new FollowPath(intake2,true),
-                new Delay(1),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(goBack2,true),
-                shootWithTransfer(),
-                new Delay(3),
-                Shooter.INSTANCE.shooterOff,
-                TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(park,true)
+                new FollowPath(intake2,true)
+//                new Delay(1),
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(goBack2,true),
+//                shootWithTransfer(),
+//                new Delay(3),
+//                Shooter.INSTANCE.shooterOff,
+//                TransferPusher.INSTANCE.transferOff,
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(park,true)
 
         );
     }
@@ -99,7 +100,7 @@ public class Blue9BallClassifierAuto extends NextFTCOpMode {
 
     private Path shoot1, intake1, goBack1, intake2, goBack2, park;
 
-    private final Pose startPose = new Pose(116.7182, 129.528, Math.toRadians(216)).mirror();
+    private final Pose startPose = new Pose(120, 132, Math.toRadians(216)).mirror();
     private final Pose scoringPose = new Pose(84, 100, Math.toRadians(216)).mirror();
 
     private final Pose intakePose1 = new Pose(130.150, 84.990, Math.toRadians(0)).mirror();

@@ -37,17 +37,17 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                Shooter.INSTANCE.shooterClassifierShoot,
-                new Delay(0.75),
+                Shooter.INSTANCE.shooterFarShoot,
+                new Delay(1.25),
                 Intake.INSTANCE.intakeHalfSpeed,
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.5),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.5),
                 TransferPusher.INSTANCE.transferOn,
-                new Delay(0.15),
+                new Delay(0.5),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
+                new Delay(0.5),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -55,9 +55,19 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command autoRoutine() {
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
+                shootWithTransfer(),
+                new Delay(3),
+                Shooter.INSTANCE.shooterOff,
+                TransferPusher.INSTANCE.transferOff,
                 new FollowPath(turn1,true),
                 new FollowPath(intake1,true),
+                new Delay(1),
+                Intake.INSTANCE.intakeOff,
                 new FollowPath(shoot2,true),
+                shootWithTransfer(),
+                new Delay(3),
+                Shooter.INSTANCE.shooterOff,
+                TransferPusher.INSTANCE.transferOff,
                 new FollowPath(park,true)
         );
     }

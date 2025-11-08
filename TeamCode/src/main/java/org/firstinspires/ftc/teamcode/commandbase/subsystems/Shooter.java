@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.commandbase.subsystems;
 
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.subsystems.Subsystem;
@@ -22,7 +24,11 @@ public class Shooter implements Subsystem {
 
     MotorGroup shooterMotorGroup = new MotorGroup(shooterMotorLeft, shooterMotorRight); //create motor group
 
-
+    @Override
+    public void initialize() {
+        shooterMotorLeft.getMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooterMotorRight.getMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
     public Command shooterFarShoot = new SetPower(shooterMotorGroup, 1);
 
     public Command shooterClassifierShoot = new SetPower(shooterMotorGroup, 0.8);
