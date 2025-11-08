@@ -37,7 +37,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                Shooter.INSTANCE.shooterClassifierShoot,
+                Shooter.INSTANCE.shooterClassifierShoot(),
                 new Delay(0.75),
                 Intake.INSTANCE.intakeHalfSpeed,
                 TransferPusher.INSTANCE.transferOn,

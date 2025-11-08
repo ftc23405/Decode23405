@@ -92,9 +92,9 @@ public class V1_Teleop_Red extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseSlow) //intake reverse slow for holding 2 balls
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot());
         Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterOff());
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
