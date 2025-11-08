@@ -99,7 +99,7 @@ public class V2_Teleop extends NextFTCOpMode {
 
         Gamepads.gamepad2().dpadLeft()
                 .whenBecomesTrue(new SequentialGroup(
-                        Shooter.INSTANCE.shooterCloseShoot,
+                        Shooter.INSTANCE.shooterCloseShoot(),
                         new Delay(0.75),
                         Intake.INSTANCE.intakeFullSpeed,
                         TransferPusher.INSTANCE.transferOn,
@@ -117,7 +117,7 @@ public class V2_Teleop extends NextFTCOpMode {
 
         Gamepads.gamepad2().dpadUp()
                 .whenBecomesTrue(new SequentialGroup(
-                        Shooter.INSTANCE.shooterFarShoot,
+                        Shooter.INSTANCE.shooterFarShoot(),
                         new Delay(0.75),
                         Intake.INSTANCE.intakeFullSpeed,
                         TransferPusher.INSTANCE.transferOn,
@@ -133,7 +133,7 @@ public class V2_Teleop extends NextFTCOpMode {
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
         Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot());
 //                .whenBecomesFalse(new SequentialGroup(
 //                        new Delay(0.75),
 //                        Intake.INSTANCE.intakeFullSpeed,
@@ -148,7 +148,7 @@ public class V2_Teleop extends NextFTCOpMode {
 //                        TransferPusher.INSTANCE.transferOn
 //                ));
         Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot());
 //                .whenBecomesFalse(new SequentialGroup(
 //                        new Delay(0.75),
 //                        Intake.INSTANCE.intakeFullSpeed,
@@ -163,7 +163,7 @@ public class V2_Teleop extends NextFTCOpMode {
 //                        TransferPusher.INSTANCE.transferOn
 //                ));
         Gamepads.gamepad2().dpadDown()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+                .whenBecomesTrue(Shooter.INSTANCE.shooterOff());
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs

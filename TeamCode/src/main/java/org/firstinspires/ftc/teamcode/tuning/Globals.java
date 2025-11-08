@@ -11,7 +11,7 @@ public class Globals {
     public static double intakeTargetSpeed = 1;
     public static double intakeOffSpeed = 0;
 
-    public static double shooterP = 0.1;
+    public static double shooterP = 0.01;
     public static double shooterI = 0; //use integrator (high kI) for high error response
     public static double shooterD = 0;
     public static double shooterFF = 0.005;
