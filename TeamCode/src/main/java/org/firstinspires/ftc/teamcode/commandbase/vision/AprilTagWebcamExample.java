@@ -12,11 +12,9 @@ public class AprilTagWebcamExample extends NextFTCOpMode {
 
     AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
 
-    private TelemetryManager telemetryM;
-
     @Override
     public void onInit() {
-        aprilTagWebcam.initalize(hardwareMap, telemetryM);
+        aprilTagWebcam.initalize(hardwareMap, telemetry);
     }
 
     @Override
