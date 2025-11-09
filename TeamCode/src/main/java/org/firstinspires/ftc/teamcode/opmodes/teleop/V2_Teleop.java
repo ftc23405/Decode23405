@@ -54,7 +54,7 @@ public class V2_Teleop extends NextFTCOpMode {
 
     @Override
     public void onInit() {
-//        webcam.initalize(hardwareMap, telemetryM);
+        webcam.initalize(hardwareMap, telemetryM);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
@@ -76,13 +76,13 @@ public class V2_Teleop extends NextFTCOpMode {
                         new InstantCommand(() -> gamepad1.rumble(500))
                 )); //reset pinpoint IMU
 
-//        Gamepads.gamepad1().y()
-//                .whenBecomesTrue(() -> webcam.start())
-//                .whenTrue(new SequentialGroup(
-//                        new InstantCommand(() -> webcam.update()),
-//                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
-//                )
-//                        .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+        Gamepads.gamepad1().y()
+                .whenBecomesTrue(() -> webcam.start())
+                .whenTrue(new SequentialGroup(
+                        new InstantCommand(() -> webcam.update()),
+                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
+                )
+                        .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
@@ -189,6 +189,6 @@ public class V2_Teleop extends NextFTCOpMode {
     @Override
     public void onStop() {
         BindingManager.reset();
-//        webcam.stop();
+        webcam.stop();
     }
 }
