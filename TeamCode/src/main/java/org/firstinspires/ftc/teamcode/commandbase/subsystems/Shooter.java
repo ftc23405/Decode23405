@@ -37,7 +37,7 @@ public class Shooter implements Subsystem {
     public void initialize() {
         shooterMotorLeft.zeroed();
         shooterMotorRight.zeroed();
-        shooterMotorGroup.setPower(0);
+        controller.setGoal(new KineticState(0,0,0));
     }
 
     public Command shooterToTargetVelocity() {
