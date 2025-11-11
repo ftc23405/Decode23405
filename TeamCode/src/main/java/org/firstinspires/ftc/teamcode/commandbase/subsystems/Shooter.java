@@ -28,8 +28,6 @@ public class Shooter implements Subsystem {
 
     MotorGroup shooterMotorGroup = new MotorGroup(shooterMotorLeft, shooterMotorRight); //create motor group
 
-    public double shooterVel = shooterMotorGroup.getVelocity();
-
     public PIDCoefficients shooterPIDComponents = new PIDCoefficients(shooterP, shooterI, shooterD);
 
     public final ControlSystem shooterController = ControlSystem.builder()
@@ -51,6 +49,6 @@ public class Shooter implements Subsystem {
         shooterMotorGroup.setPower(shooterController.calculate(shooterMotorGroup.getState()));
         ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", shooterMotorRight.getVelocity());
         ActiveOpMode.telemetry().addData("Left Shooter Motor Velocity:", shooterMotorLeft.getVelocity());
-        ActiveOpMode.telemetry().addData("Motor Group Velocity", shooterVel);
+        ActiveOpMode.telemetry().addData("Motor Group Velocity", shooterMotorGroup.getVelocity());
     }
 }
