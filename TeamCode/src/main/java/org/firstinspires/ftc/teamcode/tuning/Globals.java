@@ -16,7 +16,8 @@ public class Globals {
     public static double shooterD = 0;
     public static double shooterFF = 0.005;
 
-    public static double targetVelocity = calculateTicksPerSecond(5000, 28);
+    public static double targetVelocity = calculateTicksPerSecond(6000, 28);
+    public static double classifierVelocity = calculateTicksPerSecond(4000, 28);
     public static double shooterOffVelocity = 0;
 
     public static double transferPower = 0.5;

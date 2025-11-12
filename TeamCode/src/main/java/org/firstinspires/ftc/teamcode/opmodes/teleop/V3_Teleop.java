@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.commandbase.vision.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -34,7 +36,7 @@ public class V3_Teleop extends NextFTCOpMode {
 
     public V3_Teleop() {
         addComponents( //add needed components
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
@@ -47,14 +49,14 @@ public class V3_Teleop extends NextFTCOpMode {
 
     private PathChain parkPath;
 
-    private AprilTagWebcam webcam;
+//    AprilTagWebcam webcam = new AprilTagWebcam();
 
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
 
     @Override
     public void onInit() {
-        webcam.initalize(hardwareMap, telemetryM);
+//        webcam.initalize(hardwareMap, telemetryM);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
@@ -76,13 +78,13 @@ public class V3_Teleop extends NextFTCOpMode {
                         new InstantCommand(() -> gamepad1.rumble(500))
                 )); //reset pinpoint IMU
 
-        Gamepads.gamepad1().y()
-                .whenBecomesTrue(() -> webcam.start())
-                .whenTrue(new SequentialGroup(
-                        new InstantCommand(() -> webcam.update()),
-                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
-                )
-                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+//        Gamepads.gamepad1().y()
+//                .whenBecomesTrue(() -> webcam.start())
+//                .whenTrue(new SequentialGroup(
+//                        new InstantCommand(() -> webcam.update()),
+//                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
+//                )
+//                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 
         Gamepads.gamepad1().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
@@ -96,17 +98,22 @@ public class V3_Teleop extends NextFTCOpMode {
         Gamepads.gamepad1().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().dpadUp()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterToTargetVelocity());
-        Gamepads.gamepad1().dpadDown()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterNewOff());
 
-        Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
-        Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot);
-        Gamepads.gamepad2().dpadDown()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
+        Gamepads.gamepad1().dpadUp()
+                .whenBecomesTrue(new SequentialGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                ));
+        Gamepads.gamepad1().dpadDown()
+                .whenBecomesTrue(new SequentialGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightOff()
+                ));
+        Gamepads.gamepad1().rightBumper()
+                .whenBecomesTrue(ShooterMotorRight.INSTANCE.shooterMotorRightOn());
+        Gamepads.gamepad1().rightBumper()
+                .whenBecomesTrue(ShooterMotorLeft.INSTANCE.shooterMotorLeftOn());
+
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
@@ -132,6 +139,6 @@ public class V3_Teleop extends NextFTCOpMode {
     @Override
     public void onStop() {
         BindingManager.reset();
-        webcam.stop();
+//        webcam.stop();
     }
 }
