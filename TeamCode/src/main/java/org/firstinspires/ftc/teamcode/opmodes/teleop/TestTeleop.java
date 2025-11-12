@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
@@ -31,6 +32,7 @@ public class TestTeleop extends NextFTCOpMode {
         addComponents( //add needed components
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
+                CommandManager.INSTANCE,
                 new PedroComponent(Constants::createFollower) //follower for Pedro teleop drive
         );
     }
@@ -87,9 +89,7 @@ public class TestTeleop extends NextFTCOpMode {
                 })
                 .whenBecomesFalse(() -> {
                     double bearing = webcam.getTagBearing(24);
-                    if (!Double.isNaN(bearing) && Math.abs(bearing) > 0.3) {
-                        currentTurn.stop(false);
-                    }
+                    CommandManager.INSTANCE.cancelAll();
                     driverControlled.schedule();
         });
     }
