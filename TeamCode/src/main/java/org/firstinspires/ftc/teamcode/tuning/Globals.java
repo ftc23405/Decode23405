@@ -11,10 +11,10 @@ public class Globals {
     public static double intakeTargetSpeed = 1;
     public static double intakeOffSpeed = 0;
 
-    public static double shooterP = 0.1;
+    public static double shooterP = 0.011;
     public static double shooterI = 0; //use integrator (high kI) for high error response
-    public static double shooterD = 0;
-    public static double shooterFF = 0.005;
+    public static double shooterD = 0.0001;
+    public static double shooterFF = 0.0005;
 
     public static double targetVelocity = calculateTicksPerSecond(6000, 28);
     public static double classifierVelocity = calculateTicksPerSecond(4000, 28);

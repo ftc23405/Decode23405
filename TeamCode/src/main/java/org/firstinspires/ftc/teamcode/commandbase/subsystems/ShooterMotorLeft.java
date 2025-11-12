@@ -23,8 +23,8 @@ public class ShooterMotorLeft implements Subsystem {
     MotorEx shooterMotorLeft = new MotorEx("shooterMotorLeft").floatMode().zeroed();
 
     ControlSystem controllerLeft = ControlSystem.builder()
-            .velPid(0.011, 0, 0.0001)
-            .basicFF(0.0005)
+            .velPid(shooterP, shooterI, shooterD)
+            .basicFF(shooterFF)
             .build();
 
 
