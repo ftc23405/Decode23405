@@ -6,19 +6,14 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.commandbase.vision.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
-import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
@@ -45,7 +40,9 @@ public class TestTeleop extends NextFTCOpMode {
 
     private PathChain parkPath;
 
-    private AprilTagWebcam webcam;
+
+    TurnBy currentTurn;
+    AprilTagWebcam webcam = new AprilTagWebcam();
 
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
@@ -75,13 +72,26 @@ public class TestTeleop extends NextFTCOpMode {
                 )); //reset pinpoint IMU
 
         Gamepads.gamepad1().y()
-                .whenBecomesTrue(() -> webcam.start())
-                .whenTrue(new SequentialGroup(
-                        new InstantCommand(() -> webcam.update()),
-                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
-                )
-                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
+                .whenTrue(() -> {
+                    webcam.update();
 
+                    double bearing = webcam.getTagBearing(24);
+                    if (!Double.isNaN(bearing) && Math.abs(bearing) > 0.3) {
+                        currentTurn = new TurnBy(Angle.fromDeg(bearing));
+                        currentTurn.schedule();
+                        telemetry.addData("Turning by", bearing);
+                    } else {
+                        telemetry.addLine("No valid tag detected!");
+                    }
+                    telemetry.update();
+                })
+                .whenBecomesFalse(() -> {
+                    double bearing = webcam.getTagBearing(24);
+                    if (!Double.isNaN(bearing) && Math.abs(bearing) > 0.3) {
+                        currentTurn.stop(false);
+                    }
+                    driverControlled.schedule();
+        });
     }
 
     @Override
@@ -91,6 +101,7 @@ public class TestTeleop extends NextFTCOpMode {
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
+        webcam.update();
 
         if (Math.abs(Math.toDegrees(PedroComponent.follower().getPose().getHeading()) - 180) <= 2){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);

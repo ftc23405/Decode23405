@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.commandbase.vision;
 
 import android.util.Size;
 
-import com.bylazar.telemetry.TelemetryManager;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -90,13 +89,9 @@ public class AprilTagWebcam {
         return null; // no tags detected
     }
 
-    public double getFirstTagBearing() {
-        AprilTagDetection tag = getFirstDetectedTag();
-        if (tag == null) {
-            return 0.0; //if no tag detected
-        }
-        // ftcPose.bearing = how many degrees the robot must turn to face the tag
-        return normalizeAngleDegrees(tag.ftcPose.bearing);
+    public double getTagBearing(int tagNumber) {
+        AprilTagDetection tag = getTagBySpecificID(tagNumber);
+        return (tag != null) ? tag.ftcPose.bearing : Double.NaN;
     }
 
     public double getTagDistance(AprilTagDetection detection) {
