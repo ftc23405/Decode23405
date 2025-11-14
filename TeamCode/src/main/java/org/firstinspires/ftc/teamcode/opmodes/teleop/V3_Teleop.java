@@ -82,7 +82,7 @@ public class V3_Teleop extends NextFTCOpMode {
 //                .whenBecomesTrue(() -> webcam.start())
 //                .whenTrue(new SequentialGroup(
 //                        new InstantCommand(() -> webcam.update()),
-//                        new TurnBy(Angle.fromDeg(webcam.getFirstTagBearing())))
+//                        new TurnBy(Angle.fromDeg(webcam.getTagBearing(24)))) //get red tag bearing
 //                )
 //                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 

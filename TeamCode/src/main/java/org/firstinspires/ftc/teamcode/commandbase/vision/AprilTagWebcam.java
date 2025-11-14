@@ -89,21 +89,14 @@ public class AprilTagWebcam {
         return null; // no tags detected
     }
 
-    public double getFirstTagBearing() {
-        AprilTagDetection tag = getFirstDetectedTag();
-        if (tag == null) {
-            return 0.0; //if no tag detected
-        }
-        // ftcPose.bearing = how many degrees the robot must turn to face the tag
-        return normalizeAngleDegrees(tag.ftcPose.bearing);
+    public double getTagBearing(int tagID) {
+        AprilTagDetection tag = getTagBySpecificID(tagID);
+        return (tag != null) ? tag.ftcPose.bearing : Double.NaN;
     }
 
-    public double getFirstTagDistance() {
-        AprilTagDetection tag = getFirstDetectedTag();
-        if (tag == null) {
-            return 0.0;
-        }
-        return tag.ftcPose.y;
+    public double getTagDistance(int tagID) {
+        AprilTagDetection tag = getTagBySpecificID(tagID);
+        return (tag != null) ? tag.ftcPose.range : Double.NaN;
     }
 
     public double getTagDistance(AprilTagDetection detection) {
