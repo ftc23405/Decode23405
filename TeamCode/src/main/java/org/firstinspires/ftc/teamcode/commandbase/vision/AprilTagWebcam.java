@@ -89,13 +89,14 @@ public class AprilTagWebcam {
         return null; // no tags detected
     }
 
-    public double getTagBearing(int tagNumber) {
-        AprilTagDetection tag = getTagBySpecificID(tagNumber);
+    public double getTagBearing(int tagID) {
+        AprilTagDetection tag = getTagBySpecificID(tagID);
         return (tag != null) ? tag.ftcPose.bearing : Double.NaN;
     }
 
-    public double getTagDistance(AprilTagDetection detection) {
-        return detection.ftcPose.y;
+    public double getTagDistance(int tagID) {
+        AprilTagDetection tag = getTagBySpecificID(tagID);
+        return (tag != null) ? tag.ftcPose.range : Double.NaN;
     }
 
     public void stop() {
