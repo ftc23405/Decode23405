@@ -8,7 +8,6 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
@@ -59,7 +58,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
         );
     }
 
-    public Command backTransfer() {
+    public Command backTransferWithIntake() {
         return new SequentialGroup(
                 new ParallelGroup(
                         new SequentialGroup(
@@ -67,9 +66,10 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                                 new Delay(2),
                                 TransferPusher.INSTANCE.transferOff
                         ),
-                        Intake.INSTANCE.intakeOff
+                        Intake.INSTANCE.intakeAutoSpeed
                 ),
-                Intake.INSTANCE.intakeHalfSpeed
+                new Delay(1),
+                Intake.INSTANCE.intakeOff
         );
     }
 
@@ -101,8 +101,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     Intake.INSTANCE.intakeAutoSpeed,
                     shooterMotorsReverse(),
                     new FollowPath(intake1,true),
-                    new Delay(1),
-                    backTransfer(),
+                    backTransferWithIntake(),
                     new FollowPath(goBack1,true),
                     shootWithTransfer(),
                     new Delay(3),
@@ -111,8 +110,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     Intake.INSTANCE.intakeAutoSpeed,
                     shooterMotorsReverse(),
                     new FollowPath(intake2,true),
-                    new Delay(1),
-                    backTransfer(),
+                    backTransferWithIntake(),
                     new FollowPath(goBack2,true),
                     shootWithTransfer(),
                     new Delay(3),
