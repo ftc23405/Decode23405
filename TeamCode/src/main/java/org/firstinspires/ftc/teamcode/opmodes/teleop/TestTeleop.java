@@ -4,8 +4,11 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.commandbase.vision.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -14,6 +17,7 @@ import dev.nextftc.bindings.Button;
 import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
@@ -40,24 +44,28 @@ public class TestTeleop extends NextFTCOpMode {
 
     private TelemetryManager telemetryM;
 
+    private Limelight3A limelight;
+
     private PathChain parkPath;
 
 
     TurnBy currentTurn;
-    AprilTagWebcam webcam = new AprilTagWebcam();
 
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
 
+
     @Override
     public void onInit() {
-        webcam.initalize(hardwareMap, telemetry);
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(8);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
 
     @Override
     public void onStartButtonPressed() {
+        limelight.start();
 
         PedroDriverControlled driverControlled = new PedroDriverControlled(
                 Gamepads.gamepad1().leftStickY(),
@@ -74,21 +82,18 @@ public class TestTeleop extends NextFTCOpMode {
                 )); //reset pinpoint IMU
 
         Gamepads.gamepad1().y()
-                .whenTrue(() -> {
-                    webcam.update();
-
-                    double bearing = webcam.getTagBearing(24);
-                    if (!Double.isNaN(bearing) && Math.abs(bearing) > 0.3) {
-                        currentTurn = new TurnBy(Angle.fromDeg(bearing));
+                .whenBecomesTrue(() -> {
+                    LLResult llResult = limelight.getLatestResult();
+                    if (llResult != null && llResult.isValid()) {
+                        currentTurn = new TurnBy(Angle.fromDeg(-llResult.getTx()));
                         currentTurn.schedule();
-                        telemetry.addData("Turning by", bearing);
+                        telemetry.addData("Turning by", llResult.getTx());
                     } else {
                         telemetry.addLine("No valid tag detected!");
                     }
                     telemetry.update();
                 })
                 .whenBecomesFalse(() -> {
-                    double bearing = webcam.getTagBearing(24);
                     CommandManager.INSTANCE.cancelAll();
                     driverControlled.schedule();
         });
@@ -101,7 +106,6 @@ public class TestTeleop extends NextFTCOpMode {
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
-        webcam.update();
 
         if (Math.abs(Math.toDegrees(PedroComponent.follower().getPose().getHeading()) - 180) <= 2){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
@@ -112,6 +116,6 @@ public class TestTeleop extends NextFTCOpMode {
     @Override
     public void onStop() {
         BindingManager.reset();
-        webcam.stop();
+        limelight.stop();
     }
 }

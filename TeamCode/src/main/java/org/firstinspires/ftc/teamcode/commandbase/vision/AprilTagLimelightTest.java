@@ -18,7 +18,9 @@ import dev.nextftc.ftc.NextFTCOpMode;
 public class AprilTagLimelightTest extends NextFTCOpMode {
 
     public AprilTagLimelightTest() {
-        new PedroComponent(Constants::createFollower);
+        addComponents(
+                new PedroComponent(Constants::createFollower)
+        );
     }
 
     private Limelight3A limelight;
@@ -51,6 +53,7 @@ public class AprilTagLimelightTest extends NextFTCOpMode {
             telemetry.addData("Ta", llResult.getTa());
             telemetry.addData("BotPose", botPose.toString());
             telemetry.addData("Yaw", botPose.getOrientation().getYaw());
+            telemetry.update();
         }
     }
 
