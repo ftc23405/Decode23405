@@ -9,12 +9,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
+import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -28,26 +31,40 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     public Red6BallFarAuto() {
         addComponents(
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );
     }
 
+    public Command shooterMotorsOn() {
+        return new ParallelGroup(
+                ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
+                ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+        );
+    }
+
+    public Command shooterMotorsOff() {
+        return new ParallelGroup(
+                ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
+                ShooterMotorRight.INSTANCE.shooterMotorRightOff()
+        );
+    }
+
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                Shooter.INSTANCE.shooterFarShoot,
-                new Delay(2),
+                shooterMotorsOn(),
+                new Delay(3),
                 Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
                 new Delay(0.25),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(1),
+                new Delay(0.25),
                 TransferPusher.INSTANCE.transferOn,
                 new Delay(0.25),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(1),
+                new Delay(0.25),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -57,8 +74,9 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 new FollowPath(shoot1,true),
                 shootWithTransfer(),
                 new Delay(3),
-                Shooter.INSTANCE.shooterOff,
+                shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
+                Intake.INSTANCE.intakeHalfSpeed,
                 new FollowPath(turn1,true),
                 new FollowPath(intake1,true),
                 new Delay(1),
@@ -66,7 +84,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 new FollowPath(shoot2,true),
                 shootWithTransfer(),
                 new Delay(3),
-                Shooter.INSTANCE.shooterOff,
+                shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
                 new FollowPath(park,true)
         );
@@ -91,11 +109,11 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(84.233, 18.989, Math.toRadians(-119));
+    private final Pose scoringPose = new Pose(86, 20, Math.toRadians(245));
 
     private final Pose turnPose = new Pose(97.461, 34.435, Math.toRadians(0));
 
-    private final Pose intakePose1 = new Pose(131.687, 34.852, Math.toRadians(0));
+    private final Pose intakePose1 = new Pose(133.687, 34.852, Math.toRadians(0));
 
     private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
 
