@@ -4,16 +4,9 @@ import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 import com.bylazar.configurables.annotations.Configurable;
 
-import java.util.function.DoubleSupplier;
-
-import dev.nextftc.bindings.Button;
-import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
-import dev.nextftc.ftc.GamepadEx;
-import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
@@ -28,7 +21,7 @@ public class Intake implements Subsystem {
 
     public Command intakeOff = new SetPower(intakeMotor, intakeOffSpeed);
 
-    public Command intakeQuarterSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 4);
+    public Command intakeOneThirdSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 3);
 
     public Command intakeHalfSpeed = new SetPower(intakeMotor, intakeTargetSpeed / 2);
 

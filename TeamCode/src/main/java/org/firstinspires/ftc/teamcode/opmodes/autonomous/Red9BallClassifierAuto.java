@@ -37,10 +37,10 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
             );
         }
 
-        public Command shooterMotorsOn() {
+        public Command shooterMotorsClassifierShot() {
             return new ParallelGroup(
-                    ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
-                    ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                    ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
+                    ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
             );
         }
 
@@ -61,7 +61,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                shooterMotorsOn(),
+                shooterMotorsClassifierShot(),
                 new Delay(0.5),
                 Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
@@ -83,10 +83,10 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(2),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
-                    Intake.INSTANCE.intakeAutoSpeed,
+                    Intake.INSTANCE.intakeOneThirdSpeed,
                     new ParallelGroup(
                             new FollowPath(intake1,true),
-                            createDistanceMarker(0.85, Intake.INSTANCE.intakeQuarterSpeed)
+                            createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
                     ),
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack1,true),
@@ -94,10 +94,10 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     new Delay(2),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
-                    Intake.INSTANCE.intakeAutoSpeed,
+                    Intake.INSTANCE.intakeOneThirdSpeed,
                     new ParallelGroup(
                             new FollowPath(intake2,true),
-                            createDistanceMarker(0.85, Intake.INSTANCE.intakeQuarterSpeed)
+                            createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
                     ),
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack2,true),

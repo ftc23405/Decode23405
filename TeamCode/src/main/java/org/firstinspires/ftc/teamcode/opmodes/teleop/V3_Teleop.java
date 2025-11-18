@@ -11,21 +11,17 @@ import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
-import org.firstinspires.ftc.teamcode.commandbase.vision.AprilTagWebcam;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
-import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -94,7 +90,7 @@ public class V3_Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeHalfSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().a()
-                .whenBecomesTrue(Intake.INSTANCE.intakeQuarterSpeed)
+                .whenBecomesTrue(Intake.INSTANCE.intakeOneThirdSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)

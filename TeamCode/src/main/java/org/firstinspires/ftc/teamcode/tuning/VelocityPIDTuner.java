@@ -36,6 +36,8 @@ public class VelocityPIDTuner extends NextFTCOpMode {
     public static double p = 0;
     public static double i = 0;
     public static double d = 0;
+
+    public static double ff = 0;
     public static int targetRPM = 0;
 
     MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").floatMode().zeroed();
@@ -61,7 +63,7 @@ public class VelocityPIDTuner extends NextFTCOpMode {
 
         ControlSystem controller = ControlSystem.builder()
                 .velPid(p, i, d)
-                .basicFF(shooterFF)
+                .basicFF(ff)
                 .build();
 
         controller.setGoal(new KineticState(0, calculateTicksPerSecond(targetRPM, 28) ,0));

@@ -91,7 +91,7 @@ public class V2_Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeHalfSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().a()
-                .whenBecomesTrue(Intake.INSTANCE.intakeQuarterSpeed)
+                .whenBecomesTrue(Intake.INSTANCE.intakeOneThirdSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
         Gamepads.gamepad1().b()
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
