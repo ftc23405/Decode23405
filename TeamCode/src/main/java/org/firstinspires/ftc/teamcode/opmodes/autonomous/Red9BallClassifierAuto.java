@@ -134,17 +134,17 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
         private final Pose startPose = new Pose(120, 132, Math.toRadians(216));
         private final Pose scoringPose = new Pose(84, 100, Math.toRadians(213));
 
-        private final Pose intakePose1 = new Pose(130.150, 84.990, Math.toRadians(0));
-        private final Pose intakeShortControlPose1 = new Pose(75.982, 90.224);
-        private final Pose intakeShortControlPose2 = new Pose(70.992, 84.990);
+        private final Pose intakePose1 = new Pose(130.150, 85.990, Math.toRadians(0));
+        private final Pose intakeShortControlPose1 = new Pose(75.982, 91.224);
+        private final Pose intakeShortControlPose2 = new Pose(70.992, 85.990);
 
-        private final Pose intakePose2 = new Pose(129.298, 60.523, Math.toRadians(0));
-        private final Pose intakeLongControlPose1 = new Pose(65.879, 52.733);
-        private final Pose intakeLongControlPose2 = new Pose(94.241, 60.158);
+        private final Pose intakePose2 = new Pose(129.298, 61.523, Math.toRadians(0));
+        private final Pose intakeLongControlPose1 = new Pose(65.879, 53.733);
+        private final Pose intakeLongControlPose2 = new Pose(94.241, 61.158);
 
-        private final Pose goBackLongControlPose1 = new Pose(81.825, 71.965);
+        private final Pose goBackLongControlPose1 = new Pose(81.825, 72.965);
 
-        private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
+        private final Pose endPose = new Pose(129, 87, Math.toRadians(180));
 
 
         public void buildPaths() {
