@@ -88,6 +88,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                             new FollowPath(intake1,true),
                             createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
                     ),
+                    new Delay(1),
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack1,true),
                     shootWithTransfer(),
@@ -99,6 +100,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                             new FollowPath(intake2,true),
                             createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
                     ),
+                    new Delay(1),
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack2,true),
                     shootWithTransfer(),
