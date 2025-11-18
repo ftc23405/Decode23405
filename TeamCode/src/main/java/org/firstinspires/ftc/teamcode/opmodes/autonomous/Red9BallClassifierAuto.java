@@ -38,14 +38,14 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
         }
 
         public Command shooterMotorsOn() {
-            return new SequentialGroup(
+            return new ParallelGroup(
                     ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
                     ShooterMotorRight.INSTANCE.shooterMotorRightOn()
             );
         }
 
     public Command shooterMotorsOff() {
-        return new SequentialGroup(
+        return new ParallelGroup(
                 ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
                 ShooterMotorRight.INSTANCE.shooterMotorRightOff()
         );
@@ -80,7 +80,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
             return new SequentialGroup(
                     new FollowPath(shoot1,true),
                     shootWithTransfer(),
-                    new Delay(3),
+                    new Delay(2),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
                     Intake.INSTANCE.intakeAutoSpeed,
@@ -91,7 +91,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack1,true),
                     shootWithTransfer(),
-                    new Delay(3),
+                    new Delay(2),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
                     Intake.INSTANCE.intakeAutoSpeed,
@@ -102,7 +102,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack2,true),
                     shootWithTransfer(),
-                    new Delay(3),
+                    new Delay(2),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
                     Intake.INSTANCE.intakeOff,

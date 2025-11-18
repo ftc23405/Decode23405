@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
@@ -100,12 +101,12 @@ public class V3_Teleop extends NextFTCOpMode {
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
         Gamepads.gamepad1().dpadUp()
-                .whenBecomesTrue(new SequentialGroup(
+                .whenBecomesTrue(new ParallelGroup(
                         ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
                         ShooterMotorRight.INSTANCE.shooterMotorRightOn()
                 ));
         Gamepads.gamepad1().dpadDown()
-                .whenBecomesTrue(new SequentialGroup(
+                .whenBecomesTrue(new ParallelGroup(
                         ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
                         ShooterMotorRight.INSTANCE.shooterMotorRightOff()
                 ));

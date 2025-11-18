@@ -36,6 +36,12 @@ public class ShooterMotorRight implements Subsystem {
                 .setIsDone(() -> true);
     }
 
+    public Command shooterMotorRightClassifier() {
+        return new LambdaCommand()
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierVelocity, 0)))
+                .setIsDone(() -> true);
+    }
+
     public Command shooterMotorRightReverse() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, -2000, 0)))
