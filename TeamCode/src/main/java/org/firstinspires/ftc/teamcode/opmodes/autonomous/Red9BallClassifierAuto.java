@@ -58,21 +58,6 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
         );
     }
 
-    public Command backTransferWithIntake() {
-        return new SequentialGroup(
-                new ParallelGroup(
-                        new SequentialGroup(
-                                TransferPusher.INSTANCE.transferReverse,
-                                new Delay(2),
-                                TransferPusher.INSTANCE.transferOff
-                        ),
-                        Intake.INSTANCE.intakeAutoSpeed
-                ),
-                new Delay(1),
-                Intake.INSTANCE.intakeOff
-        );
-    }
-
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
@@ -99,18 +84,22 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
                     Intake.INSTANCE.intakeAutoSpeed,
-                    shooterMotorsReverse(),
-                    new FollowPath(intake1,true),
-                    backTransferWithIntake(),
+                    new ParallelGroup(
+                            new FollowPath(intake1,true),
+                            createDistanceMarker(0.85, Intake.INSTANCE.intakeQuarterSpeed)
+                    ),
+                    Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack1,true),
                     shootWithTransfer(),
                     new Delay(3),
                     shooterMotorsOff(),
                     TransferPusher.INSTANCE.transferOff,
                     Intake.INSTANCE.intakeAutoSpeed,
-                    shooterMotorsReverse(),
-                    new FollowPath(intake2,true),
-                    backTransferWithIntake(),
+                    new ParallelGroup(
+                            new FollowPath(intake2,true),
+                            createDistanceMarker(0.85, Intake.INSTANCE.intakeQuarterSpeed)
+                    ),
+                    Intake.INSTANCE.intakeOff,
                     new FollowPath(goBack2,true),
                     shootWithTransfer(),
                     new Delay(3),
@@ -122,8 +111,8 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
             );
         }
 
-        public static Command createDistanceMarker(double distance, Command command) { //make sure to run this command parallel to followPath commands
-            return new WaitUntil(() -> PedroComponent.follower().getDistanceTraveledOnPath() >= distance)
+        public static Command createDistanceMarker(double percentageOfPathTraveled, Command command) { //make sure to run this command parallel to followPath commands
+            return new WaitUntil(() -> PedroComponent.follower().getPathCompletion() >= percentageOfPathTraveled)
                     .then(command);
         }
 
