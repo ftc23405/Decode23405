@@ -4,6 +4,8 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
@@ -15,13 +17,19 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
+import dev.nextftc.core.commands.utility.LambdaCommand;
+import dev.nextftc.core.commands.utility.PerpetualCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
+import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -37,12 +45,17 @@ public class V3_Teleop extends NextFTCOpMode {
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
+                CommandManager.INSTANCE,
                 new PedroComponent(Constants::createFollower) //follower for Pedro teleop drive
         );
     }
     private final Pose parkingPose = new Pose(38.7,33.2, Math.toRadians(90));
 
     private TelemetryManager telemetryM;
+
+    private Limelight3A limelight;
+
+    private TurnBy currentTurn;
 
     private PathChain parkPath;
 
@@ -54,6 +67,8 @@ public class V3_Teleop extends NextFTCOpMode {
     @Override
     public void onInit() {
 //        webcam.initalize(hardwareMap, telemetryM);
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(8);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
     }
@@ -69,7 +84,7 @@ public class V3_Teleop extends NextFTCOpMode {
         );
         driverControlled.schedule();
 
-        Gamepads.gamepad1().leftBumper()
+        Gamepads.gamepad1().start()
                 .whenBecomesTrue(new SequentialGroup(
                         new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))),
                         new InstantCommand(() -> gamepad1.rumble(500))
@@ -84,32 +99,36 @@ public class V3_Teleop extends NextFTCOpMode {
 //                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 
         Gamepads.gamepad1().y()
-                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().x()
-                .whenBecomesTrue(Intake.INSTANCE.intakeHalfSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().a()
-                .whenBecomesTrue(Intake.INSTANCE.intakeOneThirdSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
-        Gamepads.gamepad1().b()
-                .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
-                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+                .whenBecomesTrue(() -> {
+                    limelight.start();
+                    LLResult llResult = limelight.getLatestResult();
+                    if (llResult != null && llResult.isValid()) {
+                        currentTurn = new TurnBy(Angle.fromDeg(-llResult.getTx()));
+                        currentTurn.setInterruptible(true);
+                        currentTurn.schedule();
+                        telemetry.addData("Turning by", -llResult.getTx());
+                    } else {
+                        telemetry.addLine("No valid tag detected!");
+                    }
+                    telemetry.update();
+                })
+                .whenBecomesFalse(() -> {
+                    CommandManager.INSTANCE.cancelCommand(currentTurn);
+                    limelight.stop();
+                    driverControlled.schedule();
+                });
 
-        Gamepads.gamepad1().dpadUp()
+
+        Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(new ParallelGroup(
-                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
-                        ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
                 ));
-        Gamepads.gamepad1().dpadDown()
+        Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(new ParallelGroup(
                         ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
                         ShooterMotorRight.INSTANCE.shooterMotorRightOff()
                 ));
-        Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(ShooterMotorRight.INSTANCE.shooterMotorRightOn());
-        Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(ShooterMotorLeft.INSTANCE.shooterMotorLeftOn());
 
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
@@ -117,6 +136,19 @@ public class V3_Teleop extends NextFTCOpMode {
         Gamepads.gamepad2().a()
                 .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
+
+        Gamepads.gamepad2().y()
+                .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad2().x()
+                .whenBecomesTrue(Intake.INSTANCE.intakeHalfSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad2().a()
+                .whenBecomesTrue(Intake.INSTANCE.intakeOneThirdSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
+        Gamepads.gamepad2().b()
+                .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
+                .whenBecomesFalse(Intake.INSTANCE.intakeOff);
     }
 
     @Override
@@ -136,6 +168,6 @@ public class V3_Teleop extends NextFTCOpMode {
     @Override
     public void onStop() {
         BindingManager.reset();
-//        webcam.stop();
+        limelight.stop();
     }
 }
