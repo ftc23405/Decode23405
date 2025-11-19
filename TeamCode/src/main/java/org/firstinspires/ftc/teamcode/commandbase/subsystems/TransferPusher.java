@@ -21,6 +21,8 @@ public class TransferPusher implements Subsystem {
 
     public Command transferReverse = new SetPower(transferPusher, reverseTransferPower).requires(this);
 
+    public Command transferSlowReverse = new SetPower(transferPusher, reverseTransferPower / 5).requires(this);
+
     public Command transferOff = new SetPower(transferPusher, 0).requires(this);
 
     @Override
