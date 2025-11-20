@@ -130,7 +130,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     private final Pose intakePose1 = new Pose(133.687, 34.852, Math.toRadians(0));
 
-    private final Pose endPose = new Pose(125, 34.852, Math.toRadians(180));
+    private final Pose endPose = new Pose(125, 34.852, Math.toRadians(0));
 
 
     public void buildPaths() {

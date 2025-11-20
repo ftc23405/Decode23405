@@ -153,7 +153,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
 
         private final Pose goBackLongControlPose1 = new Pose(81.825, 72.965);
 
-        private final Pose endPose = new Pose(129, 87, Math.toRadians(180));
+        private final Pose endPose = new Pose(129, 87, Math.toRadians(0));
 
 
         public void buildPaths() {
