@@ -113,9 +113,15 @@ public class V3_Teleop extends NextFTCOpMode {
                     telemetry.update();
                 })
                 .whenBecomesFalse(() -> {
-                    CommandManager.INSTANCE.cancelCommand(currentTurn);
-                    limelight.stop();
-                    driverControlled.schedule();
+
+                    if (currentTurn != null) {
+                        CommandManager.INSTANCE.cancelCommand(currentTurn);
+                        limelight.stop();
+                        driverControlled.schedule();
+                    }
+                    else {
+                        driverControlled.schedule();
+                    }
                 });
 
 

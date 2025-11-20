@@ -58,7 +58,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 shooterMotorsOn(),
-                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(20, targetVelocity, new SequentialGroup(
+                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(150, targetVelocity, new SequentialGroup(
                         Intake.INSTANCE.intakeFullSpeed,
                         TransferPusher.INSTANCE.transferOn,
                         new Delay(0.25),
@@ -122,7 +122,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(86, 20, Math.toRadians(245));
+    private final Pose scoringPose = new Pose(86, 20, Math.toRadians(248));
 
     private final Pose turnPose = new Pose(97.461, 34.435, Math.toRadians(0));
 

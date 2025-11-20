@@ -29,10 +29,10 @@ public class Constants {
                     new PIDFCoefficients(0.15, 0, 0.01, 0)
             )
             .headingPIDFCoefficients(
-                    new PIDFCoefficients(1, 0, 0.02, 0.03)
+                    new PIDFCoefficients(1.5, 0, 0.02, 0.02)
             )
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.003,0.0,0.0001,0.6,0.0)
+                    new FilteredPIDFCoefficients(0.003,0.0,0.0001,0.6,0.001)
             )
             .secondaryTranslationalPIDFCoefficients(
                     new PIDFCoefficients(0.2, 0, 0.01, 0)
