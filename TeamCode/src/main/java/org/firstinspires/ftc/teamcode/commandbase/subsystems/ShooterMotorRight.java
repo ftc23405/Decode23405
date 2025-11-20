@@ -27,6 +27,7 @@ public class ShooterMotorRight implements Subsystem {
 
     @Override
     public void initialize() {
+        shooterMotorRight.zeroed();
         controllerRight.setGoal(new KineticState(0,0,0));
     }
 
