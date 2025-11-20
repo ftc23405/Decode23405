@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -56,7 +58,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 shooterMotorsOn(),
-                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(20, new SequentialGroup(
+                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(20, targetVelocity, new SequentialGroup(
                         Intake.INSTANCE.intakeFullSpeed,
                         TransferPusher.INSTANCE.transferOn,
                         new Delay(0.25),

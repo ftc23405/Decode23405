@@ -54,9 +54,9 @@ public class ShooterMotorRight implements Subsystem {
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)))
                 .setIsDone(() -> true);
     }
-    public Command waitUntilShooterRightAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
+    public Command waitUntilShooterRightAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
-                Math.abs(shooterMotorRight.getVelocity() - targetVelocity) < tolerance
+                Math.abs(shooterMotorRight.getVelocity() - targetVel) < tolerance
         ).then(command);
     }
 
