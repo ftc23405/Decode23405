@@ -58,14 +58,14 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 shooterMotorsOn(),
-                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(150, targetVelocity, new SequentialGroup(
+                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(125, targetVelocity, new SequentialGroup(
                         Intake.INSTANCE.intakeFullSpeed,
                         TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.25),
+                        new Delay(0.15),
                         TransferPusher.INSTANCE.transferOff,
                         new Delay(0.25),
                         TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.25),
+                        new Delay(0.15),
                         TransferPusher.INSTANCE.transferOff,
                         new Delay(0.25),
                         TransferPusher.INSTANCE.transferOn
@@ -73,7 +73,6 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
         );
     }
-
     public Command autoRoutine() {
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
@@ -81,9 +80,12 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 new Delay(3),
                 shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeHalfSpeed,
+                Intake.INSTANCE.intakeAutoSpeed,
                 new FollowPath(turn1,true),
-                new FollowPath(intake1,true),
+                new ParallelGroup(
+                        new FollowPath(intake1,true),
+                        createDistanceMarker(0.7, Intake.INSTANCE.intakeOneThirdSpeed)
+                ),
                 new Delay(1),
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(shoot2,true),
@@ -95,8 +97,8 @@ public class Red6BallFarAuto extends NextFTCOpMode {
         );
     }
 
-    public static Command createDistanceMarker(double distance, Command command) { //make sure to run this command parallel to followPath commands
-        return new WaitUntil(() -> PedroComponent.follower().getDistanceTraveledOnPath() >= distance)
+    public static Command createDistanceMarker(double percentageOfPathTraveled, Command command) { //make sure to run this command parallel to followPath commands
+        return new WaitUntil(() -> PedroComponent.follower().getPathCompletion() >= percentageOfPathTraveled)
                 .then(command);
     }
 
@@ -122,13 +124,13 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(86, 20, Math.toRadians(248));
+    private final Pose scoringPose = new Pose(86, 20, Math.toRadians(242));
 
     private final Pose turnPose = new Pose(97.461, 34.435, Math.toRadians(0));
 
     private final Pose intakePose1 = new Pose(133.687, 34.852, Math.toRadians(0));
 
-    private final Pose endPose = new Pose(125.620, 70.600, Math.toRadians(180));
+    private final Pose endPose = new Pose(125, 34.852, Math.toRadians(180));
 
 
     public void buildPaths() {

@@ -141,13 +141,13 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
     private Path shoot1, intake1, goBack1, intake2, goBack2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(84, 100, Math.toRadians(213));
+    private final Pose scoringPose = new Pose(84, 100, Math.toRadians(217));
 
-    private final Pose intakePose1 = new Pose(130.150, 85.990, Math.toRadians(0));
+    private final Pose intakePose1 = new Pose(132.150, 86.990, Math.toRadians(0));
     private final Pose intakeShortControlPose1 = new Pose(75.982, 91.224);
     private final Pose intakeShortControlPose2 = new Pose(70.992, 85.990);
 
-    private final Pose intakePose2 = new Pose(129.298, 61.523, Math.toRadians(0));
+    private final Pose intakePose2 = new Pose(137.298, 64.523, Math.toRadians(0));
     private final Pose intakeLongControlPose1 = new Pose(65.879, 53.733);
     private final Pose intakeLongControlPose2 = new Pose(94.241, 61.158);
 
@@ -167,7 +167,7 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
         goBack1.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPose.getHeading());
 
         intake2 = new Path(new BezierCurve(scoringPose, intakeLongControlPose1, intakeLongControlPose2, intakePose2));
-        intake2.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose2.getHeading(), 0.6);
+        intake2.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose2.getHeading(), 0.5);
 
         goBack2 = new Path(new BezierCurve(intakePose2, goBackLongControlPose1, scoringPose));
         goBack2.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPose.getHeading());
