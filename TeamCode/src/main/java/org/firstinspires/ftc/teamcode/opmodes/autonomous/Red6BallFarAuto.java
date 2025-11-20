@@ -22,6 +22,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
@@ -55,17 +56,19 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 shooterMotorsOn(),
-                new Delay(3),
-                Intake.INSTANCE.intakeFullSpeed,
-                TransferPusher.INSTANCE.transferOn,
-                new Delay(0.25),
-                TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
-                TransferPusher.INSTANCE.transferOn,
-                new Delay(0.25),
-                TransferPusher.INSTANCE.transferOff,
-                new Delay(0.25),
-                TransferPusher.INSTANCE.transferOn
+                ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(20, new SequentialGroup(
+                        Intake.INSTANCE.intakeFullSpeed,
+                        TransferPusher.INSTANCE.transferOn,
+                        new Delay(0.25),
+                        TransferPusher.INSTANCE.transferOff,
+                        new Delay(0.25),
+                        TransferPusher.INSTANCE.transferOn,
+                        new Delay(0.25),
+                        TransferPusher.INSTANCE.transferOff,
+                        new Delay(0.25),
+                        TransferPusher.INSTANCE.transferOn
+                ))
+
         );
     }
 
@@ -104,6 +107,14 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     @Override
     public void onStartButtonPressed() {
         autoRoutine().schedule();
+    }
+
+    @Override
+    public void onUpdate() {
+        telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
+        telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
+        telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
+        ActiveOpMode.telemetry().update();
     }
 
     private Path shoot1, turn1, intake1, shoot2, park;
