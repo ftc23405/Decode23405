@@ -34,6 +34,7 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp
 @Configurable //panels
@@ -98,31 +99,31 @@ public class V3_Teleop extends NextFTCOpMode {
 //                )
 //                .whenFalse(() -> webcam.pause()); // stop streaming to save CPU
 
-        Gamepads.gamepad1().y()
-                .whenBecomesTrue(() -> {
-                    limelight.start();
-                    LLResult llResult = limelight.getLatestResult();
-                    if (llResult != null && llResult.isValid()) {
-                        currentTurn = new TurnBy(Angle.fromDeg(-llResult.getTx()));
-                        currentTurn.setInterruptible(true);
-                        currentTurn.schedule();
-                        telemetry.addData("Turning by", -llResult.getTx());
-                    } else {
-                        telemetry.addLine("No valid tag detected!");
-                    }
-                    telemetry.update();
-                })
-                .whenBecomesFalse(() -> {
-
-                    if (currentTurn != null) {
-                        CommandManager.INSTANCE.cancelCommand(currentTurn);
-                        limelight.stop();
-                        driverControlled.schedule();
-                    }
-                    else {
-                        driverControlled.schedule();
-                    }
-                });
+//        Gamepads.gamepad1().y()
+//                .whenBecomesTrue(() -> {
+//                    limelight.start();
+//                    LLResult llResult = limelight.getLatestResult();
+//                    if (llResult != null && llResult.isValid()) {
+//                        currentTurn = new TurnBy(Angle.fromDeg(-llResult.getTx()));
+//                        currentTurn.setInterruptible(true);
+//                        currentTurn.schedule();
+//                        telemetry.addData("Turning by", -llResult.getTx());
+//                    } else {
+//                        telemetry.addLine("No valid tag detected!");
+//                    }
+//                    telemetry.update();
+//                })
+//                .whenBecomesFalse(() -> {
+//
+//                    if (currentTurn != null) {
+//                        CommandManager.INSTANCE.cancelCommand(currentTurn);
+//                        limelight.stop();
+//                        driverControlled.schedule();
+//                    }
+//                    else {
+//                        driverControlled.schedule();
+//                    }
+//                });
 
 
         Gamepads.gamepad1().rightBumper()
@@ -173,6 +174,8 @@ public class V3_Teleop extends NextFTCOpMode {
         if (Math.abs(Math.toDegrees(PedroComponent.follower().getPose().getHeading()) - 180) <= 2){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
         }
+
+        ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(100, classifierVelocity, new InstantCommand(() -> gamepad1.rumble(300)));
 
     }
 

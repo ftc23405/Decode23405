@@ -56,7 +56,7 @@ public class ShooterMotorRight implements Subsystem {
     }
     public Command waitUntilShooterRightAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
-                Math.abs(shooterMotorRight.getVelocity() - targetVel) <= tolerance
+                (shooterMotorRight.getVelocity() - targetVel) <= tolerance
         ).then(command);
     }
 
