@@ -38,10 +38,10 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
         );
     }
 
-    public Command shooterMotorsClassifierShot() {
+    public Command shooterMotorsAutoClassifierShot() {
         return new ParallelGroup(
-                ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
-                ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
+                ShooterMotorLeft.INSTANCE.shooterMotorAutoLeftClassifier(),
+                ShooterMotorRight.INSTANCE.shooterMotorAutoRightClassifier()
         );
     }
 
@@ -62,17 +62,17 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
 
     public Command shootWithTransfer() {
         return new SequentialGroup(
-                shooterMotorsClassifierShot(),
+                shooterMotorsAutoClassifierShot(),
                 new Delay(0.5),
                 Intake.INSTANCE.intakeFullSpeed,
                 TransferPusher.INSTANCE.transferOn,
                 new Delay(0.15),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.15),
+                new Delay(0.25),
                 TransferPusher.INSTANCE.transferOn,
                 new Delay(0.15),
                 TransferPusher.INSTANCE.transferOff,
-                new Delay(0.2),
+                new Delay(0.25),
                 TransferPusher.INSTANCE.transferOn
         );
     }
@@ -81,10 +81,10 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
                 shootWithTransfer(),
-                new Delay(2),
+                new Delay(1),
                 shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeOneThirdSpeed,
+                Intake.INSTANCE.intakeAutoSpeed,
                 new ParallelGroup(
                         new FollowPath(intake1,true),
                         createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
@@ -96,7 +96,7 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
                 new Delay(2),
                 shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
-                Intake.INSTANCE.intakeOneThirdSpeed,
+                Intake.INSTANCE.intakeAutoSpeed,
                 new ParallelGroup(
                         new FollowPath(intake2,true),
                         createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
@@ -105,7 +105,7 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(goBack2,true),
                 shootWithTransfer(),
-                new Delay(2),
+                new Delay(1),
                 shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
                 Intake.INSTANCE.intakeOff,
@@ -143,6 +143,8 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
     private final Pose scoringPose = new Pose(84, 100, Math.toRadians(217));
 
+    private final Pose scoringPoseOffset = new Pose(86, 22, Math.toRadians(220));
+
     private final Pose intakePose1 = new Pose(132.150, 86.990, Math.toRadians(0));
     private final Pose intakeShortControlPose1 = new Pose(75.982, 91.224);
     private final Pose intakeShortControlPose2 = new Pose(70.992, 85.990);
@@ -170,10 +172,10 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
         intake2.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose2.getHeading(), 0.5);
 
         goBack2 = new Path(new BezierCurve(intakePose2, goBackLongControlPose1, scoringPose));
-        goBack2.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPose.getHeading());
+        goBack2.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPoseOffset.getHeading());
 
         park = new Path(new BezierLine(scoringPose, endPose));
-        park.setLinearHeadingInterpolation(scoringPose.getHeading(), endPose.getHeading());
+        park.setLinearHeadingInterpolation(scoringPoseOffset.getHeading(), endPose.getHeading());
     }
 
 }

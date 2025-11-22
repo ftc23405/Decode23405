@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -9,16 +11,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
+import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
+import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
@@ -28,43 +34,57 @@ public class Red3BallFarAuto extends NextFTCOpMode {
 
     public Red3BallFarAuto() {
         addComponents(
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );
     }
 
-    public Command shootWithTransfer() {
-        return new SequentialGroup(
-                Shooter.INSTANCE.shooterFarShoot,
-                new Delay(2),
-                Intake.INSTANCE.intakeFullSpeed,
-                TransferPusher.INSTANCE.transferOn,
-                new Delay(0.2),
-                TransferPusher.INSTANCE.transferOff,
-                new Delay(1),
-                TransferPusher.INSTANCE.transferOn,
-                new Delay(0.2),
-                TransferPusher.INSTANCE.transferOff,
-                new Delay(1),
-                TransferPusher.INSTANCE.transferOn
+    public Command shooterMotorsOn() {
+        return new ParallelGroup(
+                ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
+                ShooterMotorRight.INSTANCE.shooterMotorRightOn()
         );
     }
 
+    public Command shooterMotorsOff() {
+        return new ParallelGroup(
+                ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
+                ShooterMotorRight.INSTANCE.shooterMotorRightOff()
+        );
+    }
+
+    public Command shootWithTransfer() {
+        return new SequentialGroup(
+                shooterMotorsOn(),
+                new Delay(2),
+                Intake.INSTANCE.intakeFullSpeed,
+                new Delay(0.3),
+                TransferPusher.INSTANCE.transferOn,
+                new Delay(0.05),
+                TransferPusher.INSTANCE.transferOff,
+                new Delay(0.5),
+                TransferPusher.INSTANCE.transferOn,
+                new Delay(0.05),
+                TransferPusher.INSTANCE.transferOff,
+                new Delay(0.5),
+                TransferPusher.INSTANCE.transferOn
+        );
+    }
     public Command autoRoutine() {
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
                 shootWithTransfer(),
-                new Delay(3),
-                Shooter.INSTANCE.shooterOff,
+                new Delay(1),
+                shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
-                new FollowPath(park, true)
+                new FollowPath(park,true)
         );
     }
 
-    public static Command createDistanceMarker(double distance, Command command) { //make sure to run this command parallel to followPath commands
-        return new WaitUntil(() -> PedroComponent.follower().getDistanceTraveledOnPath() >= distance)
+    public static Command createDistanceMarker(double percentageOfPathTraveled, Command command) { //make sure to run this command parallel to followPath commands
+        return new WaitUntil(() -> PedroComponent.follower().getPathCompletion() >= percentageOfPathTraveled)
                 .then(command);
     }
 
@@ -79,30 +99,25 @@ public class Red3BallFarAuto extends NextFTCOpMode {
         autoRoutine().schedule();
     }
 
+    @Override
+    public void onUpdate() {
+        telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
+        telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
+        telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
+        ActiveOpMode.telemetry().update();
+    }
+
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(84.233, 18.989, Math.toRadians(-119));
+    private final Pose scoringPose = new Pose(86, 22, Math.toRadians(248));
 
-    private final Pose turnPose = new Pose(97.461, 34.435, Math.toRadians(0));
-
-    private final Pose intakePose1 = new Pose(131.687, 34.852, Math.toRadians(0));
-
-    private final Pose endPose = new Pose(118, 9, Math.toRadians(180));
+    private final Pose endPose = new Pose(108, 11, Math.toRadians(0));
 
 
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
-
-        turn1 = new Path(new BezierLine(scoringPose, turnPose));
-        turn1.setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose.getHeading());
-
-        intake1 = new Path(new BezierLine(turnPose, intakePose1));
-        intake1.setLinearHeadingInterpolation(turnPose.getHeading(), intakePose1.getHeading());
-
-        shoot2 = new Path(new BezierLine(intakePose1, scoringPose));
-        shoot2.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPose.getHeading());
 
         park = new Path(new BezierLine(scoringPose, endPose));
         park.setLinearHeadingInterpolation(scoringPose.getHeading(), endPose.getHeading());
