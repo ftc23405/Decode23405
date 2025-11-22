@@ -26,10 +26,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "6 Ball Blue Side Classifier Auto")
-public class Blue6BallClassifierAuto extends NextFTCOpMode{
+@Autonomous(name = "Complementary 9 Ball Blue Side Far Auto")
+public class Blue9BallFarStartComplementAuto extends NextFTCOpMode{
 
-    public Blue6BallClassifierAuto() {
+    public Blue9BallFarStartComplementAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -81,7 +81,7 @@ public class Blue6BallClassifierAuto extends NextFTCOpMode{
         return new SequentialGroup(
                 new FollowPath(shoot1,true),
                 shootWithTransfer(),
-                new Delay(2),
+                new Delay(1),
                 shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
                 Intake.INSTANCE.intakeAutoSpeed,
@@ -95,18 +95,18 @@ public class Blue6BallClassifierAuto extends NextFTCOpMode{
                 shootWithTransfer(),
                 new Delay(2),
                 shooterMotorsOff(),
-//                TransferPusher.INSTANCE.transferOff,
-//                Intake.INSTANCE.intakeAutoSpeed,
-//                new ParallelGroup(
-//                        new FollowPath(intake2,true),
-//                        createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
-//                ),
-//                new Delay(1),
-//                Intake.INSTANCE.intakeOff,
-//                new FollowPath(goBack2,true),
-//                shootWithTransfer(),
-//                new Delay(2),
-//                shooterMotorsOff(),
+                TransferPusher.INSTANCE.transferOff,
+                Intake.INSTANCE.intakeAutoSpeed,
+                new ParallelGroup(
+                        new FollowPath(intake2,true),
+                        createDistanceMarker(0.9, Intake.INSTANCE.intakeOneThirdSpeed)
+                ),
+                new Delay(1),
+                Intake.INSTANCE.intakeOff,
+                new FollowPath(goBack2,true),
+                shootWithTransfer(),
+                new Delay(1),
+                shooterMotorsOff(),
                 TransferPusher.INSTANCE.transferOff,
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(park,true)
@@ -140,7 +140,7 @@ public class Blue6BallClassifierAuto extends NextFTCOpMode{
 
     private Path shoot1, intake1, goBack1, intake2, goBack2, park;
 
-    private final Pose startPose = new Pose(112, 138, Math.toRadians(180)).mirror();
+    private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270)).mirror();
     private final Pose scoringPose = new Pose(84, 100, Math.toRadians(217)).mirror();
 
     private final Pose scoringPoseOffset = new Pose(86, 22, Math.toRadians(220)).mirror();
