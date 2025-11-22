@@ -60,6 +60,15 @@ public class ShooterMotorRight implements Subsystem {
         ).then(command);
     }
 
+    public boolean isAtTarget(double targetVel, double tolerance) {
+        if (shooterMotorRight.getVelocity() - targetVel <= tolerance) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     @Override
     public void periodic() {
         shooterMotorRight.setPower(controllerRight.calculate(shooterMotorRight.getState()));

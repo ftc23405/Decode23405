@@ -175,7 +175,9 @@ public class V3_Teleop extends NextFTCOpMode {
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
         }
 
-        ShooterMotorRight.INSTANCE.waitUntilShooterRightAtTargetVelocity(100, classifierVelocity, new InstantCommand(() -> gamepad1.rumble(300)));
+        if (ShooterMotorRight.INSTANCE.isAtTarget(classifierVelocity, 150)) {
+            gamepad1.rumble(200);
+        }
 
     }
 
