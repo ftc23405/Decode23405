@@ -66,7 +66,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                         TransferPusher.INSTANCE.transferOff,
                         new Delay(0.5),
                         TransferPusher.INSTANCE.transferOn,
-                        new Delay(0.15),
+                        new Delay(0.05),
                         TransferPusher.INSTANCE.transferOff,
                         new Delay(0.5),
                         TransferPusher.INSTANCE.transferOn
@@ -123,13 +123,13 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private Path shoot1, turn1, intake1, shoot2, park;
 
     private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(86, 22, Math.toRadians(245));
+    private final Pose scoringPose = new Pose(86, 22, Math.toRadians(248));
 
-    private final Pose scoringPoseOffset = new Pose(86, 22, Math.toRadians(243));
+    private final Pose scoringPoseOffset = new Pose(86, 22, Math.toRadians(245));
 
-    private final Pose turnPose = new Pose(97.461, 36, Math.toRadians(0));
+    private final Pose turnPose = new Pose(97.461, 38, Math.toRadians(0));
 
-    private final Pose intakePose1 = new Pose(133.687, 37, Math.toRadians(0));
+    private final Pose intakePose1 = new Pose(133.687, 38, Math.toRadians(0));
 
     private final Pose endPose = new Pose(125, 34.852, Math.toRadians(0));
 
@@ -145,10 +145,10 @@ public class Red6BallFarAuto extends NextFTCOpMode {
         intake1.setLinearHeadingInterpolation(turnPose.getHeading(), intakePose1.getHeading());
 
         shoot2 = new Path(new BezierLine(intakePose1, scoringPose));
-        shoot2.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPose.getHeading());
+        shoot2.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPoseOffset.getHeading());
 
         park = new Path(new BezierLine(scoringPose, endPose));
-        park.setLinearHeadingInterpolation(scoringPose.getHeading(), endPose.getHeading());
+        park.setLinearHeadingInterpolation(scoringPoseOffset.getHeading(), endPose.getHeading());
     }
 
 }
