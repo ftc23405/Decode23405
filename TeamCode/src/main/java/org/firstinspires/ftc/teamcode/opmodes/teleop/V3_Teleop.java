@@ -131,6 +131,11 @@ public class V3_Teleop extends NextFTCOpMode {
                         ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
                         ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
                 ));
+        Gamepads.gamepad1().dpadUp()
+                        .whenBecomesTrue(new ParallelGroup(
+                                ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
+                                ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                        ));
         Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(new ParallelGroup(
                         ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
@@ -175,9 +180,9 @@ public class V3_Teleop extends NextFTCOpMode {
             new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))); //reset pinpoint IMU);
         }
 
-        if (ShooterMotorRight.INSTANCE.isAtTarget(classifierVelocity, 150)) {
-            gamepad1.rumble(200);
-        }
+//        if (ShooterMotorRight.INSTANCE.isAtTarget(classifierVelocity, 150)) {
+//            gamepad1.rumble(200);
+//        }
 
     }
 

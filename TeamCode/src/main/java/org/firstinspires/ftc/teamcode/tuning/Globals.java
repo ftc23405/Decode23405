@@ -8,19 +8,19 @@ public class Globals {
     public static double intakeI = 0;
     public static double intakeD = 0.005;
 
-    public static double classifierRPM = 2000;
-    public static double farRPM = 5000;
 
     public static double intakeTargetSpeed = 1;
     public static double intakeOffSpeed = 0;
 
-    public static double shooterP = 0.011;
+    public static double shooterP = 0.011;;
     public static double shooterI = 0; //use integrator (high kI) for high error response
     public static double shooterD = 0.0001;
     public static double shooterFF = 0.0005;
 
-    public static double targetVelocity = calculateTicksPerSecond(farRPM, 28);
-    public static double classifierVelocity = calculateTicksPerSecond(classifierRPM, 28);
+    public static double targetVelocity = calculateTicksPerSecond(2400, 28);
+
+    public static double classifierAutoVelocity = calculateTicksPerSecond(2300, 28);
+    public static double classifierVelocity = calculateTicksPerSecond(2000, 28);
     public static double shooterOffVelocity = 0;
 
 

@@ -17,7 +17,7 @@ public class ShooterMotorRight implements Subsystem {
     public final static ShooterMotorRight INSTANCE = new ShooterMotorRight();
 
     private ShooterMotorRight() { }
-    MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").floatMode().zeroed();
+    MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").brakeMode().zeroed();
 
     ControlSystem controllerRight = ControlSystem.builder()
             .velPid(shooterP, shooterI, shooterD)
@@ -40,6 +40,12 @@ public class ShooterMotorRight implements Subsystem {
     public Command shooterMotorRightClassifier() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierVelocity, 0)))
+                .setIsDone(() -> true);
+    }
+
+    public Command shooterMotorAutoRightClassifier() {
+        return new LambdaCommand()
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierAutoVelocity, 0)))
                 .setIsDone(() -> true);
     }
 
