@@ -14,8 +14,10 @@ import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.impl.MotorEx;
@@ -40,8 +42,13 @@ public class VelocityPIDTuner extends NextFTCOpMode {
     public static double ff = 0;
     public static int targetRPM = 0;
 
-    MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").floatMode().zeroed();
-    MotorEx shooterMotorLeft = new MotorEx("shooterMotorLeft").floatMode().zeroed();
+    ControlSystem controller = ControlSystem.builder()
+            .velPid(p, i, d)
+            .basicFF(ff)
+            .build();
+
+    MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").brakeMode().zeroed();
+    MotorEx shooterMotorLeft = new MotorEx("shooterMotorLeft").brakeMode().zeroed();
 
 
 
@@ -50,23 +57,20 @@ public class VelocityPIDTuner extends NextFTCOpMode {
     public void onInit() {
 
 
+
+        controller.setGoal(new KineticState(0, 0 ,0));
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry(), PanelsTelemetry.INSTANCE.getFtcTelemetry());
     }
 
     @Override
     public void onStartButtonPressed() {
-
+        Gamepads.gamepad1().rightBumper()
+                .whenBecomesTrue(() -> controller.setGoal(new KineticState(0, calculateTicksPerSecond(targetRPM, 28) ,0)));
     }
 
     @Override
     public void onUpdate() {
-
-        ControlSystem controller = ControlSystem.builder()
-                .velPid(p, i, d)
-                .basicFF(ff)
-                .build();
-
-        controller.setGoal(new KineticState(0, calculateTicksPerSecond(targetRPM, 28) ,0));
 
         shooterMotorRight.setPower(controller.calculate(shooterMotorRight.getState()));
         shooterMotorLeft.setPower(controller.calculate(shooterMotorRight.getState()));
