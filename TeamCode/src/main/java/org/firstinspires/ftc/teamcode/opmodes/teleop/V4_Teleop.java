@@ -128,7 +128,9 @@ public class V4_Teleop extends NextFTCOpMode {
         }
 
 
-        double targetHeading = Math.toRadians(-limelight.getLatestResult().getTx()) + Math.toRadians(180); // Radians
+
+        LLResult llResult = limelight.getLatestResult();
+        double targetHeading = Math.toRadians(-llResult.getTx()) + Math.toRadians(180); // Radians
 
         double error = targetHeading - PedroComponent.follower().getHeading();
         headingController.setCoefficients(PedroComponent.follower().constants.coefficientsHeadingPIDF);
