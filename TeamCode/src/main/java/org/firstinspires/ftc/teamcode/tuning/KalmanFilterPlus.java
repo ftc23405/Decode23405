@@ -56,6 +56,8 @@ public class KalmanFilterPlus implements NoiseFilter {
         return state;
     }
 
+    public double getVariance() { return variance; }
+
     /**
      * This method outputs the current state, variance, and Kalman gain of the filter as a string array.
      * @return A string array containing the current state, variance, and Kalman gain.

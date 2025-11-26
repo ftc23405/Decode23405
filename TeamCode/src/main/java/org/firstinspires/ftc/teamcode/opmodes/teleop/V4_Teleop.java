@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.control.KalmanFilter;
 import com.pedropathing.control.KalmanFilterParameters;
@@ -43,6 +44,8 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+
+import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawRobot;
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp
@@ -63,6 +66,16 @@ public class V4_Teleop extends NextFTCOpMode {
     private final KalmanFilterPlus kfX = new KalmanFilterPlus(new KalmanFilterParameters(0.5, 0.5));
     private final KalmanFilterPlus kfY = new KalmanFilterPlus(new KalmanFilterParameters(0.5, 0.5));
     private final KalmanFilterPlus kfTh = new KalmanFilterPlus(new KalmanFilterParameters(0.5, 0.5));
+
+    private double ppBotX;
+    private double ppBotY;
+    private double ppBotHeading;
+
+    private double llBotX;
+    private double llBotY;
+    private double llBotTh;
+
+
 
     private Limelight3A limelight;
 
@@ -130,17 +143,12 @@ public class V4_Teleop extends NextFTCOpMode {
 
     @Override
     public void onUpdate() { //runs every loop
-        BindingManager.update();
-        telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
-        telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
-        telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
-        ActiveOpMode.telemetry().update();
 
 //        if ((Math.abs(Math.toDegrees(PedroComponent.follower().getPose().getHeading())) <= 2) ){ //if follower has heading of 180 degrees (with 2 degrees of tolerance), reset the IMU
 //            new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(0)))); //reset pinpoint IMU);
 //        }
 
-
+        BindingManager.update();
         LLResult llResult = limelight.getLatestResult();
         double targetHeading = Math.toRadians(-llResult.getTx()) + Math.toRadians(180); // Radians
 
@@ -154,6 +162,26 @@ public class V4_Teleop extends NextFTCOpMode {
             PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
 
 //        PedroComponent.follower().setPose(getRobotPoseFromLL());
+
+        ppBotX = PedroComponent.follower().getPose().getX();
+        ppBotY = PedroComponent.follower().getPose().getY();
+        ppBotHeading = PedroComponent.follower().getPose().getHeading();
+//        double filteredX = getRobotPoseFromLL().getX();
+//        double filteredY = getRobotPoseFromLL().getY();
+//        double filteredTh = getRobotPoseFromLL().getHeading();
+
+
+        telemetry.addData("Robot Heading", Math.toDegrees(ppBotHeading));
+        telemetry.addData("Robot x", ppBotX);
+        telemetry.addData("Robot y", ppBotY);
+
+//        telemetry.addData("Filtered Heading", Math.toDegrees(filteredTh));
+//        telemetry.addData("Filtered x", filteredX);
+//        telemetry.addData("Filtered y", filteredY);
+
+
+        ActiveOpMode.telemetry().update();
+//        drawRobot(PedroComponent.follower().getPose(), kfX, kfY, kfTh);
     }
 
     private Pose getRobotPoseFromLL() {
