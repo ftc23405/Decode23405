@@ -54,7 +54,7 @@ public class V4_Teleop extends NextFTCOpMode {
 
     public V4_Teleop() {
         addComponents( //add needed components
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
@@ -79,7 +79,7 @@ public class V4_Teleop extends NextFTCOpMode {
 
     private Limelight3A limelight;
 
-    PIDFController headingController = new PIDFController(PedroComponent.follower().constants.coefficientsHeadingPIDF);
+
     boolean headingLock = false;
 
 
@@ -90,6 +90,7 @@ public class V4_Teleop extends NextFTCOpMode {
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
 
     }
+
 
     @Override
     public void onStartButtonPressed() {
@@ -150,16 +151,17 @@ public class V4_Teleop extends NextFTCOpMode {
 
         BindingManager.update();
         LLResult llResult = limelight.getLatestResult();
-        double targetHeading = Math.toRadians(-llResult.getTx()) + Math.toRadians(180); // Radians
+        double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
+
+        PIDFController headingController = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
 
         double error = targetHeading - PedroComponent.follower().getHeading();
-        headingController.setCoefficients(Constants.followerConstants.coefficientsHeadingPIDF);
-        headingController.updateError(error);
+        headingController.updateError(error + Math.toRadians(180));
 
         if (headingLock)
             PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run());
         else
-            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
+            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
 
 //        PedroComponent.follower().setPose(getRobotPoseFromLL());
 

@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawDebug;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawPoseHistory;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawRobot;
-
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -140,7 +136,6 @@ public class Red9BallFarStartComplementAuto extends NextFTCOpMode{
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
-        drawDebug(PedroComponent.follower());
     }
 
     private Path shoot1, intake1, goBack1, intake2, goBack2, park;

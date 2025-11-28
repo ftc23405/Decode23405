@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawDebug;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
@@ -26,6 +25,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
 
 @Configurable
 @Autonomous(name = "9 Ball Red Side Classifier Auto")
@@ -138,7 +138,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
-        drawDebug(PedroComponent.follower());
+        Drawing.drawDebug(PedroComponent.follower());
     }
 
         private Path shoot1, intake1, goBack1, intake2, goBack2, park;

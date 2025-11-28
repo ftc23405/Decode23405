@@ -81,7 +81,7 @@ public class Shooter implements Subsystem {
     public void periodic() {
 
         shooterMotorLeft.setPower(-controller.calculate(shooterMotorLeft.getState()));
-        shooterMotorRight.setPower(controller.calculate(shooterMotorLeft.getState()));
+        shooterMotorRight.setPower(controller.calculate(shooterMotorRight.getState()));
 
         ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", shooterMotorRight.getVelocity());
         ActiveOpMode.telemetry().addData("Left Shooter Motor Velocity:", shooterMotorLeft.getVelocity());

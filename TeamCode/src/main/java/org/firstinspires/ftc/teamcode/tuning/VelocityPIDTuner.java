@@ -29,7 +29,6 @@ public class VelocityPIDTuner extends NextFTCOpMode {
 
     public VelocityPIDTuner() {
         addComponents(
-                new SubsystemComponent(ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 BindingsComponent.INSTANCE,
                 BulkReadComponent.INSTANCE
         );
@@ -65,18 +64,28 @@ public class VelocityPIDTuner extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
-        Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(() -> controller.setGoal(new KineticState(0, calculateTicksPerSecond(targetRPM, 28) ,0)));
     }
 
     @Override
     public void onUpdate() {
+        controller = ControlSystem.builder()
+                .velPid(p, i, d)
+                .basicFF(ff)
+                .build();
+
+        controller.setGoal(new KineticState(
+                0,
+                calculateTicksPerSecond(targetRPM, 28),
+                0
+        ));
 
         shooterMotorRight.setPower(controller.calculate(shooterMotorRight.getState()));
-        shooterMotorLeft.setPower(controller.calculate(shooterMotorRight.getState()));
+        shooterMotorLeft.setPower(controller.calculate(shooterMotorLeft.getState()));
 
-        telemetry.addData("Shooter Left Velocity", shooterMotorLeft.getVelocity());
-        telemetry.addData("Shooter Right Velocity", shooterMotorRight.getVelocity());
+        telemetry.addData("Shooter Left Velocity (rpm)", calculateTicksPerSecond(shooterMotorLeft.getVelocity(), 28));
+        telemetry.addData("Shooter Right Velocity (rpm)", calculateTicksPerSecond(shooterMotorRight.getVelocity(), 28));
+        telemetry.addData("Target", targetRPM);
         telemetry.update();
     }
+
 }
