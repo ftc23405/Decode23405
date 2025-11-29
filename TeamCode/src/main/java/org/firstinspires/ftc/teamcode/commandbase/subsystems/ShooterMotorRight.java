@@ -19,6 +19,9 @@ public class ShooterMotorRight implements Subsystem {
     private ShooterMotorRight() { }
     MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").brakeMode().zeroed();
 
+    private static double aveRPM = 0;
+
+
     ControlSystem controllerRight = ControlSystem.builder()
             .velPid(shooterP, shooterI, shooterD)
             .basicFF(shooterFF)
@@ -34,31 +37,31 @@ public class ShooterMotorRight implements Subsystem {
     public Command shooterMotorRightOn() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, targetVelocity, 0)))
-                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
 
     public Command shooterMotorRightClassifier() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierVelocity, 0)))
-                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
 
     public Command shooterMotorAutoRightClassifier() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierAutoVelocity, 0)))
-                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
 
     public Command shooterMotorRightReverse() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, -2000, 0)))
-                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
 
     public Command shooterMotorRightOff() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)))
-                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
     public Command waitUntilShooterRightAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
@@ -77,7 +80,10 @@ public class ShooterMotorRight implements Subsystem {
 
     @Override
     public void periodic() {
-        shooterMotorRight.setPower(controllerRight.calculate(shooterMotorRight.getState()));
-        ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", shooterMotorRight.getVelocity());
+        double motorRPM = calculateRPM(shooterMotorRight.getVelocity(), 28);
+        int avePeriod = 5;
+        aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
+        shooterMotorRight.setPower(controllerRight.calculate(new KineticState(0, aveRPM)));
+        ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", aveRPM);
     }
 }

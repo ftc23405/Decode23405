@@ -81,18 +81,14 @@ public class VelocityPIDTuner extends NextFTCOpMode {
         double motorRPM = calculateRPM(shooterMotorRight.getVelocity(), 28);
         aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
 
-
         controller.setGoal(new KineticState(
                 0,
-                calculateTicksPerSecond(targetRPM, 28),
+                targetRPM,
                 0
         ));
 
-        if (Math.abs( - targetRPM) >= tolerence) {
+        if (Math.abs(motorRPM - targetRPM) >= tolerence) {
             shooterPower = controller.calculate(new KineticState(0, aveRPM, 0));
-        }
-        else {
-//             shooterPower = 0;
         }
 
         shooterMotorRight.setPower(shooterPower);
