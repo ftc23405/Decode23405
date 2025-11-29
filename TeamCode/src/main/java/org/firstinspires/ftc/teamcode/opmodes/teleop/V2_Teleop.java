@@ -102,74 +102,74 @@
 //                        Shooter.INSTANCE.shooterCloseShoot,
 //                        new Delay(0.75),
 //                        Intake.INSTANCE.intakeFullSpeed,
-//                        TransferPusher.INSTANCE.transferOn,
+//                        TransferPusher.INSTANCE.transferPush,
 //                        new Delay(0.15),
-//                        TransferPusher.INSTANCE.transferOff,
+//                        TransferPusher.INSTANCE.transferHold,
 //                        new Delay(0.25),
-//                        TransferPusher.INSTANCE.transferOn,
+//                        TransferPusher.INSTANCE.transferPush,
 //                        new Delay(0.15),
-//                        TransferPusher.INSTANCE.transferOff,
+//                        TransferPusher.INSTANCE.transferHold,
 //                        new Delay(0.25),
-//                        TransferPusher.INSTANCE.transferOn
+//                        TransferPusher.INSTANCE.transferPush
 //                ))
 //                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold);
 //
 //        Gamepads.gamepad2().dpadUp()
 //                .whenBecomesTrue(new SequentialGroup(
 //                        Shooter.INSTANCE.shooterFarShoot,
 //                        new Delay(0.75),
 //                        Intake.INSTANCE.intakeFullSpeed,
-//                        TransferPusher.INSTANCE.transferOn,
+//                        TransferPusher.INSTANCE.transferPush,
 //                        new Delay(0.15),
-//                        TransferPusher.INSTANCE.transferOff,
+//                        TransferPusher.INSTANCE.transferHold,
 //                        new Delay(0.25),
-//                        TransferPusher.INSTANCE.transferOn,
+//                        TransferPusher.INSTANCE.transferPush,
 //                        new Delay(0.15),
-//                        TransferPusher.INSTANCE.transferOff,
+//                        TransferPusher.INSTANCE.transferHold,
 //                        new Delay(0.25),
-//                        TransferPusher.INSTANCE.transferOn
+//                        TransferPusher.INSTANCE.transferPush
 //                ))
 //                .whenBecomesFalse(Intake.INSTANCE.intakeOff)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff);
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold);
 //        Gamepads.gamepad2().rightBumper()
 //                .whenBecomesTrue(Shooter.INSTANCE.shooterFarShoot);
 ////                .whenBecomesFalse(new SequentialGroup(
 ////                        new Delay(0.75),
 ////                        Intake.INSTANCE.intakeFullSpeed,
-////                        TransferPusher.INSTANCE.transferOn,
+////                        TransferPusher.INSTANCE.transferPush,
 ////                        new Delay(0.15),
-////                        TransferPusher.INSTANCE.transferOff,
+////                        TransferPusher.INSTANCE.transferHold,
 ////                        new Delay(0.25),
-////                        TransferPusher.INSTANCE.transferOn,
+////                        TransferPusher.INSTANCE.transferPush,
 ////                        new Delay(0.15),
-////                        TransferPusher.INSTANCE.transferOff,
+////                        TransferPusher.INSTANCE.transferHold,
 ////                        new Delay(0.25),
-////                        TransferPusher.INSTANCE.transferOn
+////                        TransferPusher.INSTANCE.transferPush
 ////                ));
 //        Gamepads.gamepad2().leftBumper()
 //                .whenBecomesTrue(Shooter.INSTANCE.shooterCloseShoot);
 ////                .whenBecomesFalse(new SequentialGroup(
 ////                        new Delay(0.75),
 ////                        Intake.INSTANCE.intakeFullSpeed,
-////                        TransferPusher.INSTANCE.transferOn,
+////                        TransferPusher.INSTANCE.transferPush,
 ////                        new Delay(0.15),
-////                        TransferPusher.INSTANCE.transferOff,
+////                        TransferPusher.INSTANCE.transferHold,
 ////                        new Delay(0.25),
-////                        TransferPusher.INSTANCE.transferOn,
+////                        TransferPusher.INSTANCE.transferPush,
 ////                        new Delay(0.15),
-////                        TransferPusher.INSTANCE.transferOff,
+////                        TransferPusher.INSTANCE.transferHold,
 ////                        new Delay(0.25),
-////                        TransferPusher.INSTANCE.transferOn
+////                        TransferPusher.INSTANCE.transferPush
 ////                ));
 //        Gamepads.gamepad2().dpadDown()
 //                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
 //        Gamepads.gamepad2().y()
-//                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
+//                .whenBecomesTrue(TransferPusher.INSTANCE.transferPush)
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs
 //        Gamepads.gamepad2().a()
 //                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer reverses
 //    }
 //
 //    @Override

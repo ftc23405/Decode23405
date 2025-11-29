@@ -37,31 +37,31 @@ public class ShooterMotorLeft implements Subsystem {
     public Command shooterMotorLeftOn() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, -targetVelocity, 0)))
-                .setIsDone(() -> true);
+                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
     }
 
     public Command shooterMotorLeftClassifier() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierVelocity, 0)))
-                .setIsDone(() -> true);
+                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
     }
 
     public Command shooterMotorAutoLeftClassifier() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierAutoVelocity, 0)))
-                .setIsDone(() -> true);
+                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
     }
 
     public Command shooterMotorLeftOff() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, -shooterOffVelocity, 0)))
-                .setIsDone(() -> true);
+                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
     }
 
     public Command shooterMotorLeftReverse() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, 2000, 0)))
-                .setIsDone(() -> true);
+                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,calculateTicksPerSecond(50, 28))));
     }
     public Command waitUntilShooterLeftAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->

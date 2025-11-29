@@ -96,11 +96,11 @@
 //        Gamepads.gamepad2().leftBumper()
 //                .whenBecomesTrue(Shooter.INSTANCE.shooterOff);
 //        Gamepads.gamepad2().y()
-//                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
+//                .whenBecomesTrue(TransferPusher.INSTANCE.transferPush)
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs
 //        Gamepads.gamepad2().a()
 //                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
-//                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer reverses
 //        parkButton
 //                .whenBecomesTrue(new FollowPath(parkPath));
 //    }

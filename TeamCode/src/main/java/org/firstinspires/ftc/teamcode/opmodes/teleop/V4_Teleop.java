@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.gamepad.PanelsGamepad;
-import com.bylazar.telemetry.TelemetryManager;
-import com.pedropathing.control.KalmanFilter;
 import com.pedropathing.control.KalmanFilterParameters;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.PoseHistory;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -26,27 +21,19 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.tuning.KalmanFilterPlus;
 
 import dev.nextftc.bindings.BindingManager;
-import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
-import dev.nextftc.core.commands.utility.LambdaCommand;
-import dev.nextftc.core.commands.utility.PerpetualCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
-import dev.nextftc.extensions.pedro.PedroDriverControlled;
-import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawRobot;
-import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp
 @Configurable //panels
@@ -54,7 +41,7 @@ public class V4_Teleop extends NextFTCOpMode {
 
     public V4_Teleop() {
         addComponents( //add needed components
-                new SubsystemComponent(Intake.INSTANCE, Shooter.INSTANCE),
+                new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
                 BindingsComponent.INSTANCE,
@@ -108,22 +95,24 @@ public class V4_Teleop extends NextFTCOpMode {
 
 
         Gamepads.gamepad1().rightBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterClassifier());
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
+                ));
         Gamepads.gamepad1().dpadUp()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOn());
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                ));
         Gamepads.gamepad1().leftBumper()
-                .whenBecomesTrue(Shooter.INSTANCE.shooterOff());
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightOff()
+                ));
 
         Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
-        Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
-
-        Gamepads.gamepad2().dpadUp()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferSlowReverse)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer slow reverses
+                .whenBecomesTrue(TransferPusher.INSTANCE.transferPush)
+                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs, when let go go back to hold position
 
 
         Gamepads.gamepad2().y()

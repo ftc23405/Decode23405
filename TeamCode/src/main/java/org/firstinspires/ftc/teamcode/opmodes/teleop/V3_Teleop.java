@@ -142,16 +142,16 @@ public class V3_Teleop extends NextFTCOpMode {
                         ShooterMotorRight.INSTANCE.shooterMotorRightOff()
                 ));
 
-        Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferOn)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer runs
-        Gamepads.gamepad2().leftBumper()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer reverses
-
-        Gamepads.gamepad2().dpadUp()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferSlowReverse)
-                .whenBecomesFalse(TransferPusher.INSTANCE.transferOff); //when button held transfer slow reverses
+//        Gamepads.gamepad2().rightBumper()
+//                .whenBecomesTrue(TransferPusher.INSTANCE.transferPush)
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs
+//        Gamepads.gamepad2().leftBumper()
+//                .whenBecomesTrue(TransferPusher.INSTANCE.transferReverse)
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer reverses
+//
+//        Gamepads.gamepad2().dpadUp()
+//                .whenBecomesTrue(TransferPusher.INSTANCE.transferSlowReverse)
+//                .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer slow reverses
 
 
         Gamepads.gamepad2().y()

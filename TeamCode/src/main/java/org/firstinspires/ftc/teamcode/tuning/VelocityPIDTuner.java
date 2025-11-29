@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.vision.FFCapstoneDetector;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,6 +15,8 @@ import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
+import dev.nextftc.control.feedback.PIDCoefficients;
+import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -34,16 +37,23 @@ public class VelocityPIDTuner extends NextFTCOpMode {
         );
     }
 
-    public static double p = 0;
-    public static double i = 0;
-    public static double d = 0;
+    public static double p = shooterP;
+    public static double i = shooterI;
+    public static double d = shooterD;
+    public static double ff = shooterFF;
 
-    public static double ff = 0;
+    public static double tolerence = shooterVelTolerance;
+    private static double shooterPower;
+
+    public static PIDCoefficients coefficients = new PIDCoefficients(p, i, d);
+    public static BasicFeedforwardParameters ffCoefficients = new BasicFeedforwardParameters(ff, 0, 0);
     public static int targetRPM = 0;
+    public static double aveRPM = 0;
+    public static int avePeriod = 5;
 
     ControlSystem controller = ControlSystem.builder()
-            .velPid(p, i, d)
-            .basicFF(ff)
+            .velPid(coefficients)
+            .basicFF(ffCoefficients)
             .build();
 
     MotorEx shooterMotorRight = new MotorEx("shooterMotorRight").brakeMode().zeroed();
@@ -68,10 +78,9 @@ public class VelocityPIDTuner extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
-        controller = ControlSystem.builder()
-                .velPid(p, i, d)
-                .basicFF(ff)
-                .build();
+        double motorRPM = calculateRPM(shooterMotorRight.getVelocity(), 28);
+        aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
+
 
         controller.setGoal(new KineticState(
                 0,
@@ -79,12 +88,19 @@ public class VelocityPIDTuner extends NextFTCOpMode {
                 0
         ));
 
-        shooterMotorRight.setPower(controller.calculate(shooterMotorRight.getState()));
-        shooterMotorLeft.setPower(controller.calculate(shooterMotorLeft.getState()));
+        if (Math.abs( - targetRPM) >= tolerence) {
+            shooterPower = controller.calculate(new KineticState(0, aveRPM, 0));
+        }
+        else {
+//             shooterPower = 0;
+        }
 
-        telemetry.addData("Shooter Left Velocity (rpm)", calculateTicksPerSecond(shooterMotorLeft.getVelocity(), 28));
-        telemetry.addData("Shooter Right Velocity (rpm)", calculateTicksPerSecond(shooterMotorRight.getVelocity(), 28));
+        shooterMotorRight.setPower(shooterPower);
+
+        telemetry.addData("Shooter Right Velocity (rpm)", motorRPM);
+        telemetry.addData("Shooter Right Velocity (rpm) average", aveRPM);
         telemetry.addData("Target", targetRPM);
+        telemetry.addData("Shooter Power", shooterPower);
         telemetry.update();
     }
 

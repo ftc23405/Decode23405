@@ -67,15 +67,15 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                 shooterMotorsAutoClassifierShot(),
                 new Delay(0.5),
                 Intake.INSTANCE.intakeFullSpeed,
-                TransferPusher.INSTANCE.transferOn,
+                TransferPusher.INSTANCE.transferPush,
                 new Delay(0.15),
-                TransferPusher.INSTANCE.transferOff,
+                TransferPusher.INSTANCE.transferHold,
                 new Delay(0.25),
-                TransferPusher.INSTANCE.transferOn,
+                TransferPusher.INSTANCE.transferPush,
                 new Delay(0.15),
-                TransferPusher.INSTANCE.transferOff,
+                TransferPusher.INSTANCE.transferHold,
                 new Delay(0.25),
-                TransferPusher.INSTANCE.transferOn
+                TransferPusher.INSTANCE.transferPush
         );
     }
 
@@ -85,7 +85,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     shootWithTransfer(),
                     new Delay(2),
                     shooterMotorsOff(),
-                    TransferPusher.INSTANCE.transferOff,
+                    TransferPusher.INSTANCE.transferHold,
                     Intake.INSTANCE.intakeAutoSpeed,
                     new ParallelGroup(
                             new FollowPath(intake1,true),
@@ -97,7 +97,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     shootWithTransfer(),
                     new Delay(2),
                     shooterMotorsOff(),
-                    TransferPusher.INSTANCE.transferOff,
+                    TransferPusher.INSTANCE.transferHold,
                     Intake.INSTANCE.intakeAutoSpeed,
                     new ParallelGroup(
                             new FollowPath(intake2,true),
@@ -109,7 +109,7 @@ public class Red9BallClassifierAuto extends NextFTCOpMode{
                     shootWithTransfer(),
                     new Delay(2),
                     shooterMotorsOff(),
-                    TransferPusher.INSTANCE.transferOff,
+                    TransferPusher.INSTANCE.transferHold,
                     Intake.INSTANCE.intakeOff,
                     new FollowPath(park,true)
 

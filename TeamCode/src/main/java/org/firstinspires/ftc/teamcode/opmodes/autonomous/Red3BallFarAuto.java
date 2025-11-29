@@ -1,16 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
-import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
-
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
@@ -61,15 +57,15 @@ public class Red3BallFarAuto extends NextFTCOpMode {
                 new Delay(2),
                 Intake.INSTANCE.intakeFullSpeed,
                 new Delay(0.3),
-                TransferPusher.INSTANCE.transferOn,
+                TransferPusher.INSTANCE.transferPush,
                 new Delay(0.05),
-                TransferPusher.INSTANCE.transferOff,
+                TransferPusher.INSTANCE.transferHold,
                 new Delay(0.5),
-                TransferPusher.INSTANCE.transferOn,
+                TransferPusher.INSTANCE.transferPush,
                 new Delay(0.05),
-                TransferPusher.INSTANCE.transferOff,
+                TransferPusher.INSTANCE.transferHold,
                 new Delay(0.5),
-                TransferPusher.INSTANCE.transferOn
+                TransferPusher.INSTANCE.transferPush
         );
     }
     public Command autoRoutine() {
@@ -78,7 +74,7 @@ public class Red3BallFarAuto extends NextFTCOpMode {
                 shootWithTransfer(),
                 new Delay(1),
                 shooterMotorsOff(),
-                TransferPusher.INSTANCE.transferOff,
+                TransferPusher.INSTANCE.transferHold,
                 new FollowPath(park,true)
         );
     }
