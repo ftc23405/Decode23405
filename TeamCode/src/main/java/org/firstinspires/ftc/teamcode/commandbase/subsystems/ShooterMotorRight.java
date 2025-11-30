@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.conditionals.IfElseCommand;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
@@ -63,19 +64,13 @@ public class ShooterMotorRight implements Subsystem {
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)))
                 .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
-    public Command waitUntilShooterRightAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
-        return new WaitUntil(() ->
-                (shooterMotorRight.getVelocity() - targetVel) <= tolerance
-        ).then(command);
+    public Command waitUntilShooterRightAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
+        return new IfElseCommand(() ->
+                (Math.abs((calculateRPM(shooterMotorRight.getVelocity(), 28) - controllerRight.getGoal().getVelocity())) <= tolerance), command);
     }
 
-    public boolean isAtTarget(double targetVel, double tolerance) {
-        if (shooterMotorRight.getVelocity() - targetVel <= tolerance) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    public boolean isAtTarget(double tolerance) {
+        return Math.abs(aveRPM - controllerRight.getGoal().getVelocity()) <= tolerance;
     }
 
     @Override
@@ -85,5 +80,6 @@ public class ShooterMotorRight implements Subsystem {
         aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
         shooterMotorRight.setPower(controllerRight.calculate(new KineticState(0, aveRPM)));
         ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", aveRPM);
+        ActiveOpMode.telemetry().addData("Right Controller Velocity:", controllerRight.getGoal().getVelocity());
     }
 }

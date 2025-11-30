@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.control.KalmanFilterParameters;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.ftc.FTCCoordinates;
@@ -22,6 +25,7 @@ import org.firstinspires.ftc.teamcode.tuning.KalmanFilterPlus;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.core.commands.CommandManager;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
@@ -75,6 +79,7 @@ public class V4_Teleop extends NextFTCOpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(8);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry(), PanelsTelemetry.INSTANCE.getFtcTelemetry());
 
     }
 
@@ -83,6 +88,7 @@ public class V4_Teleop extends NextFTCOpMode {
     public void onStartButtonPressed() {
 
         PedroComponent.follower().startTeleopDrive();
+        limelight.start();
         Gamepads.gamepad1().start()
                 .whenBecomesTrue(new SequentialGroup(
                         new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))),
@@ -110,8 +116,15 @@ public class V4_Teleop extends NextFTCOpMode {
                         ShooterMotorRight.INSTANCE.shooterMotorRightOff()
                 ));
 
-        Gamepads.gamepad2().rightBumper()
-                .whenBecomesTrue(TransferPusher.INSTANCE.transferPush)
+        Gamepads.gamepad2().rightBumper().whenBecomesTrue(() -> {
+                    if (ShooterMotorRight.INSTANCE.isAtTarget(50)) {
+                        new SequentialGroup(
+                                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                                new Delay(0.2),
+                                Intake.INSTANCE.intakeOff
+                        ).schedule();
+                    }
+                })
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs, when let go go back to hold position
 
 
@@ -140,17 +153,19 @@ public class V4_Teleop extends NextFTCOpMode {
 
         BindingManager.update();
         LLResult llResult = limelight.getLatestResult();
-        double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
+        double targetHeading = Math.toRadians(llResult.getTx()); // Radians
 
         PIDFController headingController = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
 
-        double error = targetHeading - PedroComponent.follower().getHeading();
-        headingController.updateError(error + Math.toRadians(180));
+        double error = targetHeading;
+        headingController.updateError(error);
 
         if (headingLock)
             PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run());
         else
             PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
+
+        telemetry.addData("limelight tx", llResult.getTx());
 
 //        PedroComponent.follower().setPose(getRobotPoseFromLL());
 
@@ -171,7 +186,7 @@ public class V4_Teleop extends NextFTCOpMode {
 //        telemetry.addData("Filtered y", filteredY);
 
 
-        ActiveOpMode.telemetry().update();
+        telemetry.update();
 //        drawRobot(PedroComponent.follower().getPose(), kfX, kfY, kfTh);
     }
 
