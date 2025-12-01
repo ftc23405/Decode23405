@@ -92,6 +92,7 @@ public class VelocityPIDTuner extends NextFTCOpMode {
         }
 
         shooterMotorRight.setPower(shooterPower);
+        shooterMotorLeft.setPower(-shooterPower);
 
         telemetry.addData("Shooter Right Velocity (rpm)", motorRPM);
         telemetry.addData("Shooter Right Velocity (rpm) average", aveRPM);

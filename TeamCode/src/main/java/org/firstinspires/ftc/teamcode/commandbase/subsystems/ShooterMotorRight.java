@@ -69,7 +69,7 @@ public class ShooterMotorRight implements Subsystem {
     }
 
     public boolean isAtTarget(double tolerance) {
-        return Math.abs(controllerRight.getLastMeasurement().getVelocity() - controllerRight.getGoal().getVelocity()) <= tolerance;
+        return Math.abs(controllerRight.getLastMeasurement().getVelocity() - controllerRight.getGoal().getVelocity()) <= tolerance && !controllerRight.getGoal().equals(new KineticState(0, 0));
     }
 
     @Override
