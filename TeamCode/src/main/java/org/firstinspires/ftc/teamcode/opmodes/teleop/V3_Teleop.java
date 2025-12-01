@@ -4,12 +4,10 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
@@ -17,16 +15,12 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.bindings.BindingManager;
 import dev.nextftc.bindings.Button;
-import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
-import dev.nextftc.core.commands.utility.LambdaCommand;
-import dev.nextftc.core.commands.utility.PerpetualCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.extensions.pedro.PedroDriverControlled;
 import dev.nextftc.extensions.pedro.TurnBy;
@@ -34,7 +28,6 @@ import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
-import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp
 @Configurable //panels
@@ -133,8 +126,8 @@ public class V3_Teleop extends NextFTCOpMode {
                 ));
         Gamepads.gamepad1().dpadUp()
                         .whenBecomesTrue(new ParallelGroup(
-                                ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
-                                ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                                ShooterMotorLeft.INSTANCE.shooterMotorLeftFar(),
+                                ShooterMotorRight.INSTANCE.shooterMotorRightFar()
                         ));
         Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(new ParallelGroup(

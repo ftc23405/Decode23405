@@ -7,7 +7,6 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.conditionals.IfElseCommand;
-import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
@@ -35,7 +34,7 @@ public class ShooterMotorRight implements Subsystem {
         controllerRight.setGoal(new KineticState(0,0,0));
     }
 
-    public Command shooterMotorRightOn() {
+    public Command shooterMotorRightFar() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, targetVelocity, 0)))
                 .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
@@ -70,7 +69,7 @@ public class ShooterMotorRight implements Subsystem {
     }
 
     public boolean isAtTarget(double tolerance) {
-        return Math.abs(aveRPM - controllerRight.getGoal().getVelocity()) <= tolerance;
+        return Math.abs(controllerRight.getLastMeasurement().getVelocity() - controllerRight.getGoal().getVelocity()) <= tolerance;
     }
 
     @Override

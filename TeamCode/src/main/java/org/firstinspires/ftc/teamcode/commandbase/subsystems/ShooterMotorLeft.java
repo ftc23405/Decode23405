@@ -10,9 +10,7 @@ import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
-import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
-import dev.nextftc.hardware.powerable.SetPower;
 
 public class ShooterMotorLeft implements Subsystem {
 
@@ -36,7 +34,7 @@ public class ShooterMotorLeft implements Subsystem {
         controllerLeft.setGoal(new KineticState(0,0,0));
     }
 
-    public Command shooterMotorLeftOn() {
+    public Command shooterMotorLeftFar() {
         return new LambdaCommand()
                 .setStart(() -> controllerLeft.setGoal(new KineticState(0, -targetVelocity, 0)))
                 .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));

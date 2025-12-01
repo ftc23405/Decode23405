@@ -4,6 +4,7 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -25,10 +27,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "6 Ball Red Far Auto")
-public class Red6BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "New 9 Ball Red Far Auto")
+public class New_Red9BallFarAuto extends NextFTCOpMode {
 
-    public Red6BallFarAuto() {
+    public New_Red9BallFarAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -54,42 +56,37 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 shooterMotorsOn(),
-                        new Delay(2),
-                        Intake.INSTANCE.intakeFullSpeed,
-                        new Delay(0.3),
-                        TransferPusher.INSTANCE.transferPush,
-                        new Delay(0.05),
-                        TransferPusher.INSTANCE.transferHold,
-                        new Delay(0.5),
-                        TransferPusher.INSTANCE.transferPush,
-                        new Delay(0.05),
-                        TransferPusher.INSTANCE.transferHold,
-                        new Delay(0.5),
-                        TransferPusher.INSTANCE.transferPush
-                );
+                new Delay(2),
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(0.2),
+                Intake.INSTANCE.intakeOff,
+                TransferPusher.INSTANCE.transferHold,
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(0.2),
+                Intake.INSTANCE.intakeOff,
+                TransferPusher.INSTANCE.transferHold,
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(0.2),
+                Intake.INSTANCE.intakeOff,
+                TransferPusher.INSTANCE.transferHold,
+                shooterMotorsOff()
+        );
     }
     public Command autoRoutine() {
         return new SequentialGroup(
-                new FollowPath(shoot1,true),
+                new FollowPath(shoot1),
                 shootWithTransfer(),
-                new Delay(1),
-                shooterMotorsOff(),
-                TransferPusher.INSTANCE.transferHold,
-                Intake.INSTANCE.intakeAutoSpeed,
-                new FollowPath(turn1,true),
-                new ParallelGroup(
-                        new FollowPath(intake1,true),
-                        createDistanceMarker(0.7, Intake.INSTANCE.intakeOneThirdSpeed)
-                ),
-                new Delay(1),
+                Intake.INSTANCE.intakeFullSpeed,
+                new FollowPath(intake1),
                 Intake.INSTANCE.intakeOff,
-                new FollowPath(shoot2,true),
+                new FollowPath(shoot2),
                 shootWithTransfer(),
-                new Delay(1),
-                shooterMotorsOff(),
-                TransferPusher.INSTANCE.transferHold,
+                Intake.INSTANCE.intakeFullSpeed,
+                new FollowPath(intake2),
                 Intake.INSTANCE.intakeOff,
-                new FollowPath(park,true)
+                new FollowPath(shoot3),
+                shootWithTransfer(),
+                new FollowPath(park)
         );
     }
 
@@ -111,22 +108,29 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        Drawing.drawDebug(PedroComponent.follower());
         telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
         telemetry.addData("Robot y", PedroComponent.follower().getPose().getY());
         ActiveOpMode.telemetry().update();
     }
 
-    private Path shoot1, turn1, intake1, shoot2, park;
+    private Path shoot1, shoot2, shoot3, park;
+    private PathChain intake1, intake2;
 
-    private final Pose startPose = new Pose(82.017, 7.096, Math.toRadians(270));
-    private final Pose scoringPose = new Pose(86, 22, Math.toRadians(248));
+    private final Pose startPose = new Pose(82, 9, Math.toRadians(270));
 
-    private final Pose scoringPoseOffset = new Pose(86, 22, Math.toRadians(245));
+    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(250));
 
-    private final Pose turnPose = new Pose(97.461, 38, Math.toRadians(0));
+    private final Pose turnPose1 = new Pose(117, 18, Math.toRadians(0));
 
-    private final Pose intakePose1 = new Pose(133.687, 38, Math.toRadians(0));
+    private final Pose intakePose1 = new Pose(132, 18, Math.toRadians(-20));
+
+    private final Pose intakeSlidePose = new Pose(134, 8, Math.toRadians(-40));
+
+    private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0));
+
+    private final Pose intakePose2 = new Pose(135, 36, Math.toRadians(0));
 
     private final Pose endPose = new Pose(108, 11, Math.toRadians(0));
 
@@ -135,17 +139,31 @@ public class Red6BallFarAuto extends NextFTCOpMode {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
 
-        turn1 = new Path(new BezierLine(scoringPose, turnPose));
-        turn1.setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose.getHeading());
 
-        intake1 = new Path(new BezierLine(turnPose, intakePose1));
-        intake1.setLinearHeadingInterpolation(turnPose.getHeading(), intakePose1.getHeading());
+        intake1 = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(scoringPose, turnPose1))
+                .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose1.getHeading())
+                .addPath(new BezierLine(turnPose1, intakePose1))
+                .setLinearHeadingInterpolation(turnPose1.getHeading(), intakePose1.getHeading())
+                .addPath(new BezierLine(intakePose1, intakeSlidePose))
+                .setLinearHeadingInterpolation(intakePose1.getHeading(), intakeSlidePose.getHeading())
+                .build();
 
         shoot2 = new Path(new BezierLine(intakePose1, scoringPose));
-        shoot2.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPoseOffset.getHeading());
+        shoot2.setLinearHeadingInterpolation(intakePose1.getHeading(), scoringPose.getHeading());
+
+        intake2 = PedroComponent.follower().pathBuilder()
+                .addPath(new BezierLine(scoringPose, turnPose2))
+                .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose2.getHeading())
+                .addPath(new BezierLine(turnPose2, intakePose2))
+                .setLinearHeadingInterpolation(turnPose2.getHeading(), intakePose2.getHeading())
+                .build();
+
+        shoot3 = new Path(new BezierLine(intakePose2, scoringPose));
+        shoot3.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPose.getHeading());
 
         park = new Path(new BezierLine(scoringPose, endPose));
-        park.setLinearHeadingInterpolation(scoringPoseOffset.getHeading(), endPose.getHeading());
+        park.setLinearHeadingInterpolation(scoringPose.getHeading(), endPose.getHeading());
     }
 
 }

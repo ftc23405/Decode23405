@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import static com.pedropathing.paths.HeadingInterpolator.linearFromPoint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.bylazar.configurables.annotations.Configurable;
@@ -7,8 +9,11 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.control.KalmanFilterParameters;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,7 +21,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.commandbase.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorLeft;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
@@ -24,6 +28,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.tuning.KalmanFilterPlus;
 
 import dev.nextftc.bindings.BindingManager;
+import dev.nextftc.bindings.Button;
 import dev.nextftc.core.commands.CommandManager;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -31,8 +36,8 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.BindingsComponent;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
-import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.Gamepads;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -62,6 +67,11 @@ public class V4_Teleop extends NextFTCOpMode {
     private double ppBotY;
     private double ppBotHeading;
 
+    private PathChain parkPath;
+    Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
+
+    private Pose redParkPose = new Pose(39, 33, Math.toRadians(180));
+
     private double llBotX;
     private double llBotY;
     private double llBotTh;
@@ -79,6 +89,11 @@ public class V4_Teleop extends NextFTCOpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(8);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
+
+        parkPath = PedroComponent.follower().pathBuilder()
+                .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, redParkPose)))
+                .setHeadingInterpolation(linearFromPoint(PedroComponent.follower()::getHeading, redParkPose.getHeading(), 0.8))
+                .build();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry(), PanelsTelemetry.INSTANCE.getFtcTelemetry());
 
     }
@@ -107,8 +122,8 @@ public class V4_Teleop extends NextFTCOpMode {
                 ));
         Gamepads.gamepad1().dpadUp()
                 .whenBecomesTrue(new ParallelGroup(
-                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
-                        ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftFar(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightFar()
                 ));
         Gamepads.gamepad1().leftBumper()
                 .whenBecomesTrue(new ParallelGroup(
@@ -141,6 +156,10 @@ public class V4_Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
+
+        parkButton
+                .whenBecomesTrue(new FollowPath(parkPath));
+
     }
 
 
@@ -153,14 +172,14 @@ public class V4_Teleop extends NextFTCOpMode {
 
         BindingManager.update();
         LLResult llResult = limelight.getLatestResult();
-        double targetHeading = Math.toRadians(llResult.getTx()); // Radians
+        double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
 
         PIDFController headingController = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
 
         double error = targetHeading;
         headingController.updateError(error);
 
-        if (headingLock)
+        if (headingLock && llResult.isValid())
             PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run());
         else
             PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);

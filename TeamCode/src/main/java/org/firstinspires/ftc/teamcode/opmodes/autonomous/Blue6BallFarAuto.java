@@ -39,8 +39,8 @@ public class Blue6BallFarAuto extends NextFTCOpMode {
 
     public Command shooterMotorsOn() {
         return new ParallelGroup(
-                ShooterMotorLeft.INSTANCE.shooterMotorLeftOn(),
-                ShooterMotorRight.INSTANCE.shooterMotorRightOn()
+                ShooterMotorLeft.INSTANCE.shooterMotorLeftFar(),
+                ShooterMotorRight.INSTANCE.shooterMotorRightFar()
         );
     }
 
