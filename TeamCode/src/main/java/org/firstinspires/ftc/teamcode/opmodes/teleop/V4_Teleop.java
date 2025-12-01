@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.control.KalmanFilterParameters;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.control.PIDFController;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.geometry.BezierLine;
@@ -43,6 +44,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Drawing.drawRobot;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @TeleOp
 @Configurable //panels
@@ -68,6 +70,8 @@ public class V4_Teleop extends NextFTCOpMode {
     private double ppBotHeading;
 
     private PathChain parkPath;
+
+    PIDFController headingController = new PIDFController(null);
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
     private Pose redParkPose = new Pose(39, 33, Math.toRadians(180));
@@ -174,13 +178,12 @@ public class V4_Teleop extends NextFTCOpMode {
         LLResult llResult = limelight.getLatestResult();
         double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
 
-        PIDFController headingController = new PIDFController(Constants.followerConstants.getCoefficientsHeadingPIDF());
-
         double error = targetHeading;
+        headingController.setCoefficients(new PIDFCoefficients(headingP, headingI, headingD, headingFF));
         headingController.updateError(error);
 
         if (headingLock && llResult.isValid())
-            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run());
+            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run(), false);
         else
             PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
 

@@ -17,6 +17,13 @@ public class Globals {
     public static double shooterD = 0;
     public static double shooterFF = 0.000195;
 
+    public static double headingP = 0.8;
+    public static double headingI = 0;
+
+    public static double headingD = 0;
+
+    public static double headingFF = 0;
+
     public static double shooterVelTolerance = 0;
 
     public static double targetVelocity = 2400;
