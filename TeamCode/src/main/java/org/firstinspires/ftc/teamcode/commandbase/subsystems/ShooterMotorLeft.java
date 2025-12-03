@@ -36,38 +36,32 @@ public class ShooterMotorLeft implements Subsystem {
 
     public Command shooterMotorLeftFar() {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -targetVelocity, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -targetVelocity, 0)));
     }
 
     public Command shooterMotorLeftClassifier() {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierVelocity, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierVelocity, 0)));
     }
 
     public Command shooterMotorAutoLeftClassifier() {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierAutoVelocity, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -classifierAutoVelocity, 0)));
     }
 
     public Command shooterMotorLeftOff() {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -shooterOffVelocity, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -shooterOffVelocity, 0)));
     }
 
     public Command autoRPM(double rpm) {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -rpm, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, -rpm, 0)));
     }
 
     public Command shooterMotorLeftReverse() {
         return new LambdaCommand()
-                .setStart(() -> controllerLeft.setGoal(new KineticState(0, 2000, 0)))
-                .setIsDone(() -> controllerLeft.isWithinTolerance(new KineticState(0,0)));
+                .setStart(() -> controllerLeft.setGoal(new KineticState(0, 2000, 0)));
     }
     public Command waitUntilShooterLeftAtTargetVelocity(double tolerance, double targetVel, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new WaitUntil(() ->
