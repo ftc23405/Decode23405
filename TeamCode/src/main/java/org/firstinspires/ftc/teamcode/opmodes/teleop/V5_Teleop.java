@@ -138,9 +138,7 @@ public class V5_Teleop extends NextFTCOpMode {
         Gamepads.gamepad2().rightBumper().whenBecomesTrue(() -> {
                     if (ShooterMotorRight.INSTANCE.isAtTarget(50)) {
                         new SequentialGroup(
-                                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
-                                new Delay(0.2),
-                                Intake.INSTANCE.intakeOff
+                                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush)
                         ).schedule();
                     }
                 })

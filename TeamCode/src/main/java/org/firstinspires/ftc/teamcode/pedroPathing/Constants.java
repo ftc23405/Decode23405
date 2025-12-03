@@ -17,22 +17,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.205)
-            .forwardZeroPowerAcceleration(-31.5283904)
-            .lateralZeroPowerAcceleration(-50.4018932)
+            .mass(10.75)
+            .forwardZeroPowerAcceleration(-32.431628)
+            .lateralZeroPowerAcceleration(-56.762794)
             .useSecondaryTranslationalPIDF(false)
             .useSecondaryHeadingPIDF(false)
             .useSecondaryDrivePIDF(false)
             .centripetalScaling(0.0005)
 
             .translationalPIDFCoefficients(
-                    new PIDFCoefficients(0.15, 0, 0.01, 0)
+                    new PIDFCoefficients(0.1, 0, 0.005, 0.02)
             )
             .headingPIDFCoefficients(
-                    new PIDFCoefficients(1.5, 0, 0.002, 0.02)
+                    new PIDFCoefficients(1.0, 0, 0.005, 0.03)
             )
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.003,0.0,0.0001,0.6,0.001)
+                    new FilteredPIDFCoefficients(0.0025,0.0,0.0003,0.6,0.055)
             )
             .secondaryTranslationalPIDFCoefficients(
                     new PIDFCoefficients(0.2, 0, 0.01, 0)
@@ -54,13 +54,13 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(80.43560646)
-            .yVelocity(64.513515)
+            .xVelocity(79.923287)
+            .yVelocity(64.2379789)
             .useBrakeModeInTeleOp(true);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-5)
-            .strafePodX(-8)
+            .forwardPodY(-4.2519)
+            .strafePodX(-7.519)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .yawScalar(1.0)
