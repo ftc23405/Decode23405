@@ -32,7 +32,14 @@ public class Globals {
     public static double classifierVelocity = 2400;
     public static double shooterOffVelocity = 0;
 
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    public static double limelightMountAngleDegrees = 25.0;
 
+    // distance from the center of the Limelight lens to the floor
+    public static double limelightLensHeightInches = 20.0;
+
+    // distance from the target to the floor
+    public static double goalHeightInches = 60.0;
 
     public static double transferPushPosition = 0.6;
     public static double transferHoldPosition = 0.15;

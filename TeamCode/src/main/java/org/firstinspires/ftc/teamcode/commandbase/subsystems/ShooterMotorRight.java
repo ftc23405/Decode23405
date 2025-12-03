@@ -58,6 +58,12 @@ public class ShooterMotorRight implements Subsystem {
                 .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
     }
 
+    public Command autoRPM(double rpm) {
+        return new LambdaCommand()
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, rpm, 0)))
+                .setIsDone(() -> controllerRight.isWithinTolerance(new KineticState(0,0)));
+    }
+
     public Command shooterMotorRightOff() {
         return new LambdaCommand()
                 .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)))

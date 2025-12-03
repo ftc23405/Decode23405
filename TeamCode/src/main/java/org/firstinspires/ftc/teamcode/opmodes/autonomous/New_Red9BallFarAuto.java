@@ -108,6 +108,7 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     @Override
     public void onUpdate() {
+        Drawing.drawPoseHistory(PedroComponent.follower().getPoseHistory());
         Drawing.drawDebug(PedroComponent.follower());
         telemetry.addData("Robot Heading", Math.toDegrees(PedroComponent.follower().getPose().getHeading()));
         telemetry.addData("Robot x", PedroComponent.follower().getPose().getX());
