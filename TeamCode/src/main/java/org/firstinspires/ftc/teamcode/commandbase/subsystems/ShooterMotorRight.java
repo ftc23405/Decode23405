@@ -36,32 +36,38 @@ public class ShooterMotorRight implements Subsystem {
 
     public Command shooterMotorRightFar() {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, targetVelocity, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, targetVelocity, 0)))
+                .setIsDone(() -> true);
     }
 
     public Command shooterMotorRightClassifier() {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierVelocity, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierVelocity, 0)))
+                .setIsDone(() -> true);
     }
 
     public Command shooterMotorAutoRightClassifier() {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierAutoVelocity, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, classifierAutoVelocity, 0)))
+                .setIsDone(() -> true);
     }
 
     public Command shooterMotorRightReverse() {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, -2000, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, -2000, 0)))
+                .setIsDone(() -> true);
     }
 
     public Command autoRPM(double rpm) {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, rpm, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, rpm, 0)))
+                .setIsDone(() -> true);
     }
 
     public Command shooterMotorRightOff() {
         return new LambdaCommand()
-                .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)));
+                .setStart(() -> controllerRight.setGoal(new KineticState(0, shooterOffVelocity, 0)))
+                .setIsDone(() -> true);
     }
     public Command waitUntilShooterRightAtTargetVelocity(double tolerance, Command command) { //waits until shooter is at target velocity with inputed tolerance, then runs the command passed as an argument
         return new IfElseCommand(() ->

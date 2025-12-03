@@ -141,6 +141,8 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
+        shoot1.setBrakingStart(1.5);
+        shoot1.setBrakingStrength(2);
 
 
         intake1 = PedroComponent.follower().pathBuilder()

@@ -82,6 +82,7 @@ public class V5_Teleop extends NextFTCOpMode {
     private double llBotTh;
 
     private InterpLUT interpLUT = new InterpLUT();
+    private double distance;
 
     private Limelight3A limelight;
 
@@ -91,6 +92,11 @@ public class V5_Teleop extends NextFTCOpMode {
 
     @Override
     public void onInit() {
+        interpLUT.add(0,0);
+        interpLUT.add(1,2);
+        interpLUT.add(3,5);
+        interpLUT.createLUT();
+
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(8);
         PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
@@ -118,6 +124,11 @@ public class V5_Teleop extends NextFTCOpMode {
                 .whenTrue(() -> headingLock = true)
                 .whenFalse(() -> headingLock = false);
 
+        Gamepads.gamepad1().a()
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.autoRPM(interpLUT.get(distance)),
+                        ShooterMotorRight.INSTANCE.autoRPM(interpLUT.get(distance))
+                ));
 
         Gamepads.gamepad1().rightBumper()
                 .whenBecomesTrue(new ParallelGroup(
@@ -181,12 +192,14 @@ public class V5_Teleop extends NextFTCOpMode {
         headingController.updateError(error);
 
         if (headingLock && llResult.isValid())
-            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run(), false);
+            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, headingController.run(), false);
         else
             PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
 
+        distance = getDistanceFromTag(llResult.getTy());
+
         telemetry.addData("limelight tx", llResult.getTx());
-        telemetry.addData("Distance from Tag", getDistanceFromTag(llResult.getTy()));
+        telemetry.addData("Distance from Tag", distance);
 
 //        PedroComponent.follower().setPose(getRobotPoseFromLL());
 

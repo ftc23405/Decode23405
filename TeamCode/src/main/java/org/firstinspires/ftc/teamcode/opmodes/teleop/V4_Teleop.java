@@ -183,7 +183,7 @@ public class V4_Teleop extends NextFTCOpMode {
         headingController.updateError(error);
 
         if (headingLock && llResult.isValid())
-            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run(), false);
+            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, headingController.run(), false);
         else
             PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
 
