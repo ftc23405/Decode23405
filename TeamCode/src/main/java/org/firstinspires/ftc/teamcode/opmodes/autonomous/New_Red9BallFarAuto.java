@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -100,18 +101,18 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
                 TransferPusher.INSTANCE.transferHold,
                 new FollowPath(shoot1),
                 Intake.INSTANCE.intakeAutoSpeed,
-                shootWithTransfer()
-//                Intake.INSTANCE.intakeFullSpeed,
-//                new FollowPath(intake1),
-//                Intake.INSTANCE.intakeOff,
-//                new FollowPath(shoot2),
-//                shootWithTransfer(),
+                shootWithTransfer(),
+                Intake.INSTANCE.intakeFullSpeed,
+                new FollowPath(intake1),
+                Intake.INSTANCE.intakeOff,
+                new FollowPath(shoot2),
+                shootWithTransfer(),
 //                Intake.INSTANCE.intakeFullSpeed,
 //                new FollowPath(intake2),
-//                Intake.INSTANCE.intakeOff,
+                Intake.INSTANCE.intakeOff,
 //                new FollowPath(shoot3),
 //                shootWithTransfer(),
-//                new FollowPath(park)
+                new FollowPath(park)
         );
     }
 
@@ -150,7 +151,9 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     private final Pose turnPose1 = new Pose(117, 20, Math.toRadians(-90));
 
-    private final Pose intakePose1 = new Pose(134, 25, Math.toRadians(-90));
+    private final Pose intake1ControlPose = new Pose(100.7, 6.5);
+
+    private final Pose intakePose1 = new Pose(135, 25, Math.toRadians(-90));
 
     private final Pose intakeSlidePose = new Pose(139, 8, Math.toRadians(-90));
 
@@ -165,17 +168,14 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
         shoot1.setBrakingStart(2);
-        shoot1.setBrakingStrength(1);
-        shoot1.setVelocityConstraint(0.3);
+        shoot1.setBrakingStrength(5);
+        shoot1.setVelocityConstraint(0.1);
 
 
         intake1 = PedroComponent.follower().pathBuilder()
-                .addPath(new BezierLine(scoringPose, turnPose1))
-                .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose1.getHeading())
-                .setVelocityConstraint(0.8)
-                .addPath(new BezierLine(turnPose1, intakePose1))
-                .setLinearHeadingInterpolation(turnPose1.getHeading(), intakePose1.getHeading())
-                .setVelocityConstraint(0.3)
+                .addPath(new BezierCurve(scoringPose, intake1ControlPose, intakePose1))
+                .setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose1.getHeading())
+                .setVelocityConstraint(0.1)
                 .addPath(new BezierLine(intakePose1, intakeSlidePose))
                 .setLinearHeadingInterpolation(intakePose1.getHeading(), intakeSlidePose.getHeading())
                 .setVelocityConstraint(0.3)
