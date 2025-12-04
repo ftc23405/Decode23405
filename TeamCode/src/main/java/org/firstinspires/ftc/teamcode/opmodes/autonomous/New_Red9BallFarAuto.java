@@ -37,6 +37,7 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
+                CommandManager.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );
     }
@@ -59,40 +60,22 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
         return new SequentialGroup(
                 TransferPusher.INSTANCE.transferHold,
                 shooterMotorsOn(),
-                new Delay(2),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferPush, // shoot
+                new Delay(1.5), // Reduced from 2s - give shooters time to spin up
+                // Shot 1
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(1), // Time for ball to transfer
+                TransferPusher.INSTANCE.transferHold,
+                new Delay(1), // Brief pause between shots
+                // Shot 2
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
                 new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferHold,
                 new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferPush,
+                // Shot 3
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
                 new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferHold,
-                new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferHold,
-                new Delay(1),
-                Intake.INSTANCE.intakeReverseHalfSpeed,
-                new Delay(0.1),
-                Intake.INSTANCE.intakeAutoSpeed,
+                Intake.INSTANCE.intakeOff,
                 shooterMotorsOff()
         );
     }
