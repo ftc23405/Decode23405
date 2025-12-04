@@ -36,7 +36,6 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
                 BulkReadComponent.INSTANCE,
-                CommandManager.INSTANCE,
                 new PedroComponent(Constants::createFollower)
         );
     }
@@ -60,37 +59,59 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
                 TransferPusher.INSTANCE.transferHold,
                 shooterMotorsOn(),
                 new Delay(2),
-                Intake.INSTANCE.intakeFullSpeed,
-                TransferPusher.INSTANCE.transferPush,
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
+                TransferPusher.INSTANCE.transferPush, // shoot
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferHold,
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferPush,
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferHold,
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferPush,
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 TransferPusher.INSTANCE.transferHold,
                 new Delay(1),
+                Intake.INSTANCE.intakeReverseHalfSpeed,
+                new Delay(0.1),
+                Intake.INSTANCE.intakeAutoSpeed,
                 shooterMotorsOff()
         );
     }
     public Command autoRoutine() {
         return new SequentialGroup(
+                TransferPusher.INSTANCE.transferHold,
                 new FollowPath(shoot1),
-                shootWithTransfer(),
-                Intake.INSTANCE.intakeFullSpeed,
-                new FollowPath(intake1),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(shoot2),
-                shootWithTransfer(),
-                Intake.INSTANCE.intakeFullSpeed,
-                new FollowPath(intake2),
-                Intake.INSTANCE.intakeOff,
-                new FollowPath(shoot3),
-                shootWithTransfer(),
-                new FollowPath(park)
+                Intake.INSTANCE.intakeAutoSpeed,
+                shootWithTransfer()
+//                Intake.INSTANCE.intakeFullSpeed,
+//                new FollowPath(intake1),
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(shoot2),
+//                shootWithTransfer(),
+//                Intake.INSTANCE.intakeFullSpeed,
+//                new FollowPath(intake2),
+//                Intake.INSTANCE.intakeOff,
+//                new FollowPath(shoot3),
+//                shootWithTransfer(),
+//                new FollowPath(park)
         );
     }
 
@@ -125,13 +146,13 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     private final Pose startPose = new Pose(82, 9, Math.toRadians(270));
 
-    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(245));
+    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(248));
 
-    private final Pose turnPose1 = new Pose(117, 18, Math.toRadians(0));
+    private final Pose turnPose1 = new Pose(117, 20, Math.toRadians(-90));
 
-    private final Pose intakePose1 = new Pose(132, 18, Math.toRadians(-20));
+    private final Pose intakePose1 = new Pose(134, 25, Math.toRadians(-90));
 
-    private final Pose intakeSlidePose = new Pose(134, 8, Math.toRadians(-40));
+    private final Pose intakeSlidePose = new Pose(139, 8, Math.toRadians(-90));
 
     private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0));
 
@@ -143,19 +164,21 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
-        shoot1.setBrakingStart(1.5);
-        shoot1.setBrakingStrength(2);
-        shoot1.setVelocityConstraint(0.7);
+        shoot1.setBrakingStart(2);
+        shoot1.setBrakingStrength(1);
+        shoot1.setVelocityConstraint(0.3);
 
 
         intake1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(scoringPose, turnPose1))
                 .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose1.getHeading())
+                .setVelocityConstraint(0.8)
                 .addPath(new BezierLine(turnPose1, intakePose1))
                 .setLinearHeadingInterpolation(turnPose1.getHeading(), intakePose1.getHeading())
+                .setVelocityConstraint(0.3)
                 .addPath(new BezierLine(intakePose1, intakeSlidePose))
                 .setLinearHeadingInterpolation(intakePose1.getHeading(), intakeSlidePose.getHeading())
-                .setVelocityConstraint(0.6)
+                .setVelocityConstraint(0.3)
                 .build();
 
         shoot2 = new Path(new BezierLine(intakePose1, scoringPose));

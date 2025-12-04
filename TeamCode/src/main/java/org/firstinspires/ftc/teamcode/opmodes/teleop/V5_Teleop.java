@@ -92,6 +92,7 @@ public class V5_Teleop extends NextFTCOpMode {
 
     @Override
     public void onInit() {
+        interpLUT.add(0,2300);
         interpLUT.add(59,2300);
         interpLUT.add(66.5,2350);
         interpLUT.add(81,2350);
@@ -122,10 +123,10 @@ public class V5_Teleop extends NextFTCOpMode {
                 )); //reset pinpoint IMU
 
         Gamepads.gamepad1().y()
-                .whenBecomesTrue(new ParallelGroup(
-                        ShooterMotorLeft.INSTANCE.autoRPM(interpLUT.get(distance)),
-                        ShooterMotorRight.INSTANCE.autoRPM(interpLUT.get(distance))
-                ))
+//                .whenBecomesTrue(new ParallelGroup(
+//                        ShooterMotorLeft.INSTANCE.autoRPM(interpLUT.get(distance)),
+//                        ShooterMotorRight.INSTANCE.autoRPM(interpLUT.get(distance))
+//                ))
                 .whenTrue(() -> headingLock = true)
                 .whenFalse(() -> headingLock = false);
 
