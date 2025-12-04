@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
@@ -28,10 +29,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "New 9 Ball Red Far Auto")
-public class New_Red9BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "New 9 Ball Red Classifier Auto")
+public class New_Red9BallClassifierAuto extends NextFTCOpMode {
 
-    public New_Red9BallFarAuto() {
+    public New_Red9BallClassifierAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -123,37 +124,32 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     private Path shoot1, shoot2, shoot3, park;
     private PathChain intake1, intake2;
 
-    private final Pose startPose = new Pose(82, 9, Math.toRadians(270));
+    private final Pose startPose = new Pose(111, 135, Math.toRadians(180));
 
-    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(250));
+    private final Pose scoringPose = new Pose(92, 94, Math.toRadians(230));
 
-    private final Pose turnPose1 = new Pose(117, 18, Math.toRadians(0));
+    private final Pose turnPose1 = new Pose(92, 84, Math.toRadians(0));
 
-    private final Pose intakePose1 = new Pose(132, 18, Math.toRadians(-20));
+    private final Pose intakePose1 = new Pose(129, 84, Math.toRadians(0));
 
-    private final Pose intakeSlidePose = new Pose(134, 8, Math.toRadians(-40));
+    private final Pose turnPose2 = new Pose(92, 59, Math.toRadians(0));
 
-    private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0));
+    private final Pose intakePose2 = new Pose(135, 59, Math.toRadians(0));
 
-    private final Pose intakePose2 = new Pose(135, 36, Math.toRadians(0));
+    private final Pose goBack2ControlPose = new Pose(88,67);
 
-    private final Pose endPose = new Pose(108, 11, Math.toRadians(0));
+    private final Pose endPose = new Pose(129, 94, Math.toRadians(0));
 
 
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
-        shoot1.setBrakingStart(1.5);
-        shoot1.setBrakingStrength(2);
-
 
         intake1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(scoringPose, turnPose1))
                 .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose1.getHeading())
                 .addPath(new BezierLine(turnPose1, intakePose1))
-                .setLinearHeadingInterpolation(turnPose1.getHeading(), intakePose1.getHeading())
-                .addPath(new BezierLine(intakePose1, intakeSlidePose))
-                .setLinearHeadingInterpolation(intakePose1.getHeading(), intakeSlidePose.getHeading())
+                .setConstantHeadingInterpolation(turnPose1.getHeading())
                 .build();
 
         shoot2 = new Path(new BezierLine(intakePose1, scoringPose));
@@ -163,10 +159,10 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
                 .addPath(new BezierLine(scoringPose, turnPose2))
                 .setLinearHeadingInterpolation(scoringPose.getHeading(), turnPose2.getHeading())
                 .addPath(new BezierLine(turnPose2, intakePose2))
-                .setLinearHeadingInterpolation(turnPose2.getHeading(), intakePose2.getHeading())
+                .setConstantHeadingInterpolation(turnPose2.getHeading())
                 .build();
 
-        shoot3 = new Path(new BezierLine(intakePose2, scoringPose));
+        shoot3 = new Path(new BezierCurve(intakePose2, goBack2ControlPose, scoringPose));
         shoot3.setLinearHeadingInterpolation(intakePose2.getHeading(), scoringPose.getHeading());
 
         park = new Path(new BezierLine(scoringPose, endPose));
