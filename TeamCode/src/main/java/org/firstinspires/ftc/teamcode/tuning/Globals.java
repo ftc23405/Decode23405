@@ -26,7 +26,7 @@ public class Globals {
 
     public static double shooterVelTolerance = 0;
 
-    public static double targetVelocity = 2800;
+    public static double targetVelocity = 2900;
 
     public static double classifierAutoVelocity = 2300;
     public static double classifierVelocity = 2400;
