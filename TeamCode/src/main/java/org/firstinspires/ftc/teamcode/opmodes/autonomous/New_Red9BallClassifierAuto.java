@@ -60,20 +60,22 @@ public class New_Red9BallClassifierAuto extends NextFTCOpMode {
         return new SequentialGroup(
                 TransferPusher.INSTANCE.transferHold,
                 shooterMotorsOn(),
-                new Delay(2),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
+                new Delay(1.5), // Reduced from 2s - give shooters time to spin up
+                // Shot 1
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(1), // Time for ball to transfer
                 TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
+                new Delay(1), // Brief pause between shots
+                // Shot 2
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(1),
                 TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
+                new Delay(1),
+                // Shot 3
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(1),
                 TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
+                Intake.INSTANCE.intakeOff,
                 shooterMotorsOff()
         );
     }
