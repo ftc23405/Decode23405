@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commandbase.subsystems.ShooterMotorRight;
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.TransferPusher;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
+import org.firstinspires.ftc.teamcode.pedroPathing.WiggleInterpolator;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.CommandManager;
@@ -210,9 +211,10 @@ public class Red6BallFarAuto extends NextFTCOpMode {
                 .build();
 
         intake2_slide = new Path(new BezierLine(intakePose_2, intakeSlidePose));
-        intake2_slide.setLinearHeadingInterpolation(intakePose_2.getHeading(), intakeSlidePose.getHeading());
+//        intake2_slide.setLinearHeadingInterpolation(intakePose_2.getHeading(), intakeSlidePose.getHeading());
         intake2_slide.setVelocityConstraint(SLOW_VELOCITY);
         intake2_slide.setTranslationalConstraint(8);
+        intake2_slide.setHeadingInterpolation(new WiggleInterpolator(true, intakeSlidePose.getHeading()));
 
         intake_wiggle2 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierPoint(intakeSlidePose))
