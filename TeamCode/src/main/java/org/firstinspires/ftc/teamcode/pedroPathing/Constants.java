@@ -26,19 +26,19 @@ public class Constants {
             .centripetalScaling(0.0005)
 
             .translationalPIDFCoefficients(
-                    new PIDFCoefficients(0.1, 0, 0.001, 0.02)
+                    new PIDFCoefficients(0.15, 0, 0.001, 0.02)
             )
             .headingPIDFCoefficients(
-                    new PIDFCoefficients(0.8, 0, 0.001, 0.03)
+                    new PIDFCoefficients(1, 0, 0.001, 0.03)
             )
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.001,0.0,0.0001,0.6,0.055)
+                    new FilteredPIDFCoefficients(0.002,0.0,0.0001,0.6,0.055)
             )
             .secondaryTranslationalPIDFCoefficients(
                     new PIDFCoefficients(0, 0, 0, 0)
             )
             .secondaryHeadingPIDFCoefficients(
-                    new PIDFCoefficients(3, 0, 0.001, 0.03)
+                    new PIDFCoefficients(2.5, 0, 0.005, 0.03)
             )
             .secondaryDrivePIDFCoefficients(
                     new FilteredPIDFCoefficients(0,0,0,0,0)
@@ -74,7 +74,7 @@ public class Constants {
             0.995,
             500,
             1.8,
-            1.5
+            1
     );
 
     public static Follower createFollower(HardwareMap hardwareMap) {

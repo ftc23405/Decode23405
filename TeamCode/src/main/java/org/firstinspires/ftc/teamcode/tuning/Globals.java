@@ -15,7 +15,7 @@ public class Globals {
     public static double shooterP = 0.003;
     public static double shooterI = 0; //use integrator (high kI) for high error response
     public static double shooterD = 0;
-    public static double shooterFF = 0.000195;
+    public static double shooterFF = 0.0001818;
 
     public static double headingP = 0.8;
     public static double headingI = 0.05;
@@ -26,7 +26,7 @@ public class Globals {
 
     public static double shooterVelTolerance = 0;
 
-    public static double targetVelocity = 2900;
+    public static double targetVelocity = 2640;
 
     public static double classifierAutoVelocity = 2300;
     public static double classifierVelocity = 2400;

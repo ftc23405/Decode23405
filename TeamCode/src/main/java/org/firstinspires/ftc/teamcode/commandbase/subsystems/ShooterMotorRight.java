@@ -84,7 +84,7 @@ public class ShooterMotorRight implements Subsystem {
         int avePeriod = 5;
         aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
         shooterMotorRight.setPower(controllerRight.calculate(new KineticState(0, aveRPM)));
-        ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity:", aveRPM);
+        ActiveOpMode.telemetry().addData("Right Shooter Motor Velocity", aveRPM);
         ActiveOpMode.telemetry().addData("Right Controller Velocity:", controllerRight.getGoal().getVelocity());
     }
 }

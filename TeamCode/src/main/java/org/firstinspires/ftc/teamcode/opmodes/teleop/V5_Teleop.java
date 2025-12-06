@@ -156,6 +156,24 @@ public class V5_Teleop extends NextFTCOpMode {
                 .whenBecomesFalse(TransferPusher.INSTANCE.transferHold); //when button held transfer runs, when let go go back to hold position
 
 
+        Gamepads.gamepad2().dpadUp()
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftFar(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightFar()
+                ));
+
+        Gamepads.gamepad2().dpadDown()
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftClassifier(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightClassifier()
+                ));
+
+        Gamepads.gamepad2().leftBumper()
+                .whenBecomesTrue(new ParallelGroup(
+                        ShooterMotorLeft.INSTANCE.shooterMotorLeftOff(),
+                        ShooterMotorRight.INSTANCE.shooterMotorRightOff()
+                ));
+
         Gamepads.gamepad2().y()
                 .whenBecomesTrue(Intake.INSTANCE.intakeFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
@@ -187,7 +205,9 @@ public class V5_Teleop extends NextFTCOpMode {
         LLResult llResult = limelight.getLatestResult();
         double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
 
+//        double error = targetHeading + Math.toRadians(1);
         double error = targetHeading;
+
         headingController.setCoefficients(new PIDFCoefficients(headingP, headingI, headingD, headingFF));
         headingController.updateError(error);
 

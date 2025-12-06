@@ -81,6 +81,6 @@ public class ShooterMotorLeft implements Subsystem {
         int avePeriod = 5;
         aveRPM = aveRPM * (avePeriod - 1) / avePeriod + motorRPM / avePeriod;
         shooterMotorLeft.setPower(controllerLeft.calculate(new KineticState(0, aveRPM)));
-        ActiveOpMode.telemetry().addData("Left Shooter Motor Velocity:", aveRPM);
+        ActiveOpMode.telemetry().addData("Left Shooter Motor Velocity", aveRPM);
     }
 }
