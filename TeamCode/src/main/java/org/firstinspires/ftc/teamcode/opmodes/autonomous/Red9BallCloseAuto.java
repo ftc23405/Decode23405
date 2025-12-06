@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
@@ -21,6 +22,7 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
@@ -88,19 +90,31 @@ public class Red9BallCloseAuto extends NextFTCOpMode {
                 shooterMotorsOff()
         );
     }
+
+    public Command correctShootHeading() {
+        return new SequentialGroup(
+            new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = true),
+            new FollowPath(shootTurn),
+            new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = false)
+        );
+    }
+
     public Command autoRoutine() {
         return new SequentialGroup(
                 new FollowPath(shoot1),
+                correctShootHeading(),
                 shootWithTransfer(),
                 Intake.INSTANCE.intakeFullSpeed,
                 new FollowPath(intake1),
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(shoot2),
+                correctShootHeading(),
                 shootWithTransfer(),
                 Intake.INSTANCE.intakeFullSpeed,
                 new FollowPath(intake2),
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(shoot3),
+                correctShootHeading(),
                 shootWithTransfer(),
                 new FollowPath(park)
         );
@@ -132,7 +146,7 @@ public class Red9BallCloseAuto extends NextFTCOpMode {
         ActiveOpMode.telemetry().update();
     }
 
-    private Path shoot1, shoot2, shoot3, park;
+    private Path shoot1, shoot2, shoot3, park, shootTurn, shoot2Turn, shoot3Turn;
     private PathChain intake1, intake2;
 
     private final Pose startPose = new Pose(111, 135, Math.toRadians(180));
@@ -155,6 +169,10 @@ public class Red9BallCloseAuto extends NextFTCOpMode {
     public void buildPaths() {
         shoot1 = new Path(new BezierLine(startPose, scoringPose));
         shoot1.setLinearHeadingInterpolation(startPose.getHeading(), scoringPose.getHeading());
+
+        shootTurn = new Path(new BezierPoint(scoringPose));
+        shootTurn.setLinearHeadingInterpolation(scoringPose.getHeading(), scoringPose.getHeading());
+
 
         intake1 = PedroComponent.follower().pathBuilder()
                 .addPath(new BezierLine(scoringPose, turnPose1))
