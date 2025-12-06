@@ -33,9 +33,10 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @Configurable
-@Autonomous(name = "9 Red Ball Close Auto")
-public class Red9BallCloseAuto extends NextFTCOpMode {
-    public Red9BallCloseAuto() {
+@Autonomous(name = "9 Ball Blue Close Auto")
+public class Blue9BallCloseAuto extends NextFTCOpMode {
+
+    public Blue9BallCloseAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -86,9 +87,9 @@ public class Red9BallCloseAuto extends NextFTCOpMode {
 
     public Command correctShootHeading() {
         return new SequentialGroup(
-            new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = true),
-            new FollowPath(shootTurn),
-            new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = false)
+                new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = true),
+                new FollowPath(shootTurn),
+                new InstantCommand(() -> PedroComponent.follower().constants.useSecondaryHeadingPIDF = false)
         );
     }
 
@@ -142,21 +143,21 @@ public class Red9BallCloseAuto extends NextFTCOpMode {
     private Path shoot1, shoot2, shoot3, park, shootTurn, shoot2Turn, shoot3Turn;
     private PathChain intake1, intake2;
 
-    private final Pose startPose = new Pose(111, 135, Math.toRadians(180));
+    private final Pose startPose = new Pose(111, 135, Math.toRadians(180)).mirror();
 
-    private final Pose scoringPose = new Pose(92, 94, Math.toRadians(230));
+    private final Pose scoringPose = new Pose(92, 94, Math.toRadians(230)).mirror();
 
-    private final Pose turnPose1 = new Pose(92, 84, Math.toRadians(0));
+    private final Pose turnPose1 = new Pose(92, 84, Math.toRadians(0)).mirror();
 
-    private final Pose intakePose1 = new Pose(129, 84, Math.toRadians(0));
+    private final Pose intakePose1 = new Pose(129, 84, Math.toRadians(0)).mirror();
 
-    private final Pose turnPose2 = new Pose(92, 59, Math.toRadians(0));
+    private final Pose turnPose2 = new Pose(92, 59, Math.toRadians(0)).mirror();
 
-    private final Pose intakePose2 = new Pose(135, 59, Math.toRadians(0));
+    private final Pose intakePose2 = new Pose(135, 59, Math.toRadians(0)).mirror();
 
-    private final Pose goBack2ControlPose = new Pose(88,67);
+    private final Pose goBack2ControlPose = new Pose(88,67).mirror();
 
-    private final Pose endPose = new Pose(129, 94, Math.toRadians(0));
+    private final Pose endPose = new Pose(129, 94, Math.toRadians(0)).mirror();
 
 
     public void buildPaths() {

@@ -44,6 +44,15 @@ public class Globals {
     public static double transferPushPosition = 0.6;
     public static double transferHoldPosition = 0.15;
 
+    public static double SHOOTER_SPINUP_TIME = 2;
+    public static double BALL_TRANSFER_TIME = 0.6;
+    public static double SHOT_PAUSE_TIME = 1.0;
+    public static int SHOTS_PER_SEQUENCE = 3;
+
+    // Velocity constraints
+    public static double SLOW_VELOCITY = 1000;
+    public static double MEDIUM_VELOCITY = 0.3;
+
     public static double calculateTicksPerSecond(double targetRPM, double ticksPerRev) {
         return (targetRPM / 60) * ticksPerRev;
     }

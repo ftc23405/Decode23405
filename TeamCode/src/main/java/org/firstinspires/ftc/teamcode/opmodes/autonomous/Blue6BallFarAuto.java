@@ -34,15 +34,23 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @Configurable
-@Autonomous(name = "6 Ball Red Far Auto")
-public class Red6BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "6 Ball Blue Far Auto")
+public class Blue6BallFarAuto extends NextFTCOpMode {
 
     // Timing constants
+    public static double SHOOTER_SPINUP_TIME = 2;
+    public static double BALL_TRANSFER_TIME = 1.0;
+    public static double SHOT_PAUSE_TIME = 1.0;
+    public static int SHOTS_PER_SEQUENCE = 3;
+
+    // Velocity constraints
+    public static double SLOW_VELOCITY = 1000;
+    public static double MEDIUM_VELOCITY = 0.3;
     // Braking constants
     public static double BRAKING_STRENGTH = Constants.pathConstraints.getBrakingStrength();
     public static double BRAKING_START = Constants.pathConstraints.getBrakingStart();
 
-    public Red6BallFarAuto() {
+    public Blue6BallFarAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -152,25 +160,25 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private Path shoot1, shoot1Turn, shoot2, shoot2Turn, shoot3, park, intake1, intake1_slide, intake2_slide;
     private PathChain intake_wiggle1, intake_wiggle2, intake2;
 
-    private final Pose startPose = new Pose(82, 9, Math.toRadians(270));
+    private final Pose startPose = new Pose(82, 9, Math.toRadians(270)).mirror();
 
-    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(248));
+    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(248)).mirror();
 
-    private final Pose turnPose1 = new Pose(117, 20, Math.toRadians(-90));
+    private final Pose turnPose1 = new Pose(117, 20, Math.toRadians(-90)).mirror();
 
-    private final Pose intake1ControlPose = new Pose(100.7, 6.5);
-    private final Pose intake1ControlPose2 = new Pose(120, 13);
+    private final Pose intake1ControlPose = new Pose(100.7, 6.5).mirror();
+    private final Pose intake1ControlPose2 = new Pose(120, 13).mirror();
 
-    private final Pose intakePose1 = new Pose(138, 26, Math.toRadians(-90));
-    private final Pose intakePose_2 = new Pose(138, 15, Math.toRadians(-90));
+    private final Pose intakePose1 = new Pose(138, 26, Math.toRadians(-90)).mirror();
+    private final Pose intakePose_2 = new Pose(138, 15, Math.toRadians(-90)).mirror();
 
-    private final Pose intakeSlidePose = new Pose(138, 10, Math.toRadians(-90));
+    private final Pose intakeSlidePose = new Pose(138, 10, Math.toRadians(-90)).mirror();
 
-    private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0));
+    private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0)).mirror();
 
-    private final Pose intakePose2 = new Pose(135, 36, Math.toRadians(0));
+    private final Pose intakePose2 = new Pose(135, 36, Math.toRadians(0)).mirror();
 
-    private final Pose endPose = new Pose(108, 11, Math.toRadians(0));
+    private final Pose endPose = new Pose(108, 11, Math.toRadians(0)).mirror();
 
 
     public void buildPaths() {
