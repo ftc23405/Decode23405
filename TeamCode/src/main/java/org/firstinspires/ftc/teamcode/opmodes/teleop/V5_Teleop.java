@@ -101,7 +101,7 @@ public class V5_Teleop extends NextFTCOpMode {
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(8);
-        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
+        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
 
         parkPath = PedroComponent.follower().pathBuilder()
                 .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, redParkPose)))
