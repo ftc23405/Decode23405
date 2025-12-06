@@ -1,11 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
+import static org.firstinspires.ftc.teamcode.tuning.Globals.headingD;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.headingFF;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.headingI;
+import static org.firstinspires.ftc.teamcode.tuning.Globals.headingP;
+
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PIDFController;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commandbase.subsystems.Intake;
@@ -21,9 +30,12 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -42,11 +54,24 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
         );
     }
 
+    private Limelight3A limelight;
+    PIDFController headingController = new PIDFController(null);
+
+
     public Command shooterMotorsOn() {
         return new ParallelGroup(
                 ShooterMotorLeft.INSTANCE.shooterMotorLeftFar(),
                 ShooterMotorRight.INSTANCE.shooterMotorRightFar()
         );
+    }
+
+    public Command autoAimOn() {
+        return new InstantCommand(() -> {
+            LLResult llResult = limelight.getLatestResult();
+            double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
+            double error = targetHeading;
+            new TurnBy(Angle.fromRad(error));
+        });
     }
 
     public Command shooterMotorsOff() {
@@ -83,12 +108,14 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
         return new SequentialGroup(
                 TransferPusher.INSTANCE.transferHold,
                 new FollowPath(shoot1),
+                autoAimOn(),
                 Intake.INSTANCE.intakeAutoSpeed,
                 shootWithTransfer(),
                 Intake.INSTANCE.intakeFullSpeed,
                 new FollowPath(intake1),
                 Intake.INSTANCE.intakeOff,
                 new FollowPath(shoot2),
+                autoAimOn(),
                 shootWithTransfer(),
 //                Intake.INSTANCE.intakeFullSpeed,
 //                new FollowPath(intake2),
@@ -106,6 +133,7 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     @Override
     public void onInit() {
+        limelight.start();
         PedroComponent.follower().setStartingPose(startPose);
         buildPaths();
     }
