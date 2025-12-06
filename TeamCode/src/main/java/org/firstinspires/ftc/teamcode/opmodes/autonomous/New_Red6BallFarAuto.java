@@ -39,8 +39,8 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "New 9 Ball Red Far Auto")
-public class New_Red9BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "New 6 Ball Red Far Auto")
+public class New_Red6BallFarAuto extends NextFTCOpMode {
 
     // Timing constants
     public static double SHOOTER_SPINUP_TIME = 1.5;
@@ -49,7 +49,7 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     public static int SHOTS_PER_SEQUENCE = 3;
 
     // Velocity constraints
-    public static double SLOW_VELOCITY = 10;
+    public static double SLOW_VELOCITY = 1500;
     public static double MEDIUM_VELOCITY = 0.3;
     // Braking constants
     public static double BRAKING_STRENGTH = Constants.pathConstraints.getBrakingStrength();
@@ -58,7 +58,7 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     private Limelight3A limelight;
     private PIDFController headingController = new PIDFController(new PIDFCoefficients(headingP, headingI, headingD, headingFF));
 
-    public New_Red9BallFarAuto() {
+    public New_Red6BallFarAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -84,14 +84,20 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     public Command autoAim() {
         return new LambdaCommand()
+                .setStart(() -> {
+                    headingController.reset();
+                    telemetry.addLine("Started Auto Aim");
+                })
                 .setUpdate(() -> {
                     LLResult llResult = limelight.getLatestResult();
-                    double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
-                    double error = targetHeading;
+                    double error = Math.toRadians(-llResult.getTx()); // Radians
+                    telemetry.addData("LimeLight Error", Math.toDegrees(error));
                     headingController.updateError(error);
-                    new TurnBy(Angle.fromRad(headingController.run()));
+//                    telemetry.addData("Aim Snapshot", CommandManager.INSTANCE.snapshot());
+//                    new TurnBy(Angle.fromRad(headingController.run()));
+                    (new TurnBy(Angle.fromRad(headingController.run()))).schedule();
                 })
-                .setIsDone(() -> headingController.getError() < Math.toRadians(2));
+                .setIsDone(() -> headingController.getError() < Math.toRadians(3));
     }
 
     /**
@@ -154,6 +160,9 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
     public void onInit() {
         PedroComponent.follower().setStartingPose(startPose);
         buildPaths();
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.start();
+        limelight.pipelineSwitch(8);
     }
 
     @Override
@@ -182,9 +191,9 @@ public class New_Red9BallFarAuto extends NextFTCOpMode {
 
     private final Pose intake1ControlPose = new Pose(100.7, 6.5);
 
-    private final Pose intakePose1 = new Pose(135, 25, Math.toRadians(-90));
+    private final Pose intakePose1 = new Pose(139, 25, Math.toRadians(-90));
 
-    private final Pose intakeSlidePose = new Pose(139, 10, Math.toRadians(-90));
+    private final Pose intakeSlidePose = new Pose(139, 9, Math.toRadians(-90));
 
     private final Pose turnPose2 = new Pose(85, 36, Math.toRadians(0));
 
