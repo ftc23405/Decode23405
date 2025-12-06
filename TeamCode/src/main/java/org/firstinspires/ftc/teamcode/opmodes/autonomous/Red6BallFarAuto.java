@@ -186,8 +186,9 @@ public class Red6BallFarAuto extends NextFTCOpMode {
         intake1 = new Path(new BezierCurve(scoringPose, intake1ControlPose, intake1ControlPose2, intakePose1));
 //        intake1.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose1.getHeading());
         intake1.setHeadingInterpolation(HeadingInterpolator.piecewise(
-                new HeadingInterpolator.PiecewiseNode(0, 0.8, HeadingInterpolator.constant(Math.toRadians(-60))),
-                new HeadingInterpolator.PiecewiseNode(0.8, 1, HeadingInterpolator.constant(Math.toRadians(-90)))
+//                new HeadingInterpolator.PiecewiseNode(0, 0.8, HeadingInterpolator.constant(Math.toRadians(-150))),
+                new HeadingInterpolator.PiecewiseNode(0, 0.85, HeadingInterpolator.tangent.reverse()),
+                new HeadingInterpolator.PiecewiseNode(0.85, 1, HeadingInterpolator.constant(Math.toRadians(-90)))
         ));
 //        HeadingInterpolator headingInterpolator = HeadingInterpolator.
 //        intake1.setBrakingStart(BRAKING_START);
