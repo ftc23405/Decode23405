@@ -29,8 +29,8 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Configurable
-@Autonomous(name = "New 9 Ball Red Classifier Auto")
-public class New_Red9BallClassifierAuto extends NextFTCOpMode {
+@Autonomous(name = "Red 9 Ball Close Auto")
+public class Red9BallCloseAuto extends NextFTCOpMode {
 
 
     private static double SHOOTER_SPINUP_TIME = 2;
@@ -40,7 +40,7 @@ public class New_Red9BallClassifierAuto extends NextFTCOpMode {
 
     // Velocity constraints
     public static double SLOW_VELOCITY = 1000;
-    public New_Red9BallClassifierAuto() {
+    public Red9BallCloseAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
