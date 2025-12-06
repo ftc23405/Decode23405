@@ -32,6 +32,19 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 @Autonomous(name = "New 9 Ball Red Classifier Auto")
 public class New_Red9BallClassifierAuto extends NextFTCOpMode {
 
+
+    static double SHOOTER_SPINUP_TIME = 1.5;
+    static double BALL_TRANSFER_TIME = 1.0;
+    static double SHOT_PAUSE_TIME = 1.0;
+    static int SHOTS_PER_SEQUENCE = 3;
+
+    // Velocity constraints
+    static double SLOW_VELOCITY = 10;
+    static double MEDIUM_VELOCITY = 0.3;
+    // Braking constants
+    static double BRAKING_STRENGTH = Constants.pathConstraints.getBrakingStrength();
+    static double BRAKING_START = Constants.pathConstraints.getBrakingStart();
+
     public New_Red9BallClassifierAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
@@ -56,24 +69,27 @@ public class New_Red9BallClassifierAuto extends NextFTCOpMode {
         );
     }
 
+    private Command createShotSequence() {
+        return new SequentialGroup(
+                new ParallelGroup(Intake.INSTANCE.intakeAutoSpeed, TransferPusher.INSTANCE.transferPush),
+                new Delay(BALL_TRANSFER_TIME),
+                TransferPusher.INSTANCE.transferHold,
+                new Delay(SHOT_PAUSE_TIME)
+        );
+    }
+
+    /**
+     * Executes a complete shooting sequence with multiple balls
+     */
     public Command shootWithTransfer() {
         return new SequentialGroup(
                 TransferPusher.INSTANCE.transferHold,
                 shooterMotorsOn(),
-                new Delay(2),
-                Intake.INSTANCE.intakeAutoSpeed,
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
-                TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
-                TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
-                TransferPusher.INSTANCE.transferPush,
-                new Delay(0.5),
-                TransferPusher.INSTANCE.transferHold,
-                new Delay(0.1),
+                new Delay(SHOOTER_SPINUP_TIME),
+                createShotSequence(),
+                createShotSequence(),
+                createShotSequence(),
+                Intake.INSTANCE.intakeOff,
                 shooterMotorsOff()
         );
     }
