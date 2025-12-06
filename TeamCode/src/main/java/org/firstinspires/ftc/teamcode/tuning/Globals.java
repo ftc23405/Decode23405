@@ -46,7 +46,7 @@ public class Globals {
 
     public static double SHOOTER_SPINUP_TIME = 2;
     public static double BALL_TRANSFER_TIME = 0.6;
-    public static double SHOT_PAUSE_TIME = 1.0;
+    public static double SHOT_PAUSE_TIME = 0.8;
     public static int SHOTS_PER_SEQUENCE = 3;
 
     // Velocity constraints
