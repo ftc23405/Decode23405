@@ -26,10 +26,10 @@ public class Globals {
 
     public static double shooterVelTolerance = 0;
 
-    public static double targetVelocity = 2640;
+    public static double targetVelocity = 2400;
 
     public static double classifierAutoVelocity = 2300;
-    public static double classifierVelocity = 2400;
+    public static double classifierVelocity = 2050;
     public static double shooterOffVelocity = 0;
 
     // how many degrees back is your limelight rotated from perfectly vertical?
@@ -46,7 +46,7 @@ public class Globals {
 
     public static double SHOOTER_SPINUP_TIME = 2;
     public static double BALL_TRANSFER_TIME = 0.6;
-    public static double SHOT_PAUSE_TIME = 0.8;
+    public static double SHOT_PAUSE_TIME = 1.2;
     public static int SHOTS_PER_SEQUENCE = 3;
 
     // Velocity constraints

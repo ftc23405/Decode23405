@@ -35,15 +35,15 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 import static org.firstinspires.ftc.teamcode.tuning.Globals.*;
 
 @Configurable
-@Autonomous(name = "Simple 6 Ball Red Far Auto")
-public class SimpleRed6BallFarAuto extends NextFTCOpMode {
+@Autonomous(name = "Simple 6 Ball Blue Far Auto")
+public class SimpleBlue6BallFarAuto extends NextFTCOpMode {
 
     // Timing constants
     // Braking constants
     public static double BRAKING_STRENGTH = Constants.pathConstraints.getBrakingStrength();
     public static double BRAKING_START = Constants.pathConstraints.getBrakingStart();
 
-    public SimpleRed6BallFarAuto() {
+    public SimpleBlue6BallFarAuto() {
         addComponents(
                 new SubsystemComponent(Intake.INSTANCE, ShooterMotorRight.INSTANCE, ShooterMotorLeft.INSTANCE),
                 new SubsystemComponent(TransferPusher.INSTANCE),
@@ -154,16 +154,16 @@ public class SimpleRed6BallFarAuto extends NextFTCOpMode {
 
     private Path shoot1, shoot2, shoot2Turn, shoot3, park, intake1, intake2;
 
-    private final Pose startPose = new Pose(82, 9, Math.toRadians(270));
+    private final Pose startPose = new Pose(82, 9, Math.toRadians(270)).mirror();
 
-    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(248));
+    private final Pose scoringPose = new Pose(85, 22, Math.toRadians(248)).mirror();
 
-    private final Pose intake1Pose = new Pose(95, 33.5, Math.toRadians(0));
+    private final Pose intake1Pose = new Pose(95, 33.5, Math.toRadians(0)).mirror();
 
-    private final Pose intake2Pose = new Pose(136, 33.5, Math.toRadians(0));
+    private final Pose intake2Pose = new Pose(136, 33.5, Math.toRadians(0)).mirror();
 
 
-    private final Pose endPose = new Pose(108, 11, Math.toRadians(0));
+    private final Pose endPose = new Pose(108, 11, Math.toRadians(0)).mirror();
 
 
     public void buildPaths() {

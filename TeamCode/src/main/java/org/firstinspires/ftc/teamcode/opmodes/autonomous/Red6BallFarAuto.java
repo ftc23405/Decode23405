@@ -162,7 +162,7 @@ public class Red6BallFarAuto extends NextFTCOpMode {
     private final Pose intake1ControlPose = new Pose(100.7, 6.5);
     private final Pose intake1ControlPose2 = new Pose(120, 13);
 
-    private final Pose intakePose1 = new Pose(138, 26, Math.toRadians(-90));
+    private final Pose intakePose1 = new Pose(138, 25, Math.toRadians(-90));
     private final Pose intakePose_2 = new Pose(138, 15, Math.toRadians(-90));
 
     private final Pose intakeSlidePose = new Pose(138, 10, Math.toRadians(-90));
@@ -188,9 +188,14 @@ public class Red6BallFarAuto extends NextFTCOpMode {
 //        intake1.setLinearHeadingInterpolation(scoringPose.getHeading(), intakePose1.getHeading());
         intake1.setHeadingInterpolation(HeadingInterpolator.piecewise(
 //                new HeadingInterpolator.PiecewiseNode(0, 0.8, HeadingInterpolator.constant(Math.toRadians(-150))),
-                new HeadingInterpolator.PiecewiseNode(0, 0.85, HeadingInterpolator.tangent.reverse()),
-                new HeadingInterpolator.PiecewiseNode(0.85, 1, HeadingInterpolator.constant(Math.toRadians(-90)))
+                new HeadingInterpolator.PiecewiseNode(0, 0.95, HeadingInterpolator.tangent.reverse()),
+                new HeadingInterpolator.PiecewiseNode(
+                        0.95,
+                        1,
+                        HeadingInterpolator.facingPoint(intakePose2)
+                )
         ));
+//        intake1.setHeadingInterpolation(HeadingInterpolator.tangent.reverse());
 //        HeadingInterpolator headingInterpolator = HeadingInterpolator.
 //        intake1.setBrakingStart(BRAKING_START);
 //        intake1.setBrakingStrength(BRAKING_STRENGTH);

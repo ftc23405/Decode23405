@@ -205,8 +205,8 @@ public class V5_Teleop extends NextFTCOpMode {
         LLResult llResult = limelight.getLatestResult();
         double targetHeading = Math.toRadians(-llResult.getTx()); // Radians
 
-//        double error = targetHeading + Math.toRadians(1);
-        double error = targetHeading;
+        double error = targetHeading + Math.toRadians(0);
+//        double error = targetHeading;
 
         headingController.setCoefficients(new PIDFCoefficients(headingP, headingI, headingD, headingFF));
         headingController.updateError(error);
