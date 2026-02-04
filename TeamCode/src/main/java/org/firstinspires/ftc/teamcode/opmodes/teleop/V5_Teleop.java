@@ -72,6 +72,8 @@ public class V5_Teleop extends NextFTCOpMode {
 
     private PathChain parkPath;
 
+    private Boolean robotCentric = true;
+
     PIDFController headingController = new PIDFController(null);
     Button parkButton = (Gamepads.gamepad1().dpadUp()).and(Gamepads.gamepad2().dpadUp());
 
@@ -187,6 +189,10 @@ public class V5_Teleop extends NextFTCOpMode {
                 .whenBecomesTrue(Intake.INSTANCE.intakeReverseFullSpeed)
                 .whenBecomesFalse(Intake.INSTANCE.intakeOff);
 
+        Gamepads.gamepad1().back()
+                        .whenBecomesTrue(new InstantCommand(() -> {
+                            robotCentric = !robotCentric;
+                        }));
 
         parkButton
                 .whenBecomesTrue(new FollowPath(parkPath));
@@ -212,9 +218,9 @@ public class V5_Teleop extends NextFTCOpMode {
         headingController.updateError(error);
 
         if (headingLock && llResult.isValid())
-            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, headingController.run(), false);
+            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, headingController.run(), robotCentric);
         else
-            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, false);
+            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, robotCentric);
 
         distance = getDistanceFromTag(llResult.getTy());
 
@@ -234,6 +240,7 @@ public class V5_Teleop extends NextFTCOpMode {
         telemetry.addData("Robot Heading", Math.toDegrees(ppBotHeading));
         telemetry.addData("Robot x", ppBotX);
         telemetry.addData("Robot y", ppBotY);
+        telemetry.addData("Robot Centric", robotCentric);
 
 //        telemetry.addData("Filtered Heading", Math.toDegrees(filteredTh));
 //        telemetry.addData("Filtered x", filteredX);
