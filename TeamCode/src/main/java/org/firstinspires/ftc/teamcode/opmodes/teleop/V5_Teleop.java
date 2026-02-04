@@ -103,7 +103,7 @@ public class V5_Teleop extends NextFTCOpMode {
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(8);
-        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(180))); //set starting pose for pinpoint IMU
+        PedroComponent.follower().setStartingPose(new Pose(0,0, Math.toRadians(0))); //set starting pose for pinpoint IMU
 
         parkPath = PedroComponent.follower().pathBuilder()
                 .addPath(new Path(new BezierLine(PedroComponent.follower()::getPose, redParkPose)))
@@ -120,7 +120,7 @@ public class V5_Teleop extends NextFTCOpMode {
         limelight.start();
         Gamepads.gamepad1().start()
                 .whenBecomesTrue(new SequentialGroup(
-                        new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(180)))),
+                        new InstantCommand(() -> PedroComponent.follower().setPose(PedroComponent.follower().getPose().withHeading(Math.toRadians(0)))),
                         new InstantCommand(() -> gamepad1.rumble(500))
                 )); //reset pinpoint IMU
 
@@ -218,9 +218,9 @@ public class V5_Teleop extends NextFTCOpMode {
         headingController.updateError(error);
 
         if (headingLock && llResult.isValid())
-            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, headingController.run(), robotCentric);
+            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, headingController.run(), robotCentric);
         else
-            PedroComponent.follower().setTeleOpDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x, robotCentric);
+            PedroComponent.follower().setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, robotCentric);
 
         distance = getDistanceFromTag(llResult.getTy());
 
